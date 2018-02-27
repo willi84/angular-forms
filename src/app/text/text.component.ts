@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, OnChanges} from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -16,11 +16,11 @@ import { environment } from '../../environments/environment.prod';
   .hide-opacity{
     opacity: 0;
   }
-  .form-control + span + div.text-danger{
+  .form-control  + div.text-danger{
     opacity:0;
 
   }
-  .form-control:focus + span + div.text-danger{
+  .has-error .form-control:focus  + div.text-danger{
     opacity:1;
   }
   .icon-warning{
@@ -48,22 +48,27 @@ import { environment } from '../../environments/environment.prod';
     </label>
     <input class="form-control" type="{{type}}" formControlName="{{name}}" />
     
-    <div class="text-danger {{name}}-error" [ngClass]="{'hide-opacity': (!submitted || (!control.invalid && showError === '')) }">
-    <span class="mt30--xs form-control-feedback" [hidden]="!submitted || (!control.invalid && showError === '')">
+    <div 
+      class="text-danger {{name}}-error"
+      [ngClass]="{'hide-opacity': (!submitted) }">
+    <span 
+      class="mt30--xs form-control-feedback" 
+      >
         <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
     </span>
-    <small
-      [hidden]="!(showError === 'required')"
-      >Das ist ein Pflichtfeld</small>
-    </div>
-    <div class="text-danger {{name}}-error">
+  
+      <div class="text-danger {{name}}-error">
+      <small 
+        [hidden]="!(showError === 'required')"
+        >Das ist ein Pflichtfeld</small>
+      </div>
       <small  [hidden]="!(showError === 'pattern')"
       >Bitte überprüfen Sie das Textfeld.</small>
     </div>
   </div>
   `
 })
-export class TextComponent implements OnInit {
+export class TextComponent implements OnInit, OnChanges {
 
   @Input() submitted: Boolean;
   @Input() group: FormGroup;
@@ -81,5 +86,30 @@ export class TextComponent implements OnInit {
     ngOnInit() {
       this.required = this.required !== 'false' ? 'true' : 'false';
       this.control = this.group.get(this.name);
+    }
+    ngOnChanges(){
+      console.log('ngdocheck')
+    }
+    ngDoCheck(){
+      console.log('ngOnchanges')
+      if(this.control){
+
+        if(this.control.errors !== null && this.submitted){
+          if(this.control.errors.required){
+            this.showError = 'required';
+          }
+          else if(this.control.errors.pattern){
+            this.showError = 'pattern'
+          }
+         else {
+           this.showError = 'custom';
+         }
+        // this.showError = (this.control.errors.required) ? 'required': '';
+        
+      } else {
+        this.showError = '';
+      }
+    }
+
     }
 }

@@ -38,7 +38,7 @@ export class EmailComponent implements OnInit {
 
     this.group.addControl('email', new FormControl('', {
       validators: controlValidators,
-      updateOn: 'blur',
+      // updateOn: 'blur',
     // updateOn: 'change'
   }));
   }
