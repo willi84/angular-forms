@@ -30,7 +30,6 @@ export class MessageComponent implements OnInit {
     this.tagName = elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
   }
   ngOnInit() {
-    console.log(this.tagName);
     this.label = this.label || 'Firma';
     this.required = this.required !== 'false' ? 'true' : 'false';
     // this.group.push(new FormControl('', [Validators.required]))
