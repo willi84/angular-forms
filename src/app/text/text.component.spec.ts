@@ -6,15 +6,16 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { By } from '@angular/platform-browser';
 
+
 describe('TextComponent', () => {
   let component: TextComponent;
   let fixture: ComponentFixture<TextComponent>;
   let compiled;
   let inputElement: any;
 
+  
+
   function showNoError( _compiled, _component) {
-   
-      
       const errorElement = _compiled.querySelector('div');
       console.log(errorElement);
       const errorStyles = errorElement.querySelector('div').getAttribute('style');
@@ -39,9 +40,33 @@ describe('TextComponent', () => {
 
 
   }
+  function showSuccess( _compiled, _component) {
+    const errorElement = _compiled.querySelector('div');
+    console.log(errorElement);
+    const errorStyles = errorElement.querySelector('div').getAttribute('style');
+    expect(errorStyles).toMatch('visibility: hidden');
+
+    const errorMessage = _compiled.querySelector('[name="error-message"]');
+    const errorRequired = _compiled.querySelector('[name="error-required"]');
+    const errorPattern = _compiled.querySelector('[name="error-pattern"]');
+    const errorDefault = _compiled.querySelector('[name="error-default"]');
+    const errorIcon = errorElement.querySelector('[name="error-icon"]');
+    
+    expect(errorIcon.getAttribute('hidden')).toEqual('');
+    expect(errorRequired.getAttribute('hidden')).toBeFalsy();
+    expect(errorMessage.getAttribute('style')).toMatch('visibility: visible');
+    expect(errorPattern.getAttribute('hidden')).toEqual('');
+
+    // will not be shown
+    expect(errorDefault.getAttribute('hidden')).toBeFalsy();
+    // expect(errorIcon.getAttribute('style')).toMatch('visibility: visible');
+    // expect(errorRequired.getAttribute('style')).toMatch('visibility: hidden');
+    // expect(errorPattern.getAttribute('style')).toMatch('visibility: hidden');
+    // expect(errorDefault.getAttribute('style')).toMatch('visibility: hidden');
+
+
+  }
   function showRequired( _compiled, _component) {
-   
-      
     const errorElement = _compiled.querySelector('div');
     console.log(errorElement);
     const errorStyles = errorElement.querySelector('div').getAttribute('style');
@@ -53,21 +78,21 @@ describe('TextComponent', () => {
     const errorDefault = _compiled.querySelector('[name="error-default"]');
     const errorIcon = errorElement.querySelector('[name="error-icon"]');
 
-    console.log(errorPattern);
+    console.log('_compiled');
+    console.log(_compiled);
+    console.log(errorIcon);
     expect(errorIcon.getAttribute('hidden')).toBeFalsy();
     expect(errorRequired.getAttribute('hidden')).toBeFalsy();
     expect(errorMessage.getAttribute('style')).toMatch('visibility: visible');
-    expect(errorPattern.getAttribute('hidden')).toEqual('');
     expect(errorDefault.getAttribute('hidden')).toEqual('');
     // expect(errorIcon.getAttribute('style')).toMatch('visibility: visible');
     // expect(errorRequired.getAttribute('style')).toMatch('visibility: hidden');
     // expect(errorPattern.getAttribute('style')).toMatch('visibility: hidden');
     // expect(errorDefault.getAttribute('style')).toMatch('visibility: hidden');
-
-
 }
 
   beforeEach(() => {
+
     TestBed.configureTestingModule({
       declarations: [
         TextComponent
@@ -77,10 +102,7 @@ describe('TextComponent', () => {
         FormsModule,
         ReactiveFormsModule,
       ]
-    })
-      .compileComponents();
-
-      
+    }).compileComponents();
   });
 
   beforeEach(async(() => {
@@ -158,14 +180,14 @@ describe('TextComponent', () => {
 
   });
 
-  describe('submitted', () => {
+  describe('when submitted', () => {
     beforeEach(async(() => {
       component.submitted = true;
     }));
     it('should be created', async( () => {
       expect(component).toBeTruthy();
     }));
-    it('should display error when input is active', fakeAsync(() => {
+    it('should display required error when input is active', fakeAsync(() => {
       const control = component.group.controls.foo;
       const name = component.group.controls['foo'];
       // without event input no value will be set
@@ -183,6 +205,42 @@ describe('TextComponent', () => {
       // errors = name.errors || {};
       // expect(errors['required']).toEqual(true);
       showRequired( compiled, component);
+
+      // visibility: visible;
+    }));
+    it('should display no error after input has correctly changed', fakeAsync(() => {
+      const control = component.group.controls.foo;
+      const name = component.group.controls['foo'];
+      // without event input no value will be set
+      inputElement.dispatchEvent(new Event('blur'));
+      inputElement.dispatchEvent(new Event('focus'));
+
+      fixture.detectChanges();
+      expect(control.valid).toEqual(false);
+      expect(control.pristine).toEqual(true);
+      expect(control.touched).toEqual(true);
+      expect(control.value).toEqual('');
+      expect(component.showError).toEqual('required');
+
+      // let errors = {};
+      // errors = name.errors || {};
+      // expect(errors['required']).toEqual(true);
+      showRequired( compiled, component);
+
+      inputElement.value = 'xxx';
+      inputElement.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      expect(control.valid).toEqual(true);
+      expect(control.pristine).toEqual(false);
+      expect(control.touched).toEqual(true);
+      expect(control.value).toEqual('xxx');
+      expect(component.showError).toEqual('');
+
+      // let errors = {};
+      // errors = name.errors || {};
+      // expect(errors['required']).toEqual(true);
+      showSuccess( compiled, component);
+
 
       // visibility: visible;
     }));
