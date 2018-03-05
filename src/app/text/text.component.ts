@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, OnChanges} from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -9,18 +9,17 @@ import {
 
  } from '@angular/forms';
 import { environment } from '../../environments/environment.prod';
+import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: environment.prefix + 'text',
   styles: [ `
   .hide-opacity{
-    opacity: 0;
   }
-  .form-control + span + div.text-danger{
-    opacity:0;
+  .form-control  + div.text-danger{
 
   }
-  .form-control:focus + span + div.text-danger{
+  .has-error .form-control:focus  + div.text-danger{
     opacity:1;
   }
   .icon-warning{
@@ -46,24 +45,37 @@ import { environment } from '../../environments/environment.prod';
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
     </label>
-    <input class="form-control" type="{{type}}" formControlName="{{name}}" />
-    
-    <div class="text-danger {{name}}-error" [ngClass]="{'hide-opacity': (!submitted || (!control.invalid && showError === '')) }">
-    <span class="mt30--xs form-control-feedback" [hidden]="!submitted || (!control.invalid && showError === '')">
+    <input 
+    (focus)="hasFocus=true" 
+    (blur)="hasFocus=false"
+    class="form-control" type="{{type}}" formControlName="{{name}}" />
+    <div
+      class="text-danger {{name}}-error" 
+      [style.visibility]="(showError!=='') ? 'visible' : 'hidden'"
+      >
+    <span name="error-icon"
+      [hidden]="showError === ''"
+      class="mt30--xs form-control-feedback"
+      >
         <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
     </span>
-    <small
-      [hidden]="!(showError === 'required')"
-      >Das ist ein Pflichtfeld</small>
-    </div>
-    <div class="text-danger {{name}}-error">
-      <small  [hidden]="!(showError === 'pattern')"
-      >Bitte überprüfen Sie das Textfeld.</small>
+      <div name="error-message" class="text-danger {{name}}-error"
+        [style.visibility]="hasFocus ? 'visible' : 'hidden'"
+      >
+      <small name="error-required" 
+        [hidden]="!(showError === 'required')"
+        >Das ist ein Pflichtfeld</small>
+
+        <small  name="error-pattern" [hidden]="!(showError === 'pattern')"
+        >Bitte überprüfen Sie das Textfeld.</small>
+        <small  name="error-default" [hidden]="!(showError === '')"
+        >&nbsp;</small>
+      </div>
     </div>
   </div>
   `
 })
-export class TextComponent implements OnInit {
+export class TextComponent implements OnInit, OnChanges, DoCheck {
 
   @Input() submitted: Boolean;
   @Input() group: FormGroup;
@@ -72,14 +84,50 @@ export class TextComponent implements OnInit {
   @Input() type = 'text';
   @Input() required = 'false';
   showError =  '';
+  hasFocus: false;
   control: any;
   startValue: string;
   startError: true;
   noRequired =  false;
     constructor(private formBuilder: FormBuilder, private elementRef: ElementRef) {
+      this.showError = '';
     }
     ngOnInit() {
       this.required = this.required !== 'false' ? 'true' : 'false';
       this.control = this.group.get(this.name);
+      this.showError = '';
+    }
+    ngOnChanges() {
+       this.showError = '';
+    }
+    ngDoCheck() {
+       
+       this.showError = ''
+      if (this.control) {
+        if(!this.control.errors){
+          this.showError = '';
+        } else {
+
+          
+          if (this.control.errors !== null && this.submitted){
+            if (this.control.errors.required) {
+              this.showError = 'required';
+            }
+            if (this.control.errors.pattern) {
+              this.showError = 'pattern';
+            }
+            //  else {
+              //    this.showError = 'custom';
+              //  }
+              // this.showError = (this.control.errors.required) ? 'required': '';
+              
+            } else {
+              this.showError = '';
+            }
+          }
+    } else {
+      this.showError = '';
+    }
+
     }
 }
