@@ -33,10 +33,9 @@ import { environment } from '../../environments/environment';
 
       <!-- placeholder -->
       <div class="text-danger {{name}}-error">
-        <small    >Defaultplatzhalter</small>
+        <small></small>
       </div>
 
-      
   </div>
   `
 })

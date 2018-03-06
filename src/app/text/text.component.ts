@@ -45,12 +45,12 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
     </label>
-    <input 
-    (focus)="hasFocus=true" 
+    <input
+    (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
     <div
-      class="text-danger {{name}}-error" 
+      class="text-danger {{name}}-error"
       >
     <span name="error-icon"
       [style.visibility]="showError === '' ? 'hidden' : 'visible'"
@@ -58,13 +58,14 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
       >
         <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
     </span>
-      <div name="error-message" class="text-danger {{name}}-error"
+    
+      <div name="error-message" class="text-danger {{name}}-error" 
         [style.visibility]="hasFocus ? 'visible' : 'hidden'"
       >
-      <small name="error-required" 
-        [hidden]="!(showError === 'required')"
-        >Das ist ein Pflichtfeld</small>
-
+        <small name="error-required"
+          [hidden]="!(showError === 'required')"
+          >Das ist ein Pflichtfeld</small>
+          
         <small  name="error-pattern" [hidden]="!(showError === 'pattern')"
         >Bitte überprüfen Sie das Textfeld.</small>
         <small  name="error-default" [hidden]="!(showError === '')"
@@ -100,14 +101,12 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
        this.showError = '';
     }
     ngDoCheck() {
-       
-       this.showError = ''
+       this.showError = '';
       if (this.control) {
-        if(!this.control.errors){
+        if (!this.control.errors) {
           this.showError = '';
         } else {
 
-          
           if (this.control.errors !== null && this.submitted){
             if (this.control.errors.required) {
               this.showError = 'required';
@@ -119,7 +118,6 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
               //    this.showError = 'custom';
               //  }
               // this.showError = (this.control.errors.required) ? 'required': '';
-              
             } else {
               this.showError = '';
             }

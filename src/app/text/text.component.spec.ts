@@ -5,6 +5,8 @@ import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { By } from '@angular/platform-browser';
+import { customMatchers, expect } from '../../utils/testing/custom-matcher';
+
 
 
 describe('TextComponent', () => {
@@ -16,90 +18,38 @@ describe('TextComponent', () => {
   
 
   function showNoError( _compiled, _component) {
-      const errorElement = _compiled.querySelector('div');
-      console.log(errorElement);
-      const errorStyles = errorElement.querySelector('div').getAttribute('style');
-      
-      // @tODO ??
-      // expect(errorStyles).toMatch('visibility: visible');
-
-      const errorMessage = _compiled.querySelector('[name="error-message"]');
-      const errorRequired = _compiled.querySelector('[name="error-required"]');
-      const errorPattern = _compiled.querySelector('[name="error-pattern"]');
-      const errorDefault = _compiled.querySelector('[name="error-default"]');
-      const errorIcon = errorElement.querySelector('[name="error-icon"]');
-
-      console.log(errorPattern);
-      expect(errorIcon.getAttribute('hidden')).toBeFalsy();
-      expect(errorRequired.getAttribute('hidden')).toBeFalsy();
-      expect(errorMessage.getAttribute('style')).toMatch('visibility: hidden');
-      expect(errorPattern.getAttribute('hidden')).toEqual('');
-      expect(errorDefault.getAttribute('hidden')).toEqual('');
-      // expect(errorIcon.getAttribute('style')).toMatch('visibility: visible');
-      // expect(errorRequired.getAttribute('style')).toMatch('visibility: hidden');
-      // expect(errorPattern.getAttribute('style')).toMatch('visibility: hidden');
-      // expect(errorDefault.getAttribute('style')).toMatch('visibility: hidden');
-
+    expect(_compiled).hideErrorMessage('required');
+    expect(_compiled).hideErrorMessage('pattern');
+    expect(_compiled).hideErrorMessage('default');
+    // check dass nicht wackelt
+    expect(_compiled).showErrorIcon(true);
 
   }
   function showSuccess( _compiled, _component) {
-    const errorElement = _compiled.querySelector('div');
-    console.log(errorElement);
-    const errorStyles = errorElement.querySelector('div').getAttribute('style');
-    // @tODO ??
-    // expect(errorStyles).toMatch('visibility: hidden');
-
-    const errorMessage = _compiled.querySelector('[name="error-message"]');
-    const errorRequired = _compiled.querySelector('[name="error-required"]');
-    const errorPattern = _compiled.querySelector('[name="error-pattern"]');
-    const errorDefault = _compiled.querySelector('[name="error-default"]');
-    const errorIcon = errorElement.querySelector('[name="error-icon"]');
-    
-    expect(errorIcon.getAttribute('hidden')).toEqual('');
-    expect(errorRequired.getAttribute('hidden')).toBeFalsy();
-    
-    // @tODO ??
-    // expect(errorMessage.getAttribute('style')).toMatch('visibility: visible');
-    expect(errorPattern.getAttribute('hidden')).toEqual('');
-
-    // will not be shown
-    expect(errorDefault.getAttribute('hidden')).toBeFalsy();
-    // expect(errorIcon.getAttribute('style')).toMatch('visibility: visible');
-    // expect(errorRequired.getAttribute('style')).toMatch('visibility: hidden');
-    // expect(errorPattern.getAttribute('style')).toMatch('visibility: hidden');
-    // expect(errorDefault.getAttribute('style')).toMatch('visibility: hidden');
+    expect(_compiled).hideErrorMessage('required');
+    expect(_compiled).hideErrorMessage('pattern');
+    expect(_compiled).showErrorMessage('default');
+    expect(_compiled).showErrorIcon(false);
+  }
+  function showDefault( _compiled, _component) {
+    // @TODO: müsste hiden show error messag esein
+    expect(_compiled).showHiddenErrorMessage('default');
+    expect(_compiled).hideErrorMessage('required');
 
 
+    expect(_compiled).hideErrorMessage('pattern');
+    expect(_compiled).showErrorIcon(false);
   }
   function showRequired( _compiled, _component) {
-    const errorElement = _compiled.querySelector('div');
-    console.log(errorElement);
-    const errorStyles = errorElement.querySelector('div').getAttribute('style');
-
-    // @tODO ??
-    // expect(errorStyles).toMatch('visibility: visible');
-
-    const errorMessage = _compiled.querySelector('[name="error-message"]');
-    const errorRequired = _compiled.querySelector('[name="error-required"]');
-    const errorPattern = _compiled.querySelector('[name="error-pattern"]');
-    const errorDefault = _compiled.querySelector('[name="error-default"]');
-    const errorIcon = errorElement.querySelector('[name="error-icon"]');
-
-    console.log('_compiled');
-    console.log(_compiled);
-    console.log(errorIcon);
-    expect(errorIcon.getAttribute('hidden')).toBeFalsy();
-    expect(errorRequired.getAttribute('hidden')).toBeFalsy();
-    expect(errorMessage.getAttribute('style')).toMatch('visibility: visible');
-    expect(errorDefault.getAttribute('hidden')).toEqual('');
-    // expect(errorIcon.getAttribute('style')).toMatch('visibility: visible');
-    // expect(errorRequired.getAttribute('style')).toMatch('visibility: hidden');
-    // expect(errorPattern.getAttribute('style')).toMatch('visibility: hidden');
-    // expect(errorDefault.getAttribute('style')).toMatch('visibility: hidden');
+    expect(_compiled).showErrorMessage('required');
+    expect(_compiled).hideErrorMessage('pattern');
+    expect(_compiled).hideErrorMessage('default');
+    expect(_compiled).showErrorIcon(true);
 }
 
   beforeEach(() => {
 
+    jasmine.addMatchers(customMatchers);
     TestBed.configureTestingModule({
       declarations: [
         TextComponent
@@ -175,6 +125,28 @@ describe('TextComponent', () => {
       expect(control.touched).toEqual(true);
       expect(control.value).toEqual('xxx');
       expect(component.showError).toEqual('');
+
+    }));
+    it('should not display error when input is give and correct', fakeAsync(() => {
+      const control = component.group.controls.foo;
+      const name = component.group.controls['foo'];
+      // without event input no value will be set
+      inputElement.dispatchEvent(new Event('focus'));
+      inputElement.value = 'xxx';
+      inputElement.dispatchEvent(new Event('input'));
+      inputElement.dispatchEvent(new Event('blur'));
+
+      fixture.detectChanges();
+      expect(control.valid).toEqual(true);
+      expect(control.pristine).toEqual(false);
+      expect(control.touched).toEqual(true);
+      expect(control.value).toEqual('xxx');
+      expect(component.showError).toEqual('');
+
+      showDefault( compiled, component);
+      component.submitted = true;
+      fixture.detectChanges();
+      showDefault( compiled, component);
 
     }));
 
@@ -262,6 +234,7 @@ describe('TextComponent', () => {
       // errors = name.errors || {};
       // expect(errors['required']).toEqual(true);
       showNoError( compiled, component);
+      
 
       // visibility: visible;
     }));
@@ -287,47 +260,7 @@ describe('TextComponent', () => {
 
       inputElement.dispatchEvent(new Event('focus'));
       fixture.detectChanges();
-
-      const errorElement = compiled.querySelector('div');
-      const errorMessage = compiled.querySelector('[name="error-message"]');
-      const errorRequired = compiled.querySelector('[name="error-required"]');
-      const errorPattern = compiled.querySelector('[name="error-pattern"]');
-      const errorDefault = compiled.querySelector('[name="error-default"]');
-      const errorIcon = errorElement.querySelector('[name="error-icon"]');
-
-      console.log(errorIcon);
-      expect(errorIcon.getAttribute('hidden')).toBeFalsy(); 
-      // console.log(errorIcon.getAttribute('style'));
-      // expect(errorIcon.getAttribute('style')).toMatch('visibility: visible');
-      expect(errorMessage.getAttribute('style')).toMatch('visibility: visible');
-
-      // const styles = errorElement.querySelector('div').getAttribute('style');
-      // console.log(errorElement.querySelector('[name="error-message"]').textContent);
-      // console.log(errorElement.querySelector('[name="error-icon"]'));
-      // expect(styles).toMatch('visibility: visible');
-
     }));
-    it('should not display error when input is give and correct', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.value = 'xxx';
-      inputElement.dispatchEvent(new Event('blur'));
-      inputElement.dispatchEvent(new Event('input'));
-
-      fixture.detectChanges();
-      expect(control.valid).toEqual(true);
-      expect(control.pristine).toEqual(false);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('xxx');
-      expect(component.showError).toEqual('');
-
-      let errors = {};
-      errors = name.errors || {};
-      expect(errors['required']).toEqual(undefined);
-      showSuccess( compiled, component);
-    }));
-
   });
 });
 
