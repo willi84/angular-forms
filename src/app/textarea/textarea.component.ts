@@ -16,13 +16,7 @@ import { environment } from '../../environments/environment';
   .hide-opacity{
     opacity: 0;
   }
-  .form-control + span + div.text-danger{
-    opacity:0;
-
-  }
-  .form-control:focus + span + div.text-danger{
-    opacity:1;
-  }
+  
 `],
   template: `
   <div class="form-group"
@@ -36,14 +30,13 @@ import { environment } from '../../environments/environment';
       <span class="mt30--xs form-control-feedback" [hidden]="!control.invalid || !submitted">
           <i class="icon-warning text-danger"></i>
       </span>
-    <div class="text-danger {{name}}-error" [ngClass]="{'hide-opacity': (!control.invalid || !submitted) }">
-      <small [hidden]="!control.hasError('required') || !submitted"
-      >Das ist ein Pflichtfeld</small>
-    </div>
-    <div class="text-danger {{name}}-error">
-    <small  [hidden]="!control.hasError('pattern') || !submitted"
-    >Bitte überprüfen Sie das Textfeld.</small>
-  </div>
+
+      <!-- placeholder -->
+      <div class="text-danger {{name}}-error">
+        <small    >Defaultplatzhalter</small>
+      </div>
+
+      
   </div>
   `
 })

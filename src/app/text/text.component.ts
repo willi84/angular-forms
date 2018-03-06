@@ -51,10 +51,9 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     class="form-control" type="{{type}}" formControlName="{{name}}" />
     <div
       class="text-danger {{name}}-error" 
-      [style.visibility]="(showError!=='') ? 'visible' : 'hidden'"
       >
     <span name="error-icon"
-      [hidden]="showError === ''"
+      [style.visibility]="showError === '' ? 'hidden' : 'visible'"
       class="mt30--xs form-control-feedback"
       >
         <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
