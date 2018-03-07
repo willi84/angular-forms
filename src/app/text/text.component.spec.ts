@@ -80,7 +80,13 @@ describe('TextComponent', () => {
     expect(_compiled).hideErrorMessage('pattern');
     expect(_compiled).hideErrorMessage('default');
     expect(_compiled).showErrorIcon(true);
-}
+  }
+  function showError( _compiled, _control) {
+    expect(_compiled).hideErrorMessage('required');
+    expect(_compiled).hideErrorMessage('pattern');
+    expect(_compiled).hideErrorMessage('default');
+    expect(_compiled).showErrorIcon(true);
+  }
 
   beforeEach(() => {
 
@@ -163,13 +169,51 @@ describe('TextComponent', () => {
       showDefault( compiled, component);
     }));
   });
+  describe('when submitted with value', () => {
+    beforeEach(async(() => {
+      doAction('change_input', 'xx');
+      component.submitted = true;
+      _oldValue = inputElement.value;
+    }));
+    it('should be created', async( () => {
+      expect(component).toBeTruthy();
+    }));
+    it('should display no error', fakeAsync(() => {
+      // set initial state
+      // doAction('active_input');
 
-  describe('when submitted', () => {
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+      expect(component).isValid('');
+      showSuccess( compiled, component);
+    }));
+    it('should display no error when input is active', fakeAsync(() => {
+      // set initial state
+      doAction('active_input');
+
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+      expect(component).isValid('');
+      showSuccess( compiled, component);
+    }));
+  });
+  describe('when submitted without value', () => {
     beforeEach(async(() => {
       component.submitted = true;
     }));
     it('should be created', async( () => {
       expect(component).toBeTruthy();
+    }));
+
+    // @TODO
+    xit('should display  error but no text', fakeAsync(() => {
+      // set initial state
+      // doAction('active_input');
+
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+      expect(component).isInvalid('required');
+      // showError( compiled, component);
     }));
     it('should display required error when input is active', fakeAsync(() => {
       // set initial state
@@ -177,7 +221,7 @@ describe('TextComponent', () => {
 
       // test new state
       expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component.showError).toEqual('required');
+      expect(component).isInvalid('required');
       showRequired( compiled, component);
     }));
     it('should display no error after input has correctly changed', fakeAsync(() => {
@@ -186,7 +230,7 @@ describe('TextComponent', () => {
 
       // test new state
       expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component.showError).toEqual('required');
+      expect(component).isInvalid('required');
       showRequired( compiled, component);
 
       // set new state
