@@ -14,10 +14,45 @@ describe('TextComponent', () => {
   let fixture: ComponentFixture<TextComponent>;
   let compiled;
   let inputElement: any;
+  let _oldValue: string;
 
-  
+  function doAction( action: string , new_value?: string) {
 
-  function showNoError( _compiled, _component) {
+    switch (action) {
+      case 'change_input':
+        // without event input no value will be set
+        inputElement.dispatchEvent(new Event('focus'));
+        inputElement.value = new_value;
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+        break;
+      case 'changed_input':
+        // without event input no value will be set
+        inputElement.dispatchEvent(new Event('focus'));
+        inputElement.value = new_value;
+        inputElement.dispatchEvent(new Event('input'));
+        inputElement.dispatchEvent(new Event('blur'));
+        fixture.detectChanges();
+        break;
+      case 'touch':
+        inputElement.dispatchEvent(new Event('focus'));
+        fixture.detectChanges();
+        break;
+      case 'touched':
+        inputElement.dispatchEvent(new Event('focus'));
+        inputElement.dispatchEvent(new Event('blur'));
+        fixture.detectChanges();
+        break;
+      case 'active_input':
+        inputElement.dispatchEvent(new Event('blur'));
+        inputElement.dispatchEvent(new Event('focus'));
+        fixture.detectChanges();
+        break;
+    }
+
+  }
+
+  function showNoError( _compiled, _control) {
     expect(_compiled).hideErrorMessage('required');
     expect(_compiled).hideErrorMessage('pattern');
     expect(_compiled).hideErrorMessage('default');
@@ -25,13 +60,13 @@ describe('TextComponent', () => {
     expect(_compiled).showErrorIcon(true);
 
   }
-  function showSuccess( _compiled, _component) {
+  function showSuccess( _compiled, _control) {
     expect(_compiled).hideErrorMessage('required');
     expect(_compiled).hideErrorMessage('pattern');
     expect(_compiled).showErrorMessage('default');
     expect(_compiled).showErrorIcon(false);
   }
-  function showDefault( _compiled, _component) {
+  function showDefault( _compiled, _control) {
     // @TODO: müsste hiden show error messag esein
     expect(_compiled).showHiddenErrorMessage('default');
     expect(_compiled).hideErrorMessage('required');
@@ -40,7 +75,7 @@ describe('TextComponent', () => {
     expect(_compiled).hideErrorMessage('pattern');
     expect(_compiled).showErrorIcon(false);
   }
-  function showRequired( _compiled, _component) {
+  function showRequired( _compiled, _control) {
     expect(_compiled).showErrorMessage('required');
     expect(_compiled).hideErrorMessage('pattern');
     expect(_compiled).hideErrorMessage('default');
@@ -76,80 +111,57 @@ describe('TextComponent', () => {
     fixture.detectChanges();
     compiled = fixture.debugElement.nativeElement;
     inputElement = compiled.querySelector('input');
+    _oldValue = inputElement.value;
   }));
   describe('not submitted', () => {
-
-    it('should be created', async( () => {
+    it('should display default state should be created', async( () => {
       expect(component).toBeTruthy();
     }));
-    it('should not display error when input is touched', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      // without event input no value will be set
-      inputElement.dispatchEvent(new Event('blur'));
+    it('when input is touched', fakeAsync(() => {
+      // set initial state
+      doAction('touched');
 
-      fixture.detectChanges();
-      expect(control.valid).toEqual(false);
-      expect(control.pristine).toEqual(true);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('');
-      expect(component.showError).toEqual('');
-    }));
-    it('should not display error when input is given', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.value = '';
-      inputElement.dispatchEvent(new Event('blur'));
-      inputElement.dispatchEvent(new Event('input'));
-
-      fixture.detectChanges();
-      // tick();
-      expect(control.valid).toEqual(false);
-      expect(control.pristine).toEqual(false);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('');
-      expect(component.showError).toEqual('');
-
-    }));
-    it('should not display error when input is given', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.value = 'xxx';
-      inputElement.dispatchEvent(new Event('blur'));
-      inputElement.dispatchEvent(new Event('input'));
-
-      fixture.detectChanges();
-      expect(control.valid).toEqual(true);
-      expect(control.pristine).toEqual(false);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('xxx');
-      expect(component.showError).toEqual('');
-
-    }));
-    it('should not display error when input is give and correct', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.dispatchEvent(new Event('focus'));
-      inputElement.value = 'xxx';
-      inputElement.dispatchEvent(new Event('input'));
-      inputElement.dispatchEvent(new Event('blur'));
-
-      fixture.detectChanges();
-      expect(control.valid).toEqual(true);
-      expect(control.pristine).toEqual(false);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('xxx');
-      expect(component.showError).toEqual('');
-
+      // test new state
+      expect(component).isInvalid('');
       showDefault( compiled, component);
+    }));
+    it('should display default state when input is given', fakeAsync(() => {
+      // set initial state
+      doAction('changed_input',  '');
+
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+      expect(component).isInvalid('');
+      showDefault( compiled, component);
+    }));
+    it('should display default state when input is given', fakeAsync(() => {
+      // set initial state
+      doAction('changed_input', 'xxx');
+
+      // test new state
+      expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+      expect(component).isValid('');
+      showDefault( compiled, component);
+    }));
+    it('should display default state when input is given and correct', fakeAsync(() => {
+      // set initial state
+      doAction('changed_input',  'xxx');
+
+      // test new state
+      expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+      expect(component).isValid('');
+      showDefault( compiled, component);
+
+      // subtmit
+      const _newValue = inputElement.value;
       component.submitted = true;
       fixture.detectChanges();
+
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
+      expect(component).isValid('');
       showDefault( compiled, component);
-
     }));
-
   });
 
   describe('when submitted', () => {
@@ -160,106 +172,39 @@ describe('TextComponent', () => {
       expect(component).toBeTruthy();
     }));
     it('should display required error when input is active', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.dispatchEvent(new Event('blur'));
-      inputElement.dispatchEvent(new Event('focus'));
+      // set initial state
+      doAction('active_input');
 
-      fixture.detectChanges();
-      expect(control.valid).toEqual(false);
-      expect(control.pristine).toEqual(true);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('');
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
       expect(component.showError).toEqual('required');
-
-      // let errors = {};
-      // errors = name.errors || {};
-      // expect(errors['required']).toEqual(true);
       showRequired( compiled, component);
-
-      // visibility: visible;
     }));
     it('should display no error after input has correctly changed', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.dispatchEvent(new Event('blur'));
-      inputElement.dispatchEvent(new Event('focus'));
+      // set initial state
+      doAction('active_input');
 
-      fixture.detectChanges();
-      expect(control.valid).toEqual(false);
-      expect(control.pristine).toEqual(true);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('');
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
       expect(component.showError).toEqual('required');
-
-      // let errors = {};
-      // errors = name.errors || {};
-      // expect(errors['required']).toEqual(true);
       showRequired( compiled, component);
 
-      inputElement.value = 'xxx';
-      inputElement.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      expect(control.valid).toEqual(true);
-      expect(control.pristine).toEqual(false);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('xxx');
-      expect(component.showError).toEqual('');
+      // set new state
+      doAction('change_input', 'xxx');
 
-      // let errors = {};
-      // errors = name.errors || {};
-      // expect(errors['required']).toEqual(true);
+      // test renewed state
+      expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+      expect(component).isValid('');
       showSuccess( compiled, component);
-
-
-      // visibility: visible;
     }));
-    it('should not display error when input is touched', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.dispatchEvent(new Event('blur'));
-      // inputElement.dispatchEvent(new Event('focus'));
+    it('should display default state when input is touched', fakeAsync(() => {
+      // set initial state
+      doAction('touched');
 
-      fixture.detectChanges();
-      expect(control.valid).toEqual(false);
-      expect(control.pristine).toEqual(true);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('');
-      expect(component.showError).toEqual('required');
-
-      // let errors = {};
-      // errors = name.errors || {};
-      // expect(errors['required']).toEqual(true);
+      // test new state
+      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+      expect(component).isInvalid('required');
       showNoError( compiled, component);
-      
-
-      // visibility: visible;
-    }));
-    it('should not display error when input is given', fakeAsync(() => {
-      const control = component.group.controls.foo;
-      const name = component.group.controls['foo'];
-      // without event input no value will be set
-      inputElement.value = '';
-      inputElement.dispatchEvent(new Event('blur'));
-      inputElement.dispatchEvent(new Event('input'));
-
-      fixture.detectChanges();
-      // tick();
-      expect(control.valid).toEqual(false);
-      expect(control.pristine).toEqual(false);
-      expect(control.touched).toEqual(true);
-      expect(control.value).toEqual('');
-      expect(component.showError).toEqual('required');
-
-      let errors = {};
-      errors = name.errors || {};
-      expect(errors['required']).toEqual(true);
-
-      inputElement.dispatchEvent(new Event('focus'));
-      fixture.detectChanges();
     }));
   });
 });

@@ -20,17 +20,109 @@ export const expect: (actual: any) => NgMatchers = <any> _global.expect;
  * !! important to add your custom matcher to the interface
  */
 export interface NgMatchers extends jasmine.Matchers<any> {
+  hasChanged(expected: {[k: string]: string}|string): boolean;
+  isValid(expected: string): boolean;
+  isInvalid(expected: string): boolean;
   showErrorIcon(expected: boolean): boolean;
   showErrorMessage(expected: string): boolean;
   showHiddenErrorMessage(expected: string): boolean;
   hideErrorMessage(expected: string): boolean;
-  // toHaveCssStyle(expected: {[k: string]: string}|string): boolean;
 }
 
 /**
  * Implementation of 1...n custom matchers
+ * cloned from @angular/core
  */
 export const customMatchers: jasmine.CustomMatcherFactories = {
+
+  hasChanged: function () {
+    return {
+      compare: (actual: any, styles: {[k: string]: string}|string): jasmine.CustomMatcherResult => {
+
+          let expectedAction = '';
+          let oldValue = '';
+          if (typeof styles === 'string') {
+            expectedAction = styles;
+          } else {
+            expectedAction = styles.action;
+            oldValue =  styles.oldValue;
+          }
+          const control = actual.control;
+          let action = '';
+
+        const result: jasmine.CustomMatcherResult = {
+          pass: false,
+          message: ''
+        };
+
+        // CHECK
+        if (oldValue !== control.value) {
+          if (!control.pristine) {
+            action = 'input_changed';
+          }
+        } else {
+          action = 'input_not_changed';
+        }
+
+        if (action === expectedAction) {
+          result.pass = true;
+        } else {
+          // ERROR
+          result.message =  `Expecting action='${expectedAction}' (is: ${action})`;
+        }
+        return result;
+      }
+    };
+  },
+  isValid: function () {
+    return {
+      compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
+
+        expected = expected || '';
+
+        const result: jasmine.CustomMatcherResult = {
+          pass: false,
+          message: ''
+      };
+        if (actual.control.valid && actual.showError === expected ) {
+
+          // @TODO: check actual.control.errors[expected]
+          result.pass = true;
+        } else {
+           // ERROR
+           result.message =  `
+           Expecting control.valid=true (is: ${actual.control.valid}) && showError='${expected}' (is: '${actual.showError}')
+         `;
+        }
+        return result;
+      }
+    };
+  },
+  isInvalid: function () {
+    return {
+      compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
+
+        expected = expected || '';
+
+        const result: jasmine.CustomMatcherResult = {
+          pass: false,
+          message: ''
+      };
+        if (actual.control.invalid && actual.showError === expected ) {
+
+          // @TODO: check actual.control.errors[expected]
+          result.pass = true;
+        } else {
+           // ERROR
+           result.message =  `
+           Expecting control.invalid=true (is: ${actual.control.invalid}) && showError='${expected}' (is: '${actual.showError}')
+         `;
+        }
+        return result;
+      }
+    };
+  },
+
   showErrorIcon: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
@@ -73,7 +165,6 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
     };
   },
 
-  // Here is our custom matcher; cloned from @angular/core
   hideErrorMessage: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
