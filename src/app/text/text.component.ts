@@ -66,7 +66,8 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
           [hidden]="!(showError === 'required')"
           >Das ist ein Pflichtfeld</small>
           
-        <small  name="error-pattern" [hidden]="!(showError === 'pattern')"
+        <small name="error-pattern"
+          [hidden]="!(showError === 'pattern')"
         >Bitte überprüfen Sie das Textfeld.</small>
         <small  name="error-default" [hidden]="!(showError === '')"
         >&nbsp;</small>
@@ -126,5 +127,5 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       this.showError = '';
     }
 
-    }
+  }
 }

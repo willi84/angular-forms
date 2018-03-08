@@ -237,7 +237,7 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
         // get errorMessageBlock && errorMessage
         const errorMessageBlock = actual.querySelectorAll(selector.errorMessageBlock);
         const errorMessage = actual.querySelectorAll(selector.errorMessage);
-       
+
         // both blocks should exists just one time
         if (errorMessageBlock.length === 1 && errorMessage.length === 1) {
           const errorIconBlockStyles = errorMessageBlock[0].getAttribute('style');

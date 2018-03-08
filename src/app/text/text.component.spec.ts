@@ -48,6 +48,10 @@ describe('TextComponent', () => {
         inputElement.dispatchEvent(new Event('focus'));
         fixture.detectChanges();
         break;
+      case 'default':
+        // inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+        break;
     }
 
   }
@@ -81,6 +85,12 @@ describe('TextComponent', () => {
     expect(_compiled).hideErrorMessage('default');
     expect(_compiled).showErrorIcon(true);
   }
+  function showPattern( _compiled, _control) {
+    expect(_compiled).showErrorMessage('pattern');
+    expect(_compiled).hideErrorMessage('required');
+    expect(_compiled).hideErrorMessage('default');
+    expect(_compiled).showErrorIcon(true);
+  }
   function showError( _compiled, _control) {
     expect(_compiled).hideErrorMessage('required');
     expect(_compiled).hideErrorMessage('pattern');
@@ -103,153 +113,301 @@ describe('TextComponent', () => {
     }).compileComponents();
   });
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(TextComponent);
-    component = fixture.componentInstance;
-    component.name = 'foo';
-    component.submitted = false;
-    component.required = 'true';
-    component.group = new FormGroup({
-      foo:   new FormControl('', [Validators.required])
-    });
-    component.ngOnInit();
-    // component.submitted = false;
-    fixture.detectChanges();
-    compiled = fixture.debugElement.nativeElement;
-    inputElement = compiled.querySelector('input');
-    _oldValue = inputElement.value;
-  }));
-  describe('not submitted', () => {
-    it('should display default state should be created', async( () => {
-      expect(component).toBeTruthy();
-    }));
-    it('when input is touched', fakeAsync(() => {
-      // set initial state
-      doAction('touched');
-
-      // test new state
-      expect(component).isInvalid('');
-      showDefault( compiled, component);
-    }));
-    it('should display default state when input is given', fakeAsync(() => {
-      // set initial state
-      doAction('changed_input',  '');
-
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isInvalid('');
-      showDefault( compiled, component);
-    }));
-    it('should display default state when input is given', fakeAsync(() => {
-      // set initial state
-      doAction('changed_input', 'xxx');
-
-      // test new state
-      expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-      expect(component).isValid('');
-      showDefault( compiled, component);
-    }));
-    it('should display default state when input is given and correct', fakeAsync(() => {
-      // set initial state
-      doAction('changed_input',  'xxx');
-
-      // test new state
-      expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-      expect(component).isValid('');
-      showDefault( compiled, component);
-
-      // subtmit
-      const _newValue = inputElement.value;
-      component.submitted = true;
-      fixture.detectChanges();
-
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
-      expect(component).isValid('');
-      showDefault( compiled, component);
-    }));
-  });
-  describe('when submitted with value', () => {
+  describe('simple required', () => {
     beforeEach(async(() => {
-      doAction('change_input', 'xx');
-      component.submitted = true;
+      fixture = TestBed.createComponent(TextComponent);
+      component = fixture.componentInstance;
+      component.name = 'foo';
+      component.submitted = false;
+      component.required = 'true';
+      component.group = new FormGroup({
+        foo:   new FormControl('', [Validators.required])
+      });
+      component.ngOnInit();
+      // component.submitted = false;
+      fixture.detectChanges();
+      compiled = fixture.debugElement.nativeElement;
+      inputElement = compiled.querySelector('input');
       _oldValue = inputElement.value;
     }));
-    it('should be created', async( () => {
-      expect(component).toBeTruthy();
-    }));
-    it('should display no error', fakeAsync(() => {
-      // set initial state
-      // doAction('active_input');
+    describe('not submitted', () => {
+      it('should display default state should be created', async( () => {
+        expect(component).toBeTruthy();
+      }));
+      it('when input is touched', fakeAsync(() => {
+        // set initial state
+        doAction('touched');
 
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isValid('');
-      showSuccess( compiled, component);
-    }));
-    it('should display no error when input is active', fakeAsync(() => {
-      // set initial state
-      doAction('active_input');
+        // test new state
+        expect(component).isInvalid('');
+        showDefault( compiled, component);
+      }));
+      it('should display default state when input is not changed', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input',  '');
 
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isValid('');
-      showSuccess( compiled, component);
-    }));
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('');
+        showDefault( compiled, component);
+      }));
+      it('should display default state when input is changed', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input', 'xxx');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showDefault( compiled, component);
+      }));
+      it('should display default state when input is given, submitted and correct', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input',  'xxx');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showDefault( compiled, component);
+
+        // subtmit
+        const _newValue = inputElement.value;
+        component.submitted = true;
+        fixture.detectChanges();
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
+        expect(component).isValid('');
+        showDefault( compiled, component);
+      }));
+    });
+    describe('when submitted with value', () => {
+      beforeEach(async(() => {
+        doAction('change_input', 'xx');
+        component.submitted = true;
+        _oldValue = inputElement.value;
+      }));
+      it('should be created', async( () => {
+        expect(component).toBeTruthy();
+      }));
+      it('should display no error', fakeAsync(() => {
+        // set initial state
+        // doAction('default');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showSuccess( compiled, component);
+      }));
+      it('should display no error when input is active', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showSuccess( compiled, component);
+      }));
+    });
+    describe('when submitted without value', () => {
+      beforeEach(async(() => {
+        component.submitted = true;
+      }));
+      it('should be created', async( () => {
+        expect(component).toBeTruthy();
+      }));
+      it('should display error but no text', fakeAsync(() => {
+        // set initial state
+        doAction('default');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showError( compiled, component);
+      }));
+      it('should display required error when input is active', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showRequired( compiled, component);
+      }));
+      it('should display no error after input has correctly changed', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showRequired( compiled, component);
+
+        // set new state
+        doAction('change_input', 'xxx');
+
+        // test renewed state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showSuccess( compiled, component);
+      }));
+      it('should display default state when input is touched', fakeAsync(() => {
+        // set initial state
+        doAction('touched');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showNoError( compiled, component);
+      }));
+    });
   });
-  describe('when submitted without value', () => {
+  describe('pattern', () => {
     beforeEach(async(() => {
-      component.submitted = true;
+      fixture = TestBed.createComponent(TextComponent);
+      component = fixture.componentInstance;
+      component.name = 'foo';
+      component.submitted = false;
+      component.required = 'true';
+      component.group = new FormGroup({
+        foo:   new FormControl('', [Validators.required, Validators.pattern('[^ @]*@[^ @]*')])
+      });
+      component.ngOnInit();
+      // component.submitted = false;
+      fixture.detectChanges();
+      compiled = fixture.debugElement.nativeElement;
+      inputElement = compiled.querySelector('input');
+      _oldValue = inputElement.value;
     }));
-    it('should be created', async( () => {
-      expect(component).toBeTruthy();
-    }));
+    describe('not submitted', () => {
+      it('should display default state should be created', async( () => {
+        expect(component).toBeTruthy();
+      }));
+      it('when input is touched', fakeAsync(() => {
+        // set initial state
+        doAction('touched');
 
-    // @TODO
-    xit('should display  error but no text', fakeAsync(() => {
-      // set initial state
-      // doAction('active_input');
+        // test new state
+        expect(component).isInvalid('');
+        showDefault( compiled, component);
+      }));
+      it('should display default state when input is not changed', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input',  '');
 
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isInvalid('required');
-      // showError( compiled, component);
-    }));
-    it('should display required error when input is active', fakeAsync(() => {
-      // set initial state
-      doAction('active_input');
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('');
+        showDefault( compiled, component);
+      }));
+      it('should display default state when input is changed', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input', 'xxx');
 
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isInvalid('required');
-      showRequired( compiled, component);
-    }));
-    it('should display no error after input has correctly changed', fakeAsync(() => {
-      // set initial state
-      doAction('active_input');
+        // test new state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('');
+        showDefault( compiled, component);
+      }));
+      it('should display error state when is given, submitted and incorrect', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input',  'xxx');
 
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isInvalid('required');
-      showRequired( compiled, component);
+        // test new state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('');
+        showDefault( compiled, component);
 
-      // set new state
-      doAction('change_input', 'xxx');
+        // subtmit
+        const _newValue = inputElement.value;
+        component.submitted = true;
+        fixture.detectChanges();
 
-      // test renewed state
-      expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-      expect(component).isValid('');
-      showSuccess( compiled, component);
-    }));
-    it('should display default state when input is touched', fakeAsync(() => {
-      // set initial state
-      doAction('touched');
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
+        expect(component).isInvalid('pattern');
+        showError( compiled, component);
+      }));
+    });
+    describe('when submitted with value', () => {
+      beforeEach(async(() => {
+        doAction('change_input', 'xx');
+        component.submitted = true;
+        _oldValue = inputElement.value;
+      }));
+      it('should be created', async( () => {
+        expect(component).toBeTruthy();
+      }));
+      xit('should display error', fakeAsync(() => {
+        // set initial state
+        // doAction('default');
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('pattern');
+        // console.log(compiled)
+        showError( compiled, component);
+      }));
+      xit('should display no error when input is active', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
 
-      // test new state
-      expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-      expect(component).isInvalid('required');
-      showNoError( compiled, component);
-    }));
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showSuccess( compiled, component);
+      }));
+    });
+    xdescribe('when submitted without value', () => {
+      beforeEach(async(() => {
+        component.submitted = true;
+      }));
+      it('should be created', async( () => {
+        expect(component).toBeTruthy();
+      }));
+      it('should display error but no text', fakeAsync(() => {
+        // set initial state
+        doAction('default');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showError( compiled, component);
+      }));
+      it('should display required error when input is active', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showRequired( compiled, component);
+      }));
+      it('should display no error after input has correctly changed', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showRequired( compiled, component);
+
+        // set new state
+        doAction('change_input', 'xxx');
+
+        // test renewed state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showSuccess( compiled, component);
+      }));
+      it('should display default state when input is touched', fakeAsync(() => {
+        // set initial state
+        doAction('touched');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showNoError( compiled, component);
+      }));
+    });
   });
 });
 
