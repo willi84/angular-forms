@@ -58,14 +58,12 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
       >
         <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
     </span>
-    
       <div name="error-message" class="text-danger {{name}}-error" 
         [style.visibility]="hasFocus ? 'visible' : 'hidden'"
       >
         <small name="error-required"
           [hidden]="!(showError === 'required')"
           >Das ist ein Pflichtfeld</small>
-          
         <small name="error-pattern"
           [hidden]="!(showError === 'pattern')"
         >Bitte überprüfen Sie das Textfeld.</small>
@@ -94,6 +92,8 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       this.showError = '';
     }
     ngOnInit() {
+      // set initial state, fixes also tests
+      this.hasFocus = false;
       this.required = this.required !== 'false' ? 'true' : 'false';
       this.control = this.group.get(this.name);
       this.showError = '';
@@ -109,12 +109,13 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
         } else {
 
           if (this.control.errors !== null && this.submitted){
-            if (this.control.errors.required) {
-              this.showError = 'required';
-            }
-            if (this.control.errors.pattern) {
-              this.showError = 'pattern';
-            }
+              if (this.control.errors.pattern) {
+                this.showError = 'pattern';
+              }
+              if (this.control.errors.required) {
+                this.showError = 'required';
+              }
+
             //  else {
               //    this.showError = 'custom';
               //  }
