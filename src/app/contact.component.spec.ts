@@ -1,11 +1,9 @@
 /* tslint:disable:no-unused-variable */
 
-import {async, TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {ContactComponent} from './contact.component';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EmailComponent } from './email/email.component';
 import { NameComponent } from './name/name.component';
 import { CompanyComponent } from './company/company.component';
@@ -20,8 +18,6 @@ import { SelectboxComponent } from './selectbox/selectbox.component';
 describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
-  let compiled;
-  let inputEl: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,8 +49,6 @@ describe('ContactComponent', () => {
     component.ngOnInit();
     component.submitted = false;
     fixture.detectChanges();
-    compiled = fixture.debugElement.nativeElement;
-    inputEl = compiled.querySelector('input');
   }));
 
   xit('should be created', () => {

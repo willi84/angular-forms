@@ -1,9 +1,7 @@
-import {async, TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 
 import { NameComponent } from './name.component';
-import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
+import {  FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
 
 describe('NameComponent', () => {

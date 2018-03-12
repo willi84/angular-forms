@@ -1,11 +1,9 @@
-import { Component, OnInit, Input, ElementRef, OnChanges} from '@angular/core';
 import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-  ControlContainer,
-  FormGroupDirective
+  Component, OnInit, Input,
+  OnChanges
+} from '@angular/core';
+import {
+  FormGroup
 
  } from '@angular/forms';
 import { environment } from '../../environments/environment.prod';
@@ -58,7 +56,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
       >
         <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
     </span>
-      <div name="error-message" class="text-danger {{name}}-error" 
+      <div name="error-message" class="text-danger {{name}}-error"
         [style.visibility]="hasFocus ? 'visible' : 'hidden'"
       >
         <small name="error-required"
@@ -88,7 +86,10 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   startValue: string;
   startError: true;
   noRequired =  false;
-    constructor(private formBuilder: FormBuilder, private elementRef: ElementRef) {
+    constructor(
+      // private formBuilder: FormBuilder,
+      // private elementRef: ElementRef
+    ) {
       this.showError = '';
     }
     ngOnInit() {
@@ -102,13 +103,15 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
        this.showError = '';
     }
     ngDoCheck() {
+      // console.log("doCheck");
+      // console.log(this.control.value)
        this.showError = '';
       if (this.control) {
         if (!this.control.errors) {
           this.showError = '';
         } else {
 
-          if (this.control.errors !== null && this.submitted){
+          if (this.control.errors !== null && this.submitted) {
               if (this.control.errors.pattern) {
                 this.showError = 'pattern';
               }

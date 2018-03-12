@@ -1,9 +1,7 @@
-import {async, TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 
 import { PhoneComponent } from './phone.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { TextComponent } from '../text/text.component';
 
 describe('PhoneComponent', () => {
@@ -65,7 +63,6 @@ describe('PhoneComponent', () => {
   }));
   it('should not display error when input is given', fakeAsync(() => {
     const control = component.group.controls.phone;
-    const name = component.group.controls['phone'];
     // without event input no value will be set
     inputElement.value = 'xxx';
     inputElement.dispatchEvent(new Event('blur'));
@@ -88,7 +85,6 @@ describe('PhoneComponent', () => {
   }));
   it('should not display error when input is given', fakeAsync(() => {
     const control = component.group.controls.phone;
-    const name = component.group.controls['phone'];
     // without event input no value will be set
     inputElement.value = '0172';
     inputElement.dispatchEvent(new Event('blur'));

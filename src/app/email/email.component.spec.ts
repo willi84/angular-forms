@@ -1,9 +1,7 @@
-import {async, TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture,  fakeAsync } from '@angular/core/testing';
 
 import { EmailComponent } from './email.component';
-import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
+import {  FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
 
 describe('EmailComponent', () => {
@@ -85,7 +83,6 @@ describe('EmailComponent', () => {
     compiled = fixture.debugElement.nativeElement;
     inputElement = compiled.querySelector('input');
     const control = component.group.controls.email;
-    const name = component.group.controls['email'];
     // without event input no value will be set
     inputElement.value = 'xxx';
     inputElement.dispatchEvent(new Event('blur'));
@@ -109,7 +106,6 @@ describe('EmailComponent', () => {
     compiled = fixture.debugElement.nativeElement;
     inputElement = compiled.querySelector('input');
     const control = component.group.controls.email;
-    const name = component.group.controls['email'];
     // without event input no value will be set
     inputElement.value = 'xxx';
     inputElement.dispatchEvent(new Event('blur'));

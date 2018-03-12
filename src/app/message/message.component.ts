@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import {
   FormGroup,
   FormControl,
-  FormBuilder,
   Validators
  } from '@angular/forms';
 import { environment } from '../../environments/environment';
@@ -25,9 +24,8 @@ export class MessageComponent implements OnInit {
 
   constructor(
     private elementRef: ElementRef,
-    private formBuilder: FormBuilder
   ) {
-    this.tagName = elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
+    this.tagName = this.elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
   }
   ngOnInit() {
     this.label = this.label || 'Firma';

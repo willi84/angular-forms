@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import {
   FormGroup,
   FormControl,
-  FormBuilder,
   Validators
 
  } from '@angular/forms';
@@ -24,9 +23,8 @@ export class EmailComponent implements OnInit {
 
   constructor(
     private elementRef: ElementRef,
-    private formBuilder: FormBuilder
   ) {
-    this.tagName = elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
+    this.tagName = this.elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
   }
   ngOnInit() {
     this.label = this.label || 'E-Mail';

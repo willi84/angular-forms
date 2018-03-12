@@ -1,11 +1,6 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-  ControlContainer,
-  FormGroupDirective
+  FormGroup
 
  } from '@angular/forms';
 import { environment } from '../../environments/environment';
@@ -16,7 +11,6 @@ import { environment } from '../../environments/environment';
   .hide-opacity{
     opacity: 0;
   }
-  
 `],
   template: `
   <div class="form-group"
@@ -48,7 +42,7 @@ export class TextAreaComponent implements OnInit {
   @Input() rows = 5;
   @Input() required = 'false';
   control: any;
-    constructor(private formBuilder: FormBuilder, private elementRef: ElementRef) {
+    constructor() {
     }
     ngOnInit() {
       this.required = this.required !== 'false' ? 'true' : 'false';

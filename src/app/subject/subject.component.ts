@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import {
   FormGroup,
   FormControl,
-  FormBuilder,
   Validators
  } from '@angular/forms';
 import { environment } from '../../environments/environment';
@@ -24,7 +23,7 @@ export class SubjectComponent implements OnInit {
   constructor(
     private elementRef: ElementRef
   ) {
-    this.tagName = elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
+    this.tagName = this.elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
   }
   ngOnInit() {
     this.label = this.label || 'Betreff';

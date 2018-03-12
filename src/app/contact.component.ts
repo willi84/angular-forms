@@ -1,15 +1,9 @@
 import {
-  Component,
-  EventEmitter,
-  Output
+  Component
 } from '@angular/core';
 import {
   FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-  ControlContainer,
-  FormGroupDirective
+  FormBuilder
 } from '@angular/forms';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 

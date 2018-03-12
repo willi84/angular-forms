@@ -1,9 +1,7 @@
-import {async, TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 
 import { SalutationComponent } from './salutation.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { SelectboxComponent } from '../selectbox/selectbox.component';
 
 describe('SalutationComponent', () => {
@@ -65,7 +63,6 @@ describe('SalutationComponent', () => {
   }));
   it('should not display error when input is given', fakeAsync(() => {
     const control = component.group.controls.salutation;
-    const name = component.group.controls['salutation'];
     // without event input no value will be set
     inputElement.value = 'xxx';
     inputElement.dispatchEvent(new Event('blur'));

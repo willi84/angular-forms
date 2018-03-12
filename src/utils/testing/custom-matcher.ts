@@ -1,4 +1,3 @@
-import {isUndefined} from "util";
 declare var global: any;
 const _global = <any>(typeof window === 'undefined' ? global : window);
 
@@ -38,7 +37,6 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
   hasChanged: function () {
     return {
       compare: (actual: any, styles: {[k: string]: string}|string): jasmine.CustomMatcherResult => {
-
           let expectedAction = '';
           let oldValue = '';
           if (typeof styles === 'string') {
@@ -182,7 +180,6 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
         // get errorMessageBlock && errorMessage
         const errorMessageBlock = actual.querySelectorAll(selector.errorMessageBlock);
         const errorMessage = actual.querySelectorAll(selector.errorMessage);
-       
         // both blocks should exists just one time
         if (errorMessageBlock.length === 1 && errorMessage.length === 1) {
           const errorIconBlockStyles = errorMessageBlock[0].getAttribute('style');
@@ -292,7 +289,6 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
         // get errorMessageBlock && errorMessage
         const errorMessageBlock = actual.querySelectorAll(selector.errorMessageBlock);
         const errorMessage = actual.querySelectorAll(selector.errorMessage);
-       
         // both blocks should exists just one time
         if (errorMessageBlock.length === 1 && errorMessage.length === 1) {
           const errorIconBlockStyles = errorMessageBlock[0].getAttribute('style');

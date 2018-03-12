@@ -1,9 +1,7 @@
-import {async, TestBed, ComponentFixture, tick, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture,  fakeAsync } from '@angular/core/testing';
 
 import { SubjectComponent } from './subject.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { TextComponent } from '../text/text.component';
 
 describe('SubjectComponent', () => {
@@ -65,7 +63,6 @@ describe('SubjectComponent', () => {
   }));
   it('should not display error when input is given', fakeAsync(() => {
     const control = component.group.controls.subject;
-    const name = component.group.controls['subject'];
     // without event input no value will be set
     inputElement.value = 'xxx';
     inputElement.dispatchEvent(new Event('blur'));

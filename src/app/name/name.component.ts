@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import {
   FormGroup,
   FormControl,
-  FormBuilder,
   Validators
  } from '@angular/forms';
 import { environment } from '../../environments/environment';
