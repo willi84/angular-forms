@@ -44,9 +44,12 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     {{label}}<span *ngIf="required=='true'">*</span>:
     </label>
     <input
+    (keydown)="isTyping= true"
+    (keyup)="isTyping=false" 
     (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
+    isTyoing: {{isTyping}} | hasFocus {{ hasFocus }} | action {{ this.action}}
     <div
       class="text-danger {{name}}-error"
       >
@@ -82,8 +85,10 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   @Input() required = 'false';
   showError =  '';
   hasFocus: false;
+  isTyping: false;
   control: any;
-  startValue: string;
+  startValue = '';
+  action = '';  // action of input between focuses
   startError: true;
   noRequired =  false;
     constructor(
@@ -95,6 +100,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
     ngOnInit() {
       // set initial state, fixes also tests
       this.hasFocus = false;
+      this.isTyping = false;
       this.required = this.required !== 'false' ? 'true' : 'false';
       this.control = this.group.get(this.name);
       this.showError = '';
@@ -103,33 +109,66 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
        this.showError = '';
     }
     ngDoCheck() {
-      // console.log("doCheck");
-      // console.log(this.control.value)
-       this.showError = '';
-      if (this.control) {
-        if (!this.control.errors) {
-          this.showError = '';
+
+      // TODO: action based behaviour
+      // * copy & paste
+      // * delete from error/success to zero after submit
+      if (this.hasFocus) {
+        this.startValue = (this.startValue === '') ? this.control.value : this.startValue;
+        this.action = '';
+      } else {
+        const lenStartValue = this.startValue.length;
+        const lenControlValue = this.control.value.length;
+
+        // actions based on activity
+        if (lenStartValue > lenControlValue) {
+          this.action = 'shorten';
+        } else if (lenStartValue < lenControlValue) {
+          this.action = 'extended';
+        } else if (lenStartValue === lenControlValue) {
+          this.action = 'no';
         } else {
+          this.action = 'replaced';
+        }
+        this.startValue = '';
+      }
+      if (!this.isTyping ) {
 
-          if (this.control.errors !== null && this.submitted) {
-              if (this.control.errors.pattern) {
-                this.showError = 'pattern';
-              }
-              if (this.control.errors.required) {
-                this.showError = 'required';
-              }
-
-            //  else {
-              //    this.showError = 'custom';
-              //  }
-              // this.showError = (this.control.errors.required) ? 'required': '';
+        if (this.control) {
+          if (!this.control.errors) {
+            this.showError = '';
+          } else {
+            // console.log(this.name);
+            // console.log(this.hasFocus);
+            // console.log(this.showError);
+            // console.log(this.control.errors);
+            // console.log('----------');
+            if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
+              this.showError = this.showError;
             } else {
-              this.showError = '';
+              if (this.control.errors !== null && this.submitted) {
+                if (this.control.errors.pattern) {
+                  this.showError = 'pattern';
+                }
+                if (this.control.errors.required) {
+                  this.showError = 'required';
+                }
+                //  else {
+                  //    this.showError = 'custom';
+                  //  }
+                  // this.showError = (this.control.errors.required) ? 'required': '';
+                } else {
+                  this.showError = '';
+                }
+              }
             }
-          }
     } else {
       this.showError = '';
     }
+  } else {
 
   }
+
+  }
+
 }

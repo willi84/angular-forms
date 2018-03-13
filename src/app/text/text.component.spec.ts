@@ -824,10 +824,12 @@ describe('TextComponent', () => {
         showMessage('default');
         // showMessage('has_success');
       }));
-      it('#xxx4 (wrong) should display default state when input is changing', fakeAsync(() => {
+      it('#xxx4 should display pattern error state when input is changing', fakeAsync(() => {
+    
+
+
         // set initial state
         doAction('change_input', 'x');
-
         // test new state
         expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
         expect(component).isInvalid('pattern');
@@ -1118,8 +1120,8 @@ describe('TextComponent', () => {
 
         // test new state
         expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-        expect(component).isInvalid('pattern');
-        showMessage('error_pattern');
+        expect(component).isInvalid('required');
+        showMessage('error_required');
       }));
       it('#5 should display default state when input is changed', fakeAsync(() => {
         // set initial state
@@ -1148,7 +1150,7 @@ describe('TextComponent', () => {
         expect(component).isInvalid('pattern');
         showMessage('has_error');
       }));
-      it('#8 (wrong) should display no error after input has correctly changed', fakeAsync(() => {
+      it('#8 (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
         // set initial state
         doAction('active_input');
 
@@ -1162,8 +1164,75 @@ describe('TextComponent', () => {
 
         // test renewed state
         expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showMessage('error_required');
+
+        // set new state
+        doAction('changed_input', 'xxxx');
+
+        // test renewed state when left
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('pattern');
+        showMessage('has_error');
+
+        // set new state  => occurs pattern error
+        doAction('touch');
+
+        // test renewed state message
         expect(component).isInvalid('pattern');
         showMessage('error_pattern');
+      }));
+      it('#XXX (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
+        // set initial state
+        doAction('changed_input', 'xxx@adsfdf.de');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isValid('');
+        showMessage('default');
+        // @TODO: eigentlich success
+
+        // set new state  => occurs pattern error
+        doAction('change_input', 'xxx');
+
+        // test renewed state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('pattern');
+        showMessage('error_pattern');
+
+        // WAIT
+
+        // set new state
+        doAction('changed_input', 'xxxx');
+
+        // test renewed state when left
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('pattern');
+        showMessage('has_error');
+
+        // set new state  => occurs pattern error
+        doAction('touch');
+
+        // test renewed state message
+        expect(component).isInvalid('pattern');
+        showMessage('error_pattern');
+      }));
+      it('#9 (IMPORTANT) should display no error after input has correctly changed', fakeAsync(() => {
+        // set initial state
+        doAction('active_input');
+
+        // test new state
+        expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showMessage('error_required');
+
+        // set new state  => occurs pattern error
+        doAction('change_input', 'xxx');
+
+        // test renewed state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('required');
+        showMessage('error_required');
 
         // set new state
         doAction('change_input', 'xxx@daf.de');
