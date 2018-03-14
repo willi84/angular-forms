@@ -3,7 +3,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.8.
 
 ## Status
-![Travis status](https://api.travis-ci.org/willi84/angular-forms.svg?branch=masterg)
+[![Build Status](https://travis-ci.org/willi84/angular-forms.svg?branch=master)](https://travis-ci.org/angular/angular)
 
 ## Development server
 
