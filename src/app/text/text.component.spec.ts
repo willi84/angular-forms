@@ -504,14 +504,14 @@ describe('TextComponent', () => {
         expect(component).isValid('');
         showMessage('default');
       }));
-      it('#6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
+      it('#6 should display no error state (no text) when input is changed to empty', fakeAsync(() => {
         // set initial state
         doAction('changed_input',  '');
 
         // test new state
         expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-        expect(component).isInvalid('required');
-        showMessage('has_error');
+        expect(component).isInvalid('');
+        showMessage('default');
       }));
       it('#7 should display default state when input is changed to valid input', fakeAsync(() => {
         // set initial state
@@ -1054,14 +1054,42 @@ describe('TextComponent', () => {
         expect(component).isInvalid('pattern');
         showMessage('has_error');
       }));
-      it('#6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
+      it('#6 should display no error state (no text) when input is changed to empty', fakeAsync(() => {
         // set initial state
+        // doAction('change_input', 'x');
         doAction('changed_input',  '');
-
         // test new state
         expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-        expect(component).isInvalid('required');
+        expect(component).isInvalid('');
+        showMessage('default');
+      }));
+
+      //@TODO: fix and copy for reqired and pattern
+      xit('#6 should display no error state (no text) when input is changed to empty and we  go back to input', fakeAsync(() => {
+        // set initial state
+        // doAction('change_input', 'x');
+        doAction('changed_input',  '');
+        // test new state
+        expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+        expect(component).isInvalid('');
+        showMessage('default');
+
+        doAction('touch');
+        // test new state => dont show error
+        expect(component).isInvalid('');
+        showMessage('default');
+
+        // doAction('change_input',  'x');
+        // // test new state => dont show error
+        // expect(component).isInvalid('pattern');
+        // showMessage('default_active');
+
+
+        doAction('changed_input',  'xx');
+        // test new state => dont show error
+        expect(component).isInvalid('pattern');
         showMessage('has_error');
+
       }));
       it('#7  should display default state when input is changed to valid input', fakeAsync(() => {
         // set initial state
@@ -1129,7 +1157,7 @@ describe('TextComponent', () => {
         expect(component).isInvalid('pattern');
         showMessage('has_error');
       }));
-      it('#6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
+      it('#6 (TODO)should display error state (no text) when input is changed to empty', fakeAsync(() => {
         // set initial state
         doAction('changed_input',  '');
 

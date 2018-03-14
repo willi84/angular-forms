@@ -38,7 +38,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
   template: `
   <div class="form-group"
     [formGroup]="group"
-    [ngClass]="{'has-error': !(!submitted || (!control.invalid && showError === '')) }"
+    [ngClass]="{'has-error': !(!submitted || (!control.invalid && showError === '') || (control.invalid && showError === '' && control.value ==  '' ) || (control.invalid && showError === '' && lastAction ==  'reset' )) }"
   >
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
@@ -49,7 +49,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
-    isTyoing: {{isTyping}} | hasFocus {{ hasFocus }} | action {{ this.action}} | startValue: {{ startValue}}
+    isTyoing: {{isTyping}} | hasFocus {{ hasFocus }} | action {{ this.action}} | startValue: {{ startValue}} | lastACtion: {{ lastAction}}
     <div
       class="text-danger {{name}}-error"
       >
@@ -90,6 +90,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   startValue = '';
   oldValue: '';
   action = '';  // action of input between focuses
+  lastAction = '';
   startError: true;
   noRequired =  false;
     constructor(
@@ -115,23 +116,32 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       // * delete from error/success to zero after submit
       if (this.hasFocus && this.action === 'no') { // startVAlue == ''
         this.startValue = this.oldValue; // (this.startValue === '') ? this.control.value : this.oldValue;
-        this.action = 'start';
+        if(this.lastAction === 'reset' && this.control.value === ''){
+          this.action = this.lastAction;
+        } else {
+          this.action = 'start';
+        }
       }
       const lenStartValue = this.startValue.length;
       const lenControlValue = this.control.value.length;
       // actions based on activity
       if (lenStartValue > lenControlValue) {
-        this.action = 'shorten';
+        this.action = (this.action === 'reset') ? this.action : 'shorten';
       } else if (lenStartValue < lenControlValue) {
         this.action = 'extended';
       } else if (lenStartValue === lenControlValue) {
-          this.action = (this.hasFocus) ? 'start' : 'no'; //  (lenStartValue === 0) ? 'no' : 'start';
+        if(this.lastAction === 'reset' && this.control.value === ''){
+          this.action = this.action;
+        } else {
+          this.action = (this.hasFocus) ? 'start' : 'touched'; //  (lenStartValue === 0) ? 'no' : 'start';
+        }
       } else {
         this.action = 'replaced';
       }
       if (!this.hasFocus) {
         this.oldValue = this.control.value;
         this.startValue = this.oldValue;
+        this.lastAction = this.action;
         this.action = 'no';
       }
       if (!this.isTyping ) {
@@ -140,27 +150,49 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
           if (!this.control.errors) {
             this.showError = '';  // sets default
           } else {
+            
+            
+            if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
+              // @TODO: maybe deletable
+              // this.showError = this.showError;
+            } else {
+              // console.log('else');
+              // console.log(this.action + " | " + this.control.value);
+              if (this.control.errors !== null && this.submitted) {
 
-              if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
-                // @TODO: maybe deletable
-                // this.showError = this.showError;
-              } else {
-                if (this.control.errors !== null && this.submitted) {
+                // Todo: after reset show error after leave
+                if(this.lastAction !== 'reset'){
+
                   if (this.control.errors.pattern) {
                     this.showError = 'pattern';
                   }
                   if (this.control.errors.required) {
                     this.showError = 'required';
                   }
+                }
+
+                // make reset available
+                if (this.lastAction === 'shorten' && this.control.value === '') {
+                  this.showError = '';
+                }
+                if (this.action === 'shorten' && this.control.value === '') {
+                  this.showError = '';
+                  this.action = 'reset';
+                }
+                if (this.lastAction === 'reset' && this.control.value === '') {
+                  this.showError = '';
+                }
+
+                // Todo: after being valid, change to error after leave
+
                 } else {
                   this.showError = '';
                 }
               }
-            // }
-          }
+              // }
+            }
         }
       } else {
-
       }
 
     }
