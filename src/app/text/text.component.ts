@@ -83,12 +83,12 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   @Input() label?: any;
   @Input() type = 'text';
   @Input() required = 'false';
-  showError =  '';
+  showError: string;
   hasFocus: false;
   isTyping: false;
   control: any;
   startValue = '';
-  oldValue: ''
+  oldValue: '';
   action = '';  // action of input between focuses
   startError: true;
   noRequired =  false;
@@ -96,7 +96,6 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       // private formBuilder: FormBuilder,
       // private elementRef: ElementRef
     ) {
-      this.showError = '';
     }
     ngOnInit() {
       // set initial state, fixes also tests
@@ -104,12 +103,10 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       this.isTyping = false;
       this.required = this.required !== 'false' ? 'true' : 'false';
       this.control = this.group.get(this.name);
-      this.showError = '';
       this.startValue = '';
       this.oldValue = '';
     }
     ngOnChanges() {
-       this.showError = '';
     }
     ngDoCheck() {
 
@@ -137,63 +134,35 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
         this.startValue = this.oldValue;
         this.action = 'no';
       }
-
-      // if (this.hasFocus) {
-      //   this.startValue = (this.startValue === '') ? this.control.value : this.startValue;
-      //   this.action = '';
-      // } else {
-      //   const lenStartValue = this.startValue.length;
-      //   const lenControlValue = this.control.value.length;
-
-      //   // actions based on activity
-      //   if (lenStartValue > lenControlValue) {
-      //     this.action = 'shorten';
-      //   } else if (lenStartValue < lenControlValue) {
-      //     this.action = 'extended';
-      //   } else if (lenStartValue === lenControlValue) {
-      //     this.action = 'no';
-      //   } else {
-      //     this.action = 'replaced';
-      //   }
-      //   this.startValue = '';
-      // }
       if (!this.isTyping ) {
 
         if (this.control) {
           if (!this.control.errors) {
-            this.showError = '';
+            this.showError = '';  // sets default
           } else {
-            // console.log(this.name);
-            // console.log(this.hasFocus);
-            // console.log(this.showError);
-            // console.log(this.control.errors);
-            // console.log('----------');
-            if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
-              this.showError = this.showError;
-            } else {
-              if (this.control.errors !== null && this.submitted) {
-                if (this.control.errors.pattern) {
-                  this.showError = 'pattern';
-                }
-                if (this.control.errors.required) {
-                  this.showError = 'required';
-                }
-                //  else {
-                  //    this.showError = 'custom';
-                  //  }
-                  // this.showError = (this.control.errors.required) ? 'required': '';
+
+              if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
+                // @TODO: maybe deletable
+                // this.showError = this.showError;
+              } else {
+                if (this.control.errors !== null && this.submitted) {
+                  if (this.control.errors.pattern) {
+                    this.showError = 'pattern';
+                  }
+                  if (this.control.errors.required) {
+                    this.showError = 'required';
+                  }
                 } else {
                   this.showError = '';
                 }
               }
-            }
-    } else {
-      this.showError = '';
+            // }
+          }
+        }
+      } else {
+
+      }
+
     }
-  } else {
-
-  }
-
-  }
 
 }
