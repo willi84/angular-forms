@@ -41,3 +41,6 @@ This is free software using the MIT license.
 This software has been developed with support from STRATO.
 In German: Diese Software wurde mit Unterstützung von STRATO entwickelt.
 
+## Credits
+* https://medium.com/from-the-couch/angular-2-with-travis-ci-922040e01937
+

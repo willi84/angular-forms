@@ -8,7 +8,7 @@ import {
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
-selector: 'form-contact',
+selector: 'app-form-contact',
 styles: [ `
   .hide-opacity{
     opacity: 0;

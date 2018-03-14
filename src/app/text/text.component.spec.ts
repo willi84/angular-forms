@@ -60,7 +60,6 @@ describe('TextComponent', () => {
         // check dass nicht wackelt
         expect(_compiled).showErrorIcon(true);
         expect(_component.hasFocus).toEqual(false);
-        console.log(_compiled);
         break;
       case 'has_success':
         expect(_compiled).hideErrorMessage('required');
