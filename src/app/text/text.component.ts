@@ -45,11 +45,11 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     </label>
     <input
     (keydown)="isTyping= true"
-    (keyup)="isTyping=false" 
+    (keyup)="isTyping=false"
     (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
-    isTyoing: {{isTyping}} | hasFocus {{ hasFocus }} | action {{ this.action}}
+    isTyoing: {{isTyping}} | hasFocus {{ hasFocus }} | action {{ this.action}} | startValue: {{ startValue}}
     <div
       class="text-danger {{name}}-error"
       >
@@ -88,6 +88,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   isTyping: false;
   control: any;
   startValue = '';
+  oldValue: ''
   action = '';  // action of input between focuses
   startError: true;
   noRequired =  false;
@@ -104,6 +105,8 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       this.required = this.required !== 'false' ? 'true' : 'false';
       this.control = this.group.get(this.name);
       this.showError = '';
+      this.startValue = '';
+      this.oldValue = '';
     }
     ngOnChanges() {
        this.showError = '';
@@ -113,25 +116,47 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       // TODO: action based behaviour
       // * copy & paste
       // * delete from error/success to zero after submit
-      if (this.hasFocus) {
-        this.startValue = (this.startValue === '') ? this.control.value : this.startValue;
-        this.action = '';
-      } else {
-        const lenStartValue = this.startValue.length;
-        const lenControlValue = this.control.value.length;
-
-        // actions based on activity
-        if (lenStartValue > lenControlValue) {
-          this.action = 'shorten';
-        } else if (lenStartValue < lenControlValue) {
-          this.action = 'extended';
-        } else if (lenStartValue === lenControlValue) {
-          this.action = 'no';
-        } else {
-          this.action = 'replaced';
-        }
-        this.startValue = '';
+      if (this.hasFocus && this.action === 'no') { // startVAlue == ''
+        this.startValue = this.oldValue; // (this.startValue === '') ? this.control.value : this.oldValue;
+        this.action = 'start';
       }
+      const lenStartValue = this.startValue.length;
+      const lenControlValue = this.control.value.length;
+      // actions based on activity
+      if (lenStartValue > lenControlValue) {
+        this.action = 'shorten';
+      } else if (lenStartValue < lenControlValue) {
+        this.action = 'extended';
+      } else if (lenStartValue === lenControlValue) {
+          this.action = (this.hasFocus) ? 'start' : 'no'; //  (lenStartValue === 0) ? 'no' : 'start';
+      } else {
+        this.action = 'replaced';
+      }
+      if (!this.hasFocus) {
+        this.oldValue = this.control.value;
+        this.startValue = this.oldValue;
+        this.action = 'no';
+      }
+
+      // if (this.hasFocus) {
+      //   this.startValue = (this.startValue === '') ? this.control.value : this.startValue;
+      //   this.action = '';
+      // } else {
+      //   const lenStartValue = this.startValue.length;
+      //   const lenControlValue = this.control.value.length;
+
+      //   // actions based on activity
+      //   if (lenStartValue > lenControlValue) {
+      //     this.action = 'shorten';
+      //   } else if (lenStartValue < lenControlValue) {
+      //     this.action = 'extended';
+      //   } else if (lenStartValue === lenControlValue) {
+      //     this.action = 'no';
+      //   } else {
+      //     this.action = 'replaced';
+      //   }
+      //   this.startValue = '';
+      // }
       if (!this.isTyping ) {
 
         if (this.control) {

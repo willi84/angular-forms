@@ -825,8 +825,6 @@ describe('TextComponent', () => {
         // showMessage('has_success');
       }));
       it('#xxx4 should display pattern error state when input is changing', fakeAsync(() => {
-    
-
 
         // set initial state
         doAction('change_input', 'x');
