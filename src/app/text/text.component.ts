@@ -38,7 +38,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
   template: `
   <div class="form-group"
     [formGroup]="group"
-    [ngClass]="{'has-error': !(!submitted || (!control.invalid && showError === '') || (control.invalid && showError === '' && control.value ==  '' ) || (control.invalid && showError === '' && lastAction ==  'reset' )) }"
+    [ngClass]="{'has-error': getValidationStatus() }"
   >
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
@@ -49,7 +49,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
-    isTyoing: {{isTyping}} | hasFocus {{ hasFocus }} | action {{ this.action}} | startValue: {{ startValue}} | lastACtion: {{ lastAction}}
+    action {{ this.action}} | startValue: {{ startValue}} | lastACtion: {{ lastAction}}
     <div
       class="text-danger {{name}}-error"
       >
@@ -116,7 +116,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       // * delete from error/success to zero after submit
       if (this.hasFocus && this.action === 'no') { // startVAlue == ''
         this.startValue = this.oldValue; // (this.startValue === '') ? this.control.value : this.oldValue;
-        if(this.lastAction === 'reset' && this.control.value === ''){
+        if (this.lastAction === 'reset' && this.control.value === ''){
           this.action = this.lastAction;
         } else {
           this.action = 'start';
@@ -130,7 +130,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       } else if (lenStartValue < lenControlValue) {
         this.action = 'extended';
       } else if (lenStartValue === lenControlValue) {
-        if(this.lastAction === 'reset' && this.control.value === ''){
+        if (this.lastAction === 'reset' && this.control.value === '') {
           this.action = this.action;
         } else {
           this.action = (this.hasFocus) ? 'start' : 'touched'; //  (lenStartValue === 0) ? 'no' : 'start';
@@ -150,14 +150,10 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
           if (!this.control.errors) {
             this.showError = '';  // sets default
           } else {
-            
-            
             if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
               // @TODO: maybe deletable
               // this.showError = this.showError;
             } else {
-              // console.log('else');
-              // console.log(this.action + " | " + this.control.value);
               if (this.control.errors !== null && this.submitted) {
 
                 // Todo: after reset show error after leave
@@ -195,6 +191,10 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       } else {
       }
 
+    }
+    getValidationStatus() {
+      let status = !(!this.submitted || (!this.control.invalid && this.showError === '') || (this.control.invalid && this.showError === '' && this.control.value ==  '' ) || (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' ));
+      return status;
     }
 
 }
