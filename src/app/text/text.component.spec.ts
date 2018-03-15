@@ -48,7 +48,7 @@ describe('TextComponent', () => {
 
   }
 
-  // @TODO: extract to custom matcher
+  // @TODO: extract to custom matcher  hasChanged isValid
   function showMessage(action) {
     const _compiled = fixture.debugElement.nativeElement;
     const _component = fixture.componentInstance;
@@ -138,74 +138,82 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 should display default state when input created', fakeAsync(() => {
-          // set initial state
-          doAction('default');
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input is created', fakeAsync(() => {
+            // set initial state
+            doAction('default');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#2 should display default state when empty input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#4 WHEN input touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#3 should display default state when user touches input', fakeAsync(() => {
-          // set initial state
-          doAction('touch');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#4 should display default state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#8 WHEN input changed to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#5 should display default state when user is changing input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#6 should display default state when input is not changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+          it('#3 WHEN touching input', fakeAsync(() => {
+            // set initial state
+            doAction('touch');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#7 should display default state when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+          it('#5 WHEN changing input to empty', fakeAsync(() => {
+            // set initial state
+            doAction('change_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#8 should display default state when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+          it('#7 WHEN changing input to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
       });
       describe('when submitted with value', () => {
         beforeEach(async(() => {
@@ -213,161 +221,190 @@ describe('TextComponent', () => {
           component.submitted = true;
           _oldValue = inputElement.value;
         }));
-        it('#1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN given_input === correct', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#2 should display no error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#2 WHEN input has been touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-        }));
-        it('#3 should display default state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+            // showMessage('has_success');
+          }));
+          it('#3 WHEN input was changed to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-          // showMessage('has_success');
-        }));
-        it('#4 should display default state when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#4 WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#5 WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#6 WHEN input is changing to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#7 should display default state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          it('#7 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
       });
       describe('when submitted without value', () => {
         beforeEach(async(() => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#1 should display default state when input is given, submitted and correct', fakeAsync(() => {
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#2 should display error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input not changed', fakeAsync(() => {
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#3 WHEN input touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#3 should display error state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#5 WHEN input changed to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#4 should display default state when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#7 WHEN input changed to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#8 WHEN input has changed correctly', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#7 should display default state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // set new state
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#8 should display no error after input has correctly changed', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
+            // set new state
+            doAction('touched');
 
-          // set new state
-          doAction('change_input', 'xxx');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+          it('#4 WHEN input is changing to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // set new state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          it('#8 WHEN input has correctly changed', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+
+            // set new state
+            doAction('change_input', 'xxx');
+
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
       });
     });
 
-    describe('simple required', () => {
+    describe('VALIDATOR=required', () => {
       beforeEach(async(() => {
         fixture = TestBed.createComponent(TextComponent);
         component = fixture.componentInstance;
@@ -378,7 +415,6 @@ describe('TextComponent', () => {
           foo:   new FormControl('', [Validators.required])
         });
         component.ngOnInit();
-        // component.submitted = false;
         fixture.detectChanges();
         compiled = fixture.debugElement.nativeElement;
         inputElement = compiled.querySelector('input');
@@ -388,74 +424,78 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 should display default state when input created', fakeAsync(() => {
-          // set initial state
-          doAction('default');
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input created', fakeAsync(() => {
+            // set initial state
+            doAction('default');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#2 should display default state when empty input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#4 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#3 should display default state when user touches input', fakeAsync(() => {
-          // set initial state
-          doAction('touch');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input is not changed', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#4 should display default state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#8 WHEN input changed to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#5 should display default state when user is changing input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#6 should display default state when input is not changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#3 WHEN touching input', fakeAsync(() => {
+            // set initial state
+            doAction('touch');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#7 should display default state when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#5 WHEN input is not changing', fakeAsync(() => {
+            // set initial state
+            doAction('change_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#8 should display default state when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#7 WHEN input is changing to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
       });
       describe('when submitted with value', () => {
         beforeEach(async(() => {
@@ -463,74 +503,90 @@ describe('TextComponent', () => {
           component.submitted = true;
           _oldValue = inputElement.value;
         }));
-        it('#1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input has not changed', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#2 should display no error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#3 WHEN input has been touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-        }));
-        it('#3 should display default state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+            // showMessage('has_success');
+          }));
+          it('#5 WHEN input shrinked to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-          // showMessage('has_success');
-        }));
-        it('#4 should display default state when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input changed  to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#7 WHEN input extended to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#6 should display no error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#4 WHEN input is shrinking to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#7 should display default state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+          it('#4 WHEN input is extending to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          it('#2 WHEN input is not changing', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
+
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
       });
       describe('when submitted without value', () => {
         beforeEach(async(() => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        it('#1 display state=default when input is given, submitted and correct', fakeAsync(() => {
           // test new state
           expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
           expect(component).isInvalid('required');
@@ -554,7 +610,7 @@ describe('TextComponent', () => {
           showMessage('has_error');
           // showMessage('has_success');
         }));
-        it('#4 should display default state when input is changing', fakeAsync(() => {
+        it('#4 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -563,7 +619,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('default_active');
         }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
+        it('#5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -581,7 +637,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('required');
           showMessage('has_error');
         }));
-        it('#7 should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#7 display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx');
 
@@ -609,7 +665,7 @@ describe('TextComponent', () => {
         }));
       });
     });
-    describe('pattern', () => {
+    describe('VALIDATOR=pattern', () => {
       beforeEach(async(() => {
         fixture = TestBed.createComponent(TextComponent);
         component = fixture.componentInstance;
@@ -629,7 +685,7 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 (Wrong) should display default state when input created', fakeAsync(() => {
+        it('#1 (Wrong) display state=default when input created', fakeAsync(() => {
           // set initial state
           doAction('default');
 
@@ -637,7 +693,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default');
         }));
-        it('#2 should display default state when empty input is active', fakeAsync(() => {
+        it('#2 display state=default when empty input is active', fakeAsync(() => {
           // set initial state
           doAction('active_input');
 
@@ -645,7 +701,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default_active');
         }));
-        it('#3 should display default state when user touches input', fakeAsync(() => {
+        it('#3 display state=default when user touches input', fakeAsync(() => {
           // set initial state
           doAction('touch');
 
@@ -653,7 +709,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default_active');
         }));
-        it('#4 should display default state when input is touched', fakeAsync(() => {
+        it('#4 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -661,7 +717,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default');
         }));
-        it('#x5 should display default state when user is changing input', fakeAsync(() => {
+        it('#x5 display state=default when user is changing input', fakeAsync(() => {
           // set initial state
           doAction('change_input',  '');
 
@@ -670,7 +726,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default_active');
         }));
-        it('#x6 should display default state when input is not changed', fakeAsync(() => {
+        it('#x6 display state=default when input is not changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input',  '');
 
@@ -681,7 +737,7 @@ describe('TextComponent', () => {
         }));
 
         // @TODO: adapt
-        it('#x7 (wrong)should display default state when input is changing', fakeAsync(() => {
+        it('#x7 (wrong)display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'xxx');
 
@@ -691,7 +747,7 @@ describe('TextComponent', () => {
           showMessage('default_active');
           // showMessage('error_required');
         }));
-        it('#x8 should display default state when input is changed', fakeAsync(() => {
+        it('#x8 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx');
 
@@ -742,7 +798,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#xx3 should display default state when input is touched', fakeAsync(() => {
+        it('#xx3 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -750,7 +806,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('has_error');
         }));
-        it('#xx4 should display default state when input is changing', fakeAsync(() => {
+        it('#xx4 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -759,7 +815,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#xx5 (Wrong) should display default state when input is changed', fakeAsync(() => {
+        it('#xx5 (Wrong) display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -777,7 +833,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('default');
         }));
-        it('#xx7  should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#xx7  display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'xxx@asdf.de');
 
@@ -786,7 +842,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('has_success');
         }));
-        it('#xx8 should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#xx8 display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx@asdf.de');
 
@@ -801,7 +857,7 @@ describe('TextComponent', () => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#xxx1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        it('#xxx1 display state=default when input is given, submitted and correct', fakeAsync(() => {
           // test new state
           expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
           expect(component).isValid('');
@@ -834,7 +890,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#xxx5 should display default state when input is changed', fakeAsync(() => {
+        it('#xxx5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -896,7 +952,7 @@ describe('TextComponent', () => {
         }));
       });
     });
-    describe('pattern and required', () => {
+    describe('VALIDATOR=pattern,required', () => {
       beforeEach(async(() => {
         fixture = TestBed.createComponent(TextComponent);
         component = fixture.componentInstance;
@@ -917,7 +973,7 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 should display default state when input created', fakeAsync(() => {
+        it('#1 display state=default when input created', fakeAsync(() => {
           // set initial state
           doAction('default');
 
@@ -925,7 +981,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default');
         }));
-        it('#2 should display default state when empty input is active', fakeAsync(() => {
+        it('#2 display state=default when empty input is active', fakeAsync(() => {
           // set initial state
           doAction('active_input');
 
@@ -933,7 +989,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default_active');
         }));
-        it('#3 should display default state when user touches input', fakeAsync(() => {
+        it('#3 display state=default when user touches input', fakeAsync(() => {
           // set initial state
           doAction('touch');
 
@@ -941,7 +997,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default_active');
         }));
-        it('#4 should display default state when input is touched', fakeAsync(() => {
+        it('#4 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -949,7 +1005,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default');
         }));
-        it('#5 should display default state when user is changing input', fakeAsync(() => {
+        it('#5 display state=default when user is changing input', fakeAsync(() => {
           // set initial state
           doAction('change_input',  '');
 
@@ -958,7 +1014,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default_active');
         }));
-        it('#6 should display default state when input is not changed', fakeAsync(() => {
+        it('#6 display state=default when input is not changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input',  '');
 
@@ -969,7 +1025,7 @@ describe('TextComponent', () => {
         }));
 
         // @TODO: adapt
-        it('#7 should display default state when input is changing', fakeAsync(() => {
+        it('#7 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'xxx');
 
@@ -979,7 +1035,7 @@ describe('TextComponent', () => {
           showMessage('default_active');
           // showMessage('error_required');
         }));
-        it('#8 should display default state when input is changed', fakeAsync(() => {
+        it('#8 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx');
 
@@ -1030,7 +1086,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#3 should display default state when input is touched', fakeAsync(() => {
+        it('#3 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -1038,7 +1094,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('has_error');
         }));
-        it('#4 should display default state when input is changing', fakeAsync(() => {
+        it('#4 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -1047,7 +1103,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
+        it('#5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -1093,7 +1149,7 @@ describe('TextComponent', () => {
           showMessage('has_error');
 
         }));
-        it('#7  should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#7  display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'xxx@asdf.de');
 
@@ -1102,7 +1158,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('has_success');
         }));
-        it('#8 should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#8 display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx@asdf.de');
 
@@ -1117,7 +1173,7 @@ describe('TextComponent', () => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        it('#1 display state=default when input is given, submitted and correct', fakeAsync(() => {
           // test new state
           expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
           expect(component).isInvalid('required');
@@ -1141,7 +1197,7 @@ describe('TextComponent', () => {
           showMessage('has_error');
           // showMessage('has_success');
         }));
-        it('#4 (wrong) should display default state when input is changing', fakeAsync(() => {
+        it('#4 (wrong) display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -1150,7 +1206,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('required');
           showMessage('error_required');
         }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
+        it('#5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -1292,7 +1348,7 @@ describe('TextComponent', () => {
         component.type = 'tel';
         component.submitted = false;
         component.group = new FormGroup({
-          foo:   new FormControl('', [ 
+          foo:   new FormControl('', [
             Validators.pattern('^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\.\/0-9]*')
           ])
         });
@@ -1307,7 +1363,7 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 (Wrong) should display default state when input created', fakeAsync(() => {
+        it('#1 (Wrong) display state=default when input created', fakeAsync(() => {
           // set initial state
           doAction('default');
 
@@ -1315,7 +1371,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default');
         }));
-        it('#2 should display default state when empty input is active', fakeAsync(() => {
+        it('#2 display state=default when empty input is active', fakeAsync(() => {
           // set initial state
           doAction('active_input');
 
@@ -1323,7 +1379,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default_active');
         }));
-        it('#3 should display default state when user touches input', fakeAsync(() => {
+        it('#3 display state=default when user touches input', fakeAsync(() => {
           // set initial state
           doAction('touch');
 
@@ -1331,7 +1387,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default_active');
         }));
-        it('#4 should display default state when input is touched', fakeAsync(() => {
+        it('#4 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -1339,7 +1395,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default');
         }));
-        it('#x5 should display default state when user is changing input', fakeAsync(() => {
+        it('#x5 display state=default when user is changing input', fakeAsync(() => {
           // set initial state
           doAction('change_input',  '');
 
@@ -1348,7 +1404,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');  // ??
           showMessage('default_active');
         }));
-        it('#x6 should display default state when input is not changed', fakeAsync(() => {
+        it('#x6 display state=default when input is not changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input',  '');
 
@@ -1359,7 +1415,7 @@ describe('TextComponent', () => {
         }));
 
         // @TODO: adapt
-        it('#x7 (wrong)should display default state when input is changing', fakeAsync(() => {
+        it('#x7 (wrong)display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'xxx');
 
@@ -1369,7 +1425,7 @@ describe('TextComponent', () => {
           showMessage('default_active');
           // showMessage('error_required');
         }));
-        it('#x8 should display default state when input is changed', fakeAsync(() => {
+        it('#x8 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx');
 
@@ -1420,7 +1476,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#xx3 should display default state when input is touched', fakeAsync(() => {
+        it('#xx3 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -1428,7 +1484,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('has_error');
         }));
-        it('#xx4 should display default state when input is changing', fakeAsync(() => {
+        it('#xx4 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -1437,7 +1493,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#xx5 (Wrong) should display default state when input is changed', fakeAsync(() => {
+        it('#xx5 (Wrong) display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -1455,7 +1511,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('default');
         }));
-        it('#xx7  should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#xx7  display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('change_input', '020/345667');
 
@@ -1464,7 +1520,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('has_success');
         }));
-        it('#xx8 should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#xx8 display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('changed_input', '+49 565');
 
@@ -1479,7 +1535,7 @@ describe('TextComponent', () => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#xxx1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        it('#xxx1 display state=default when input is given, submitted and correct', fakeAsync(() => {
           // test new state
           expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
           expect(component).isValid('');
@@ -1512,7 +1568,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#xxx5 should display default state when input is changed', fakeAsync(() => {
+        it('#xxx5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -1596,7 +1652,7 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 should display default state when input created', fakeAsync(() => {
+        it('#1 display state=default when input created', fakeAsync(() => {
           // set initial state
           doAction('default');
 
@@ -1604,7 +1660,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default');
         }));
-        it('#2 should display default state when empty input is active', fakeAsync(() => {
+        it('#2 display state=default when empty input is active', fakeAsync(() => {
           // set initial state
           doAction('active_input');
 
@@ -1612,7 +1668,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default_active');
         }));
-        it('#3 should display default state when user touches input', fakeAsync(() => {
+        it('#3 display state=default when user touches input', fakeAsync(() => {
           // set initial state
           doAction('touch');
 
@@ -1620,7 +1676,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default_active');
         }));
-        it('#4 should display default state when input is touched', fakeAsync(() => {
+        it('#4 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -1628,7 +1684,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default');
         }));
-        it('#5 should display default state when user is changing input', fakeAsync(() => {
+        it('#5 display state=default when user is changing input', fakeAsync(() => {
           // set initial state
           doAction('change_input',  '');
 
@@ -1637,7 +1693,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('');
           showMessage('default_active');
         }));
-        it('#6 should display default state when input is not changed', fakeAsync(() => {
+        it('#6 display state=default when input is not changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input',  '');
 
@@ -1648,7 +1704,7 @@ describe('TextComponent', () => {
         }));
 
         // @TODO: adapt
-        it('#7 should display default state when input is changing', fakeAsync(() => {
+        it('#7 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'xxx');
 
@@ -1658,7 +1714,7 @@ describe('TextComponent', () => {
           showMessage('default_active');
           // showMessage('error_required');
         }));
-        it('#8 should display default state when input is changed', fakeAsync(() => {
+        it('#8 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'xxx');
 
@@ -1709,7 +1765,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#3 should display default state when input is touched', fakeAsync(() => {
+        it('#3 display state=default when input is touched', fakeAsync(() => {
           // set initial state
           doAction('touched');
 
@@ -1717,7 +1773,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('has_error');
         }));
-        it('#4 should display default state when input is changing', fakeAsync(() => {
+        it('#4 display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -1726,7 +1782,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('pattern');
           showMessage('error_pattern');
         }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
+        it('#5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
@@ -1772,7 +1828,7 @@ describe('TextComponent', () => {
           showMessage('has_error');
 
         }));
-        it('#7  should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#7  display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('change_input', '+49 565');
 
@@ -1781,7 +1837,7 @@ describe('TextComponent', () => {
           expect(component).isValid('');
           showMessage('has_success');
         }));
-        it('#8 should display default state when input is changed to valid input', fakeAsync(() => {
+        it('#8 display state=default when input is changed to valid input', fakeAsync(() => {
           // set initial state
           doAction('changed_input', '+49 565');
 
@@ -1796,7 +1852,7 @@ describe('TextComponent', () => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#1 should display default state when input is given, submitted and correct', fakeAsync(() => {
+        it('#1 display state=default when input is given, submitted and correct', fakeAsync(() => {
           // test new state
           expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
           expect(component).isInvalid('required');
@@ -1820,7 +1876,7 @@ describe('TextComponent', () => {
           showMessage('has_error');
           // showMessage('has_success');
         }));
-        it('#4 (wrong) should display default state when input is changing', fakeAsync(() => {
+        it('#4 (wrong) display state=default when input is changing', fakeAsync(() => {
           // set initial state
           doAction('change_input', 'x');
 
@@ -1829,7 +1885,7 @@ describe('TextComponent', () => {
           expect(component).isInvalid('required');
           showMessage('error_required');
         }));
-        it('#5 should display default state when input is changed', fakeAsync(() => {
+        it('#5 display state=default when input is changed', fakeAsync(() => {
           // set initial state
           doAction('changed_input', 'x');
 
