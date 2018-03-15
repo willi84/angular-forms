@@ -84,14 +84,14 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   @Input() type = 'text';
   @Input() required = 'false';
   showError: string;
-  hasFocus: false;
-  isTyping: false;
+  hasFocus = false;
+  isTyping =  false;
   control: any;
   startValue = '';
   oldValue: '';
   action = '';  // action of input between focuses
   lastAction = '';
-  startError: true;
+  startError = true;
   noRequired =  false;
     constructor(
       // private formBuilder: FormBuilder,
@@ -193,7 +193,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
 
     }
     getValidationStatus() {
-      let status = !(!this.submitted || (!this.control.invalid && this.showError === '') || (this.control.invalid && this.showError === '' && this.control.value ==  '' ) || (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' ));
+      let status = !(!this.submitted || (!this.control.invalid && this.showError === '') || (this.control.invalid && this.showError === '' && this.control.value ===  '' ) || (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' ));
       return status;
     }
 

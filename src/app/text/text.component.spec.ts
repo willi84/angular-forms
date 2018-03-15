@@ -1064,7 +1064,7 @@ describe('TextComponent', () => {
         showMessage('default');
       }));
 
-      //@TODO: fix and copy for reqired and pattern
+      // @TODO: fix and copy for reqired and pattern
       xit('#6 should display no error state (no text) when input is changed to empty and we  go back to input', fakeAsync(() => {
         // set initial state
         // doAction('change_input', 'x');
