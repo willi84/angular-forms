@@ -49,7 +49,6 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
-    action {{ this.action}} | startValue: {{ startValue}} | lastACtion: {{ lastAction}}
     <div
       class="text-danger {{name}}-error"
       >
@@ -116,7 +115,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       // * delete from error/success to zero after submit
       if (this.hasFocus && this.action === 'no') { // startVAlue == ''
         this.startValue = this.oldValue; // (this.startValue === '') ? this.control.value : this.oldValue;
-        if (this.lastAction === 'reset' && this.control.value === ''){
+        if (this.lastAction === 'reset' && this.control.value === '') {
           this.action = this.lastAction;
         } else {
           this.action = 'start';
@@ -157,7 +156,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
               if (this.control.errors !== null && this.submitted) {
 
                 // Todo: after reset show error after leave
-                if(this.lastAction !== 'reset'){
+                if (this.lastAction !== 'reset') {
 
                   if (this.control.errors.pattern) {
                     this.showError = 'pattern';
@@ -193,7 +192,12 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
 
     }
     getValidationStatus() {
-      let status = !(!this.submitted || (!this.control.invalid && this.showError === '') || (this.control.invalid && this.showError === '' && this.control.value ===  '' ) || (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' ));
+      const status = !(
+        (!this.submitted) ||
+        (!this.control.invalid && this.showError === '') ||
+        (this.control.invalid && this.showError === '' && this.control.value ===  '' ) ||
+        (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' )
+      );
       return status;
     }
 

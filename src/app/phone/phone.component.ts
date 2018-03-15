@@ -30,7 +30,7 @@ export class PhoneComponent implements OnInit {
     this.required = this.required !== 'false' ? 'true' : 'false';
     const controlValidators = [];
     if (this.required === 'true') {
-      controlValidators.push(Validators.required);
+      controlValidators.push(Validators.required, Validators.pattern('^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\\s\.\/0-9]*'));
     }
 
     this.group.addControl('phone', new FormControl('', controlValidators));
