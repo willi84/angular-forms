@@ -9,7 +9,8 @@ params:
 addons:
   browserstack:
     username: "$BROWSERSTACK_USER"
-    access_key: "$BROWSERSTACK_ACCESS_KEY"
+    access_key: 
+      secure: "$BROWSERSTACK_ACCESS_KEY"
 apt:
   sources:
     - google-chrome
