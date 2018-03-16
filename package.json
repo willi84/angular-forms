@@ -8,6 +8,7 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
+    "single": "./node_modules/.bin/protractor conf/single.conf.js",
     "e2e": "ng e2e"
   },
   "private": true,
