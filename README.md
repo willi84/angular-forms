@@ -13,6 +13,9 @@ This project should provide a simple but powerful real world solution of reactiv
 ## Demo
 [https://willi84.github.io/angular-forms/](https://willi84.github.io/angular-forms/)
 
+## Credits
+To my company STRATO and to Travis and Browserstack for supporting OpenSource projects.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
