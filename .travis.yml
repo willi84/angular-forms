@@ -35,6 +35,5 @@ before_script:
 - npm install -g karma
 - npm install
 - ng build
-- ng e2e
 
 script: karma start karma.conf.js --single-run
