@@ -5,11 +5,19 @@ const { SpecReporter } = require('jasmine-spec-reporter');
 
 exports.config = {
   allScriptsTimeout: 11000,
+  seleniumAddress: 'http://hub-cloud.browserstack.com/wd/hub',
   specs: [
     './e2e/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'browserstack.user': process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+    'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+    'build': 'protractor-browserstack',
+    'name': 'single_test',
+    'browserName': 'chrome',
+    'resolution': '1024x768',
+    'browserstack.debug': 'true'
   },
   directConnect: true,
   baseUrl: 'http://localhost:4200/',

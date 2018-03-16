@@ -39,4 +39,4 @@ before_script:
 
 script: 
 - karma start karma.conf.js --single-run
-- npm run single
+- ng e2e
