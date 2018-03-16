@@ -8,6 +8,7 @@ This project should provide a simple but powerful real world solution of reactiv
 
 ## Status
 [![Build Status](https://travis-ci.org/willi84/angular-forms.svg?branch=master)](https://travis-ci.org/willi84/angular-forms)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=https://www.browserstack.com/automate/public-build/TG5PN1BVYUhCU2R0Q0FRKzMyN3Z2bkhSUEtkRmYzQWFRK08rWXNnWDJ6OD0tLTBpbWxsL0hYUU8yVzI2T2hrWXBlSkE9PQ==--6e79f2d6d21fa6b97a2eb420107548a224d6c0e8)](https://www.browserstack.com/automate/public-build/TG5PN1BVYUhCU2R0Q0FRKzMyN3Z2bkhSUEtkRmYzQWFRK08rWXNnWDJ6OD0tLTBpbWxsL0hYUU8yVzI2T2hrWXBlSkE9PQ==--6e79f2d6d21fa6b97a2eb420107548a224d6c0e8)
 
 ## Demo
 [https://willi84.github.io/angular-forms/](https://willi84.github.io/angular-forms/)
