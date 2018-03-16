@@ -5,6 +5,9 @@ node_js:
   - '6.12.3'
 
 addons:
+  browserstack:
+    username: "$BROWSERSTACK_USER"
+    access_key: "$BROWSERSTACK_KEY"
 apt:
   sources:
     - google-chrome
@@ -22,5 +25,6 @@ before_script:
 - npm install -g karma
 - npm install
 - ng build
+- ng e2e
 
 script: karma start karma.conf.js --single-run
