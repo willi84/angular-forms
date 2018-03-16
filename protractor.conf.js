@@ -19,7 +19,7 @@ exports.config = {
     'resolution': '1024x768',
     'browserstack.debug': 'true'
   },
-  directConnect: true,
+  // directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
