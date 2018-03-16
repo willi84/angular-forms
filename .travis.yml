@@ -8,7 +8,8 @@ params:
 
 addons:
   browserstack:
-    username: BROWSERSTACK_USER
+    username: 
+      secure: BROWSERSTACK_USER
     access_key: 
       secure: BROWSERSTACK_ACCESS_KEY
 apt:
