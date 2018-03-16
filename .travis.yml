@@ -3,11 +3,13 @@ dist: trusty
 language: node_js
 node_js:
   - '6.12.3'
+params:
+- env
 
 addons:
   browserstack:
-    username: "%BROWSERSTACK_USER%"
-    access_key: "%BROWSERSTACK_KEY%"
+    username: '%BROWSERSTACK_USER%'
+    access_key: '%BROWSERSTACK_ACCESS_KEY%'
 apt:
   sources:
     - google-chrome
