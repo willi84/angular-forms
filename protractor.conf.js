@@ -14,13 +14,13 @@ exports.config = {
     'browserstack.user': process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
     'build': 'protractor-browserstack',
-    'name': 'single_test',
-    'browserName': 'chrome',
+    'name': 'angular-forms',
     'resolution': '1024x768',
     'browserstack.debug': 'true'
   },
   // directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  // baseUrl: 'http://localhost:4200/',
+  baseUrl: 'http://localhost:49152/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
