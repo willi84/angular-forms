@@ -42,7 +42,7 @@ template: `
   <div class="row">
 
     <div class="col-sm-2">
-      <form-salutation [group]="form" [submitted]="submitted"></form-salutation>
+      <form-salutation [group]="form" [submitted]="submitted" required></form-salutation>
     </div>
     <div class="col-sm-8">
       <form-name [group]="form" [submitted]="submitted" name="first_name" label="Vorname"  required></form-name>

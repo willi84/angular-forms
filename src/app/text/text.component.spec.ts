@@ -13,6 +13,12 @@ describe('TextComponent', () => {
   let compiled;
   let inputElement: any;
   let _oldValue: string;
+  const CHANGED = true;
+  const NOT_CHANGED = false;
+  const VALID = { valid: true, message: ''};
+  const INVALID = { valid: false, message: ''};
+  const ERROR_PATTERN = { valid: false, message: 'pattern'};
+  const ERROR_REQUIRED = { valid: false, message: 'required'};
 
   function doAction( action: string , new_value?: string) {
     switch (action) {
@@ -46,6 +52,17 @@ describe('TextComponent', () => {
       }
       fixture.detectChanges();
 
+  }
+
+  function showStatus( action: string, isValid: any, hasChanged: boolean) {
+    const inputChanged = (hasChanged === true) ? 'input_changed' : 'input_not_changed';
+    expect(component).hasChanged({ action: inputChanged, oldValue:  _oldValue} );
+    if (isValid.valid === true) {
+      expect(component).isValid('');
+    } else {
+      expect(component).isInvalid(isValid.message);
+    }
+    showMessage(action);
   }
 
   // @TODO: extract to custom matcher  hasChanged isValid
@@ -102,8 +119,9 @@ describe('TextComponent', () => {
   }
 
   beforeEach(() => {
-
+    // adding custom Matchers
     jasmine.addMatchers(customMatchers);
+
     TestBed.configureTestingModule({
       declarations: [
         TextComponent
@@ -140,78 +158,38 @@ describe('TextComponent', () => {
         }));
         describe('=> SHOW message="default"', () => {
           it('#1 WHEN input is created', fakeAsync(() => {
-            // set initial state
             doAction('default');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#4 WHEN input touched', fakeAsync(() => {
-            // set initial state
             doAction('touched');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#6 WHEN input changed to empty', fakeAsync(() => {
-            // set initial state
             doAction('changed_input',  '');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#8 WHEN input changed to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="default_active"', () => {
           it('#2 WHEN input is active', fakeAsync(() => {
-            // set initial state
             doAction('active_input');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , NOT_CHANGED);
           }));
           it('#3 WHEN touching input', fakeAsync(() => {
-            // set initial state
             doAction('touch');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , NOT_CHANGED);
           }));
           it('#5 WHEN changing input to empty', fakeAsync(() => {
-            // set initial state
             doAction('change_input',  '');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , NOT_CHANGED);
           }));
           it('#7 WHEN changing input to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('change_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , CHANGED);
           }));
         });
       });
@@ -223,69 +201,37 @@ describe('TextComponent', () => {
         }));
         describe('=> SHOW message="default"', () => {
           it('#1 WHEN given_input === correct', fakeAsync(() => {
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
-          it('#2 WHEN input has been touched', fakeAsync(() => {
-            // set initial state
+          it('#2 (TODO) WHEN input has been touched', fakeAsync(() => {
             doAction('touched');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
             // showMessage('has_success');
           }));
           it('#3 WHEN input was changed to "x"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
           it('#4 WHEN input is changed to empty', fakeAsync(() => {
-            // set initial state
             doAction('changed_input',  '');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
           it('#5 WHEN input is changed to valid input', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="default_active"', () => {
           it('#6 WHEN input is changing to "x"', fakeAsync(() => {
             // set initial state
             doAction('change_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="has_success"', () => {
           it('#7 WHEN input is active', fakeAsync(() => {
-            // set initial state
             doAction('active_input');
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('has_success');
+            showStatus('has_success', VALID , NOT_CHANGED);
           }));
         });
       });
@@ -296,109 +242,63 @@ describe('TextComponent', () => {
         }));
         describe('=> SHOW message="default"', () => {
           it('#1 WHEN input not changed', fakeAsync(() => {
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#3 WHEN input touched', fakeAsync(() => {
-            // set initial state
             doAction('touched');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#5 WHEN input changed to "x"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
           it('#6 WHEN input changed to empty', fakeAsync(() => {
-            // set initial state
             doAction('changed_input',  '');
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#7 WHEN input changed to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
           it('#8 WHEN input has changed correctly', fakeAsync(() => {
             // set initial state
             doAction('active_input');
 
             // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , NOT_CHANGED);
 
             // set new state
             doAction('change_input', 'xxx');
 
             // test renewed state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('has_success');
+            showStatus('has_success', VALID , CHANGED);
 
             // set new state
             doAction('touched');
 
             // test renewed state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="default_active"', () => {
           it('#2 WHEN input is active', fakeAsync(() => {
-            // set initial state
             doAction('active_input');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , NOT_CHANGED);
           }));
           it('#4 WHEN input is changing to "x"', fakeAsync(() => {
-            // set initial state
             doAction('change_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="has_success"', () => {
           it('#8 WHEN input has correctly changed', fakeAsync(() => {
             // set initial state
             doAction('active_input');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , NOT_CHANGED);
 
             // set new state
             doAction('change_input', 'xxx');
-
-            // test renewed state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('has_success');
+            showStatus('has_success', VALID , CHANGED);
           }));
         });
       });
@@ -426,74 +326,38 @@ describe('TextComponent', () => {
         }));
         describe('=> SHOW message="default"', () => {
           it('#1 WHEN input created', fakeAsync(() => {
-            // set initial state
             doAction('default');
-
-            // test new state
-            expect(component).isInvalid('');
-            showMessage('default');
+            showStatus('default', INVALID , NOT_CHANGED);
           }));
           it('#4 WHEN input is touched', fakeAsync(() => {
-            // set initial state
             doAction('touched');
-
-            // test new state
-            expect(component).isInvalid('');
-            showMessage('default');
+            showStatus('default', INVALID , NOT_CHANGED);
           }));
           it('#6 WHEN input is not changed', fakeAsync(() => {
-            // set initial state
             doAction('changed_input',  '');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isInvalid('');
-            showMessage('default');
+            showStatus('default', INVALID , NOT_CHANGED);
           }));
           it('#8 WHEN input changed to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="default_active"', () => {
           it('#2 WHEN input is active', fakeAsync(() => {
-            // set initial state
             doAction('active_input');
-
-            // test new state
-            expect(component).isInvalid('');
-            showMessage('default_active');
+            showStatus('default_active', INVALID , NOT_CHANGED);
           }));
           it('#3 WHEN touching input', fakeAsync(() => {
-            // set initial state
             doAction('touch');
-
-            // test new state
-            expect(component).isInvalid('');
-            showMessage('default_active');
+            showStatus('default_active', INVALID , NOT_CHANGED);
           }));
           it('#5 WHEN input is not changing', fakeAsync(() => {
-            // set initial state
             doAction('change_input',  '');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isInvalid('');
-            showMessage('default_active');
+            showStatus('default_active', INVALID , NOT_CHANGED);
           }));
           it('#7 WHEN input is changing to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('change_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , CHANGED);
           }));
         });
       });
@@ -505,79 +369,40 @@ describe('TextComponent', () => {
         }));
         describe('=> SHOW message="default"', () => {
           it('#1 WHEN input has not changed', fakeAsync(() => {
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
           }));
           it('#3 WHEN input has been touched', fakeAsync(() => {
-            // set initial state
             doAction('touched');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , NOT_CHANGED);
             // showMessage('has_success');
           }));
           it('#5 WHEN input shrinked to "x"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
           it('#6 WHEN input changed  to empty', fakeAsync(() => {
-            // set initial state
             doAction('changed_input',  '');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isInvalid('');
-            showMessage('default');
+            showStatus('default', INVALID , CHANGED);
           }));
           it('#7 WHEN input extended to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="default_active"', () => {
           it('#4 WHEN input is shrinking to "x"', fakeAsync(() => {
-            // set initial state
             doAction('change_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , CHANGED);
           }));
           it('#4 WHEN input is extending to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('change_input', 'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default_active');
+            showStatus('default_active', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="has_success"', () => {
           it('#2 WHEN input is not changing', fakeAsync(() => {
-            // set initial state
             doAction('active_input');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('has_success');
+            showStatus('has_success', VALID , NOT_CHANGED);
           }));
         });
       });
@@ -588,33 +413,18 @@ describe('TextComponent', () => {
         }));
         describe('=> SHOW message="required"', () => {
           it('#2 WHEN input is active', fakeAsync(() => {
-            // set initial state
             doAction('active_input');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-            expect(component).isInvalid('required');
-            showMessage('required');
+            showStatus('required', ERROR_REQUIRED , NOT_CHANGED);
           }));
         });
         describe('=> SHOW message="default"', () => {
           it('#5 WHEN input is extended to "x"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'x');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
           it('#7 WHEN input is extended to "xxx"', fakeAsync(() => {
-            // set initial state
             doAction('changed_input', 'xxx');
-            
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isValid('');
-            showMessage('default');
+            showStatus('default', VALID , CHANGED);
           }));
         });
         describe('=> SHOW message="default_active"', () => {
@@ -769,202 +579,198 @@ describe('TextComponent', () => {
             // showMessage('error_required');
           }));
         });
-        describe('=> SHOW message="has_error"', () => {
-          xit('#xx (TODO) WHEN input is extended to "xxx" and submitted', fakeAsync(() => {
-            // set initial state
-            doAction('changed_input',  'xxx');
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-            expect(component).isInvalid('');
-            showMessage('default');
-
-            // subtmit
-            const _newValue = inputElement.value;
-            component.submitted = true;
-            fixture.detectChanges();
-
-            // test new state
-            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
-            expect(component).isInvalid('pattern');
-            showMessage('has_error');
-          }));
-        });
       });
-      describe('when submitted with value', () => {
+      describe('when submitted with value "xxx"', () => {
         beforeEach(async(() => {
           doAction('changed_input', 'xx');
           component.submitted = true;
           _oldValue = inputElement.value;
         }));
-        it('#xx1 (wrong) should display error state when input is given, submitted', fakeAsync(() => {
+        describe('=> SHOW message="default"', () => {
+          it('#xx1 WHEN input has not changed', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#xx2 should display no error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#xx6 WHEN input is shrinked to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#xx3 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xx8 WHEN input is changed to valid', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx@asdf.de');
 
-          // test new state
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xx4 display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          it('#xx7  WHEN input is changing to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx@asdf.de');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#xx5 (Wrong) display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#xx3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xx6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          it('#xx5 (Wrong) WHEN input is shrinked', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#xx7  display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx@asdf.de');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#xx2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-        }));
-        it('#xx8 display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx@asdf.de');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+          it('#xx4 WHEN input is shrinked to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
       });
       describe('when submitted without value', () => {
         beforeEach(async(() => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#xxx1 display state=default when input is given, submitted and correct', fakeAsync(() => {
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#xxx2 should display error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+        describe('=> SHOW message="default"', () => {
+          it('#xxx1 WHEN input is not changed', fakeAsync(() => {
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xxx3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
+  
+            // test new state
+            expect(component).isValid('');
+            showMessage('default');
+            // showMessage('has_success');
+          }));
+          it('#xxx6 WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
+  
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xxx8 (wrong) WHEN input has correctly changed', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#xxx3 should display error state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-          // showMessage('has_success');
-        }));
-        it('#xxx4 should display pattern error state when input is changing', fakeAsync(() => {
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
 
-          // set initial state
-          doAction('change_input', 'x');
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#xxx5 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xxx6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // set new state
+            doAction('change_input', 'xxx@daf.de');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#xxx7 should display error state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+  
+            // set new state
+            doAction('touched');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#xxx2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xxx8 (wrong) should display no error after input has correctly changed', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#xxx4 WHEN input is shrinking to "x"', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
+            // set initial state
+            doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#xxx5 WHEN input is shrinked to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          it('#xxx7 WHEN input is extended to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-
-          // set new state
-          doAction('change_input', 'xxx@daf.de');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-
-          // set new state
-          doAction('touched');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
       });
     });
     describe('VALIDATOR=pattern,required', () => {
@@ -988,373 +794,367 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 display state=default when input created', fakeAsync(() => {
-          // set initial state
-          doAction('default');
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input is created', fakeAsync(() => {
+            // set initial state
+            doAction('default');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#2 display state=default when empty input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#4 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#3 display state=default when user touches input', fakeAsync(() => {
-          // set initial state
-          doAction('touch');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input is not changed', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#4 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#8 WHEN input is extended to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
+  
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 WHEN empty input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#5 display state=default when user is changing input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input',  '');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#3 WHEN input is touching', fakeAsync(() => {
+            // set initial state
+            doAction('touch');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#6 display state=default when input is not changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#5 WHEN input is shrinking to empty', fakeAsync(() => {
+            // set initial state
+            doAction('change_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+           // @TODO: adapt
+          it('#7 WHEN input is extending to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx');
 
-        // @TODO: adapt
-        it('#7 display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default_active');
-          // showMessage('error_required');
-        }));
-        it('#8 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        xit('#xx should display error state when is given, submitted and incorrect', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  'xxx');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-
-          // subtmit
-          const _newValue = inputElement.value;
-          component.submitted = true;
-          fixture.detectChanges();
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default_active');
+            // showMessage('error_required');
+          }));
+        });
       });
-      describe('when submitted with value', () => {
+      describe('when submitted with value "xx"', () => {
         beforeEach(async(() => {
           doAction('changed_input', 'xx');
           component.submitted = true;
           _oldValue = inputElement.value;
         }));
-        it('#1 (wrong) should display error state when input is given, submitted', fakeAsync(() => {
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input is not changed', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#2 should display no error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            // doAction('change_input', 'x');
+            doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#8 WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx@asdf.de');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#3 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#4 display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          it('#5 WHEN input is shrinked to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#5 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          xit('#6 WHEN input is changed to empty and we  go back to input', fakeAsync(() => {
+            // set initial state
+            // doAction('change_input', 'x');
+            doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#6 should display no error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          // doAction('change_input', 'x');
-          doAction('changed_input',  '');
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
+            doAction('touch');
+            // test new state => dont show error
+            expect(component).isInvalid('');
+            showMessage('default');
 
-        // @TODO: fix and copy for reqired and pattern
-        xit('#6 should display no error state (no text) when input is changed to empty and we  go back to input', fakeAsync(() => {
-          // set initial state
-          // doAction('change_input', 'x');
-          doAction('changed_input',  '');
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
+            // doAction('change_input',  'x');
+            // // test new state => dont show error
+            // expect(component).isInvalid('pattern');
+            // showMessage('default_active');
 
-          doAction('touch');
-          // test new state => dont show error
-          expect(component).isInvalid('');
-          showMessage('default');
+            doAction('changed_input',  'xx');
+            // test new state => dont show error
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // doAction('change_input',  'x');
-          // // test new state => dont show error
-          // expect(component).isInvalid('pattern');
-          // showMessage('default_active');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+          it('#4 WHEN input is shrinking to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          it('#7  WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx@asdf.de');
 
-          doAction('changed_input',  'xx');
-          // test new state => dont show error
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
 
-        }));
-        it('#7  display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx@asdf.de');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-        }));
-        it('#8 display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx@asdf.de');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
       });
       describe('when submitted without value', () => {
         beforeEach(async(() => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#1 display state=default when input is given, submitted and correct', fakeAsync(() => {
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('has_error');
-        }));
-        it('#2 should display error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+        describe('=> SHOW message="default"', () => {
+          it('#9 WHEN input has correctly changed', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-        }));
-        it('#3 should display error state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
 
-          // test new state
-          expect(component).isInvalid('required');
-          showMessage('has_error');
-          // showMessage('has_success');
-        }));
-        it('#4 (wrong) display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-        }));
-        it('#5 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#6 (TODO)should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // set new state
+            doAction('change_input', 'xxx@daf.de');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+  
+            // set new state
+            doAction('touched');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#1 WHEN input is not changed', fakeAsync(() => {
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('has_error');
+          }));
+          it('#3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('has_error');
-        }));
-        it('#7 should display error state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).isInvalid('required');
+            showMessage('has_error');
+            // showMessage('has_success');
+          }));
+          it('#5 WHEN input is changed to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#8 (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          it('#6 (TODO) WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('has_error');
+          }));
+          it('#7 WHEN input is extended to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
+        describe('=> SHOW message="error_required"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+          }));
+          it('#4 (wrong) WHEN input is changing to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // set new state
-          doAction('changed_input', 'xxxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#8 (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test renewed state when left
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
 
-          // set new state  => occurs pattern error
-          doAction('touch');
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
 
-          // test renewed state message
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#XXX (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx@adsfdf.de');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-          // @TODO: eigentlich success
+            // set new state
+            doAction('changed_input', 'xxxx');
 
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
+            // test renewed state when left
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
+            // set new state  => occurs pattern error
+            doAction('touch');
 
-          // WAIT
+            // test renewed state message
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+          it('#XXX (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx@adsfdf.de');
 
-          // set new state
-          doAction('changed_input', 'xxxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+            // @TODO: eigentlich success
 
-          // test renewed state when left
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
 
-          // set new state  => occurs pattern error
-          doAction('touch');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
 
-          // test renewed state message
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#9 (IMPORTANT) should display no error after input has correctly changed', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // WAIT
+            // set new state
+            doAction('changed_input', 'xxxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
+            // test renewed state when left
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
 
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
+            // set new state  => occurs pattern error
+            doAction('touch');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-
-          // set new state
-          doAction('change_input', 'xxx@daf.de');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-
-          // set new state
-          doAction('touched');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test renewed state message
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
       });
     });
   });
+  // TELEPHONE
   describe('input component (type=tel)', () => {
-
-
-
     describe('pattern', () => {
       beforeEach(async(() => {
         fixture = TestBed.createComponent(TextComponent);
@@ -1378,271 +1178,328 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 (Wrong) display state=default when input created', fakeAsync(() => {
-          // set initial state
-          doAction('default');
+        describe('=> SHOW message="default"', () => {
+          it('#1 WHEN input created', fakeAsync(() => {
+            // set initial state
+            doAction('default');
 
-          // test new state
-          expect(component).isValid('');  // ??
-          showMessage('default');
-        }));
-        it('#2 display state=default when empty input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).isValid('');  // ??
+            showMessage('default');
+          }));
+          it('#4 display WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isValid('');  // ??
-          showMessage('default_active');
-        }));
-        it('#3 display state=default when user touches input', fakeAsync(() => {
-          // set initial state
-          doAction('touch');
+            // test new state
+            expect(component).isValid('');  // ??
+            showMessage('default');
+          }));
+          it('#x6 WHEN input is not changed', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');  // ??
+            showMessage('default');
+          }));
+          it('#x8 (WRONG) WHEN input is extended to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).isValid('');  // ??
-          showMessage('default_active');
-        }));
-        it('#4 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#x8 WHEN input is extended to "012"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '012');
 
-          // test new state
-          expect(component).isValid('');  // ??
-          showMessage('default');
-        }));
-        it('#x5 display state=default when user is changing input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xx WHEN input is changed to valid value and submitted', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '030 6796786');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');  // ??
-          showMessage('default_active');
-        }));
-        it('#x6 display state=default when input is not changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');  // ??
-          showMessage('default');
-        }));
+            // subtmit
+            const _newValue = inputElement.value;
+            component.submitted = true;
+            fixture.detectChanges();
 
-        // @TODO: adapt
-        it('#x7 (wrong)display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 WHEN empty input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid(''); // ???
-          showMessage('default_active');
-          // showMessage('error_required');
-        }));
-        it('#x8 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).isValid('');  // ??
+            showMessage('default_active');
+          }));
+          it('#3 WHEN input is touching', fakeAsync(() => {
+            // set initial state
+            doAction('touch');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        xit('#xx should display error state when is given, submitted and incorrect', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  'xxx');
+            // test new state
+            expect(component).isValid('');  // ??
+            showMessage('default_active');
+          }));
+          it('#x5 WHEN input is changing to empty', fakeAsync(() => {
+            // set initial state
+            doAction('change_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');  // ??
+            showMessage('default_active');
+          }));
+          // @TODO: adapt
+          it('#x7 (WRONG) WHEN input is changing to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx');
 
-          // subtmit
-          const _newValue = inputElement.value;
-          component.submitted = true;
-          fixture.detectChanges();
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid(''); // ???
+            showMessage('default_active');
+            // showMessage('error_required');
+          }));
+          it('#x8 WHEN input is extended to "012"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '012');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#xx WHEN input is changed to incorrect value and submitted', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  'xxx');
+
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+
+            // subtmit
+            const _newValue = inputElement.value;
+            component.submitted = true;
+            fixture.detectChanges();
+
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
       });
-      describe('when submitted with value', () => {
+      describe('when submitted with value "012"', () => {
         beforeEach(async(() => {
-          doAction('changed_input', 'xx');
+          doAction('changed_input', '012');
           component.submitted = true;
           _oldValue = inputElement.value;
         }));
-        it('#xx1 (wrong) should display error state when input is given, submitted', fakeAsync(() => {
+        describe('=> SHOW message="default"', () => {
+          it('#xx1 WHEN input is not changed', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#xx2 should display no error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xx3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#xx3 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xx6 WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xx4 display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xx8 WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '+49 565');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#xx5 (Wrong) display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          it('#xx2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xx6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+          it('#xx7  WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', '020/345667');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#xx7  display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', '020/345667');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#xx4 WHEN input is changing to wrong value "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-        }));
-        it('#xx8 display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', '+49 565');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#xx5 (Wrong) WHEN input is changed to invalid value "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
       });
       describe('when submitted without value', () => {
         beforeEach(async(() => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#xxx1 display state=default when input is given, submitted and correct', fakeAsync(() => {
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#xxx2 should display error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+        describe('=> SHOW message="default"', () => {
+          it('#xxx1 WHEN input is not changed', fakeAsync(() => {
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xxx3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
-        }));
-        it('#xxx3 should display error state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).isValid('');
+            showMessage('default');
+            // showMessage('has_success');
+          }));
+          it('#xxx6 WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).isValid('');
-          showMessage('default');
-          // showMessage('has_success');
-        }));
-        it('#xxx4 should display pattern error state when input is changing', fakeAsync(() => {
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xxx8 (wrong) WHEN input is changed to valid valued', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // set initial state
-          doAction('change_input', 'x');
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#xxx5 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xxx6 should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
-        it('#xxx7 should display error state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#xxx8 (wrong) should display no error after input has correctly changed', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // set new state
+            doAction('change_input', '+49 565');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default_active');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
 
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
+            // set new state
+            doAction('touched');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#xxx7 WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '012 2345345');
 
-          // set new state
-          doAction('change_input', '+49 565');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#xxx2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#xxx4 WHEN input is changing to invalid value "x"', fakeAsync(() => {
 
-          // set new state
-          doAction('touched');
+            // set initial state
+            doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#xxx5 WHEN input is changed to wrong value "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+        });
       });
     });
     describe('pattern and required', () => {
@@ -1667,366 +1524,389 @@ describe('TextComponent', () => {
         it('#0 should be created', async( () => {
           expect(component).toBeTruthy();
         }));
-        it('#1 display state=default when input created', fakeAsync(() => {
-          // set initial state
-          doAction('default');
+        describe('=> SHOW message="default"', () => {
+          it('#1 display state=default when input created', fakeAsync(() => {
+            // set initial state
+            doAction('default');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#2 display state=default when empty input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#4 display state=default when input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#3 display state=default when user touches input', fakeAsync(() => {
-          // set initial state
-          doAction('touch');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#6 display state=default when input is not changed', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#4 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#8 display state=default when input is changed', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'xxx');
 
-          // test new state
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#5 display state=default when user is changing input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 display state=default when empty input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default_active');
-        }));
-        it('#6 display state=default when input is not changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#3 display state=default when user touches input', fakeAsync(() => {
+            // set initial state
+            doAction('touch');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          it('#5 display state=default when user is changing input', fakeAsync(() => {
+            // set initial state
+            doAction('change_input',  '');
 
-        // @TODO: adapt
-        it('#7 display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default_active');
+          }));
+          // @TODO: adapt
+          it('#7 WHEN input is changing to "xxx"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'xxx');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default_active');
-          // showMessage('error_required');
-        }));
-        it('#8 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default_active');
+            // showMessage('error_required');
+          }));
+          it('#7 WHEN input is changing to "012 678"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', '012 678');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        xit('#xx should display error state when is given, submitted and incorrect', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  'xxx');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-
-          // subtmit
-          const _newValue = inputElement.value;
-          component.submitted = true;
-          fixture.detectChanges();
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _newValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+            // showMessage('error_required');
+          }));
+        });
       });
       describe('when submitted with value', () => {
         beforeEach(async(() => {
-          doAction('changed_input', 'xx');
+          doAction('changed_input', '012');
           component.submitted = true;
           _oldValue = inputElement.value;
         }));
-        it('#1 (wrong) should display error state when input is given, submitted', fakeAsync(() => {
+        describe('=> SHOW message="default"', () => {
+          it('#1 (wrong) WHEN input is not changed', fakeAsync(() => {
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
-        it('#2 should display no error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#3 display state=default when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+          it('#6 WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            // doAction('change_input', 'x');
+            doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
+          }));
+          it('#8 WHEN input is changed to valid value "+49 565"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '+49 565');
 
-          // test new state
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#4 display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="default_active"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#5 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default_active');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#5 WHEN input is changed to invalid value "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#6 should display no error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          // doAction('change_input', 'x');
-          doAction('changed_input',  '');
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          // @TODO: fix and copy for reqired and pattern
+          xit('#6 (TODO) WHEN input is changed to empty and we go back to input', fakeAsync(() => {
+            // set initial state
+            // doAction('change_input', 'x');
+            doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('default');
 
-        // @TODO: fix and copy for reqired and pattern
-        xit('#6 should display no error state (no text) when input is changed to empty and we  go back to input', fakeAsync(() => {
-          // set initial state
-          // doAction('change_input', 'x');
-          doAction('changed_input',  '');
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('');
-          showMessage('default');
+            doAction('touch');
+            // test new state => dont show error
+            expect(component).isInvalid('');
+            showMessage('default');
 
-          doAction('touch');
-          // test new state => dont show error
-          expect(component).isInvalid('');
-          showMessage('default');
-
-          // doAction('change_input',  'x');
-          // // test new state => dont show error
-          // expect(component).isInvalid('pattern');
-          // showMessage('default_active');
+            // doAction('change_input',  'x');
+            // // test new state => dont show error
+            // expect(component).isInvalid('pattern');
+            // showMessage('default_active');
 
 
-          doAction('changed_input',  'xx');
-          // test new state => dont show error
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
+            doAction('changed_input',  'xx');
+            // test new state => dont show error
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
 
-        }));
-        it('#7  display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', '+49 565');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#4 WHEN input is changing to "x"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-        }));
-        it('#8 display state=default when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', '+49 565');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          xit('#4 WHEN input is changing to "012 6374538"', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', '012 6374538');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('');
+            showMessage('has_success');
+          }));
+          it('#7 WHEN input is changed to valid input', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', '+49 565');
+
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
+
       });
       describe('when submitted without value', () => {
         beforeEach(async(() => {
           component.submitted = true;
           doAction('touched');
         }));
-        it('#1 display state=default when input is given, submitted and correct', fakeAsync(() => {
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('has_error');
-        }));
-        it('#2 should display error when input is active', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
+        describe('=> SHOW message="default"', () => {
+          it('#9 (IMPORTANT) AFTER input has correctly changed', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
+  
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+  
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+  
+            // set new state
+            doAction('change_input', '+49 565');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+  
+            // set new state
+            doAction('touched');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+          }));
+        });
+        describe('=> SHOW message="has_success"', () => {
+          xit('#7 (WRONG) WHEN input is changed to valid input "030 45678"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '030 45678');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-        }));
-        it('#3 should display error state when input is touched', fakeAsync(() => {
-          // set initial state
-          doAction('touched');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('has_success');
+          }));
+        });
+        describe('=> SHOW message="has_error"', () => {
+          it('#1 WHEN input is not changed', fakeAsync(() => {
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('has_error');
+          }));
+          it('#3 WHEN input is touched', fakeAsync(() => {
+            // set initial state
+            doAction('touched');
 
-          // test new state
-          expect(component).isInvalid('required');
-          showMessage('has_error');
-          // showMessage('has_success');
-        }));
-        it('#4 (wrong) display state=default when input is changing', fakeAsync(() => {
-          // set initial state
-          doAction('change_input', 'x');
+            // test new state
+            expect(component).isInvalid('required');
+            showMessage('has_error');
+            // showMessage('has_success');
+          }));
+          it('#5 WHEN input is changed to wrong value "x"', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-        }));
-        it('#5 display state=default when input is changed', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'x');
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+          }));
+          it('#6 (TODO) WHEN input is changed to empty', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input',  '');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#6 (TODO)should display error state (no text) when input is changed to empty', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input',  '');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('has_error');
+          }));
+          it('#8 (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
+  
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+  
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+  
+            // set new state
+            doAction('changed_input', 'xxxx');
+  
+            // test renewed state when left
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+  
+            // set new state  => occurs pattern error
+            doAction('touch');
+  
+            // test renewed state message
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
+        describe('=> SHOW message="error_required"', () => {
+          it('#2 WHEN input is active', fakeAsync(() => {
+            // set initial state
+            doAction('active_input');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('has_error');
-        }));
-        it('#7 should display error state when input is changed to valid input', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', 'xxx');
+            // test new state
+            expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+          }));
+          it('#4 (TODO) WHEN input is changing to wrong value', fakeAsync(() => {
+            // set initial state
+            doAction('change_input', 'x');
 
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-        }));
-        it('#8 (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-
-          // set new state
-          doAction('changed_input', 'xxxx');
-
-          // test renewed state when left
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-
-          // set new state  => occurs pattern error
-          doAction('touch');
-
-          // test renewed state message
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#XXX (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
-          // set initial state
-          doAction('changed_input', '+49 565');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-          // @TODO: eigentlich success
-
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-
-          // WAIT
-
-          // set new state
-          doAction('changed_input', 'xxxx');
-
-          // test renewed state when left
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('pattern');
-          showMessage('has_error');
-
-          // set new state  => occurs pattern error
-          doAction('touch');
-
-          // test renewed state message
-          expect(component).isInvalid('pattern');
-          showMessage('error_pattern');
-        }));
-        it('#9 (IMPORTANT) should display no error after input has correctly changed', fakeAsync(() => {
-          // set initial state
-          doAction('active_input');
-
-          // test new state
-          expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-
-          // set new state  => occurs pattern error
-          doAction('change_input', 'xxx');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isInvalid('required');
-          showMessage('error_required');
-
-          // set new state
-          doAction('change_input', '+49 565');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('has_success');
-
-          // set new state
-          doAction('touched');
-
-          // test renewed state
-          expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
-          expect(component).isValid('');
-          showMessage('default');
-        }));
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('required');
+            showMessage('error_required');
+          }));
+        });
+        describe('=> SHOW message="error_pattern"', () => {
+          it('#XXX (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
+            // set initial state
+            doAction('changed_input', '+49 565');
+  
+            // test new state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isValid('');
+            showMessage('default');
+            // @TODO: eigentlich success
+  
+            // set new state  => occurs pattern error
+            doAction('change_input', 'xxx');
+  
+            // test renewed state
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+  
+            // WAIT
+  
+            // set new state
+            doAction('changed_input', 'xxxx');
+  
+            // test renewed state when left
+            expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
+            expect(component).isInvalid('pattern');
+            showMessage('has_error');
+  
+            // set new state  => occurs pattern error
+            doAction('touch');
+  
+            // test renewed state message
+            expect(component).isInvalid('pattern');
+            showMessage('error_pattern');
+          }));
+        });
       });
     });
   });

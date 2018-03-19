@@ -5,3 +5,4 @@
  * fast copy & cut
  * action based behaviour: copy and aste
 * reset after succcess, change input gets error
+* CSS: margin-top: dynmically each row

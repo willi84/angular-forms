@@ -200,5 +200,4 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
       );
       return status;
     }
-
 }
