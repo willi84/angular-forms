@@ -14,6 +14,9 @@ import { SalutationComponent } from './salutation/salutation.component';
 import { SubjectComponent } from './subject/subject.component';
 import { PhoneComponent } from './phone/phone.component';
 import { SelectboxComponent } from './selectbox/selectbox.component';
+import { SanitizeService } from './services/sanitize/sanitize.service';
+// import { HttpClient, HttpHandler } from '@angular/common/http';
+// import {Observable} from 'rxjs/Observable';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -38,7 +41,11 @@ describe('ContactComponent', () => {
       imports: [
         FormsModule,
         ReactiveFormsModule,
-      ]
+      ],
+      providers: [ 
+        SanitizeService, 
+        // HttpClient, HttpHandler
+      ],
     })
       .compileComponents();
   });

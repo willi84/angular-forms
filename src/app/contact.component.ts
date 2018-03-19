@@ -6,6 +6,11 @@ import {
   FormBuilder
 } from '@angular/forms';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { SanitizeService } from './services/sanitize/sanitize.service';
+// import {Observable} from "rxjs/Observable";
+
+import { HttpClient} from '@angular/common/http';
+// import { Headers, RequestOptions } from '@angular/http';
 
 @Component({
 selector: 'app-form-contact',
@@ -76,9 +81,14 @@ export class ContactComponent implements OnInit {
 
 
   public form: FormGroup;
-
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private sanitize: SanitizeService,
+    private http: HttpClient
+  ) {
     this.submitted = false;
+    this.sanitize = sanitize;
+    this.http = http;
   }
 
   ngOnInit() {
@@ -86,7 +96,35 @@ export class ContactComponent implements OnInit {
     this.form = this.formBuilder.group({});
   }
   onSubmit() {
+    // let headers = new Headers({ 'Content-Type': 'application/json' });
+    // let options = new RequestOptions({ headers: headers });
+    let body = "firstname=" + this.form.controls.first_name.value + "&lastname=" + this.form.controls.last_name.value +  "&email=" + this.form.controls.email.value + "&data=" + 'ffobar' + "&company=" + 'ffobar'
+    + "&phone=" + '1234' + "&title=" + 'Herr'
+    + "&subject=" + 'test';
+
     this.submitted = true;
+    const fields = Object.getOwnPropertyNames(this.form.controls);
+    const lenNodes: number = fields.length;
+    console.log(fields);
+    // IE11 not support forEach on nodeList
+    for (let i = 0; i < lenNodes;  i++) {
+     const field = this.form.controls[fields[i]];
+      field.setValue ( this.sanitize.sanitize(field.value));
+      
+    }
+    if(this.form.valid){
+
+      console.log(this.form);
+      const URL = '/api';
+
+      // Content-Type:application/x-www-form-urlencoded
+      this.http.post(URL, body).subscribe(
+        data => {
+          console.log(data);
+        }
+      );
+           
+    }
   }
 
 }

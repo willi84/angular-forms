@@ -14,6 +14,9 @@ import { TextComponent } from './text/text.component';
 import { TextAreaComponent } from './textarea/textarea.component';
 import { MessageComponent } from './message/message.component';
 import { SelectboxComponent } from './selectbox/selectbox.component';
+import { SanitizeService } from './services/sanitize/sanitize.service';
+
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -33,8 +36,9 @@ import { SelectboxComponent } from './selectbox/selectbox.component';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [SanitizeService],
   bootstrap: [ContactComponent]
 })
 export class AppModule { }
