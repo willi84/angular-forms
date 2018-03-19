@@ -42,40 +42,38 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     [formGroup]="group"
     [ngClass]="{'has-error': getValidationStatus() }"
   >
+  {{isTyping}} | {{ hasFocus}}
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
     </label>
-    <select 
-    (keydown)="isTyping= true"
-    (keyup)="isTyping=false"
-    (focus)="hasFocus=true"
-    (blur)="hasFocus=false"
+    <select
+    
+    (change)="isSelecting=true;"
     formControlName="{{name}}" class="form-control">
-      <option *ngFor="let state of states" [ngValue]="state">{{state}}</option>
+    <option *ngFor="let state of states" [ngValue]="state"
+      >{{state}}</option>
     </select>
-    <div
-    class="text-danger {{name}}-error"
-    >
-  <span name="error-icon"
-    [style.visibility]="showError === '' ? 'hidden' : 'visible'"
-    class="mt30--xs form-control-feedback"
-    >
-      <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
-  </span>
-    <div name="error-message" class="text-danger {{name}}-error"
-      [style.visibility]="hasFocus ? 'visible' : 'hidden'"
-    >
-      <small name="error-required"
-        [hidden]="!(showError === 'required')"
-        >Das ist ein Pflichtfeld</small>
-      <small name="error-pattern"
-        [hidden]="!(showError === 'pattern')"
-      >Bitte überprüfen Sie das Textfeld.</small>
-      <small  name="error-default" [hidden]="!(showError === '')"
-      >&nbsp;</small>
+    isslect: {{isSelecting}}
+    <div class="text-danger {{name}}-error">
+      <span name="error-icon"
+        [style.visibility]="showError === '' ? 'hidden' : 'visible'"
+        class="mt30--xs form-control-feedback"
+        >
+        <i class="icon-warning glyphicon glyphicon-alert text-danger"></i>
+      </span>
+      <div name="error-message" class="text-danger {{name}}-error"
+        [style.visibility]="hasFocus ? 'visible' : 'hidden'"
+      >
+        <small name="error-required"
+          [hidden]="!(showError === 'required')"
+          >Das ist ein Pflichtfeld</small>
+        <small name="error-pattern"
+          [hidden]="!(showError === 'pattern')"
+        >Bitte überprüfen Sie das Textfeld.</small>
+        <small  name="error-default" [hidden]="!(showError === '')"
+        >&nbsp;</small>
+      </div>
     </div>
-  </div>
-     
   </div>
   `
 })
@@ -93,6 +91,7 @@ export class SelectboxComponent implements OnInit, OnChanges, DoCheck {
   control: any;
   startValue = '';
   oldValue: '';
+  isSelecting: false;
   action = '';  // action of input between focuses
   lastAction = '';
   startError = true;
@@ -202,4 +201,5 @@ export class SelectboxComponent implements OnInit, OnChanges, DoCheck {
       );
       return status;
     }
+    
 }

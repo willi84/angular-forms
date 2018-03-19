@@ -126,7 +126,7 @@ describe('TextComponent', () => {
       declarations: [
         TextComponent
       ],
-      schemas: [ NO_ERRORS_SCHEMA],
+      // schemas: [ NO_ERRORS_SCHEMA],
       imports: [
         FormsModule,
         ReactiveFormsModule,
