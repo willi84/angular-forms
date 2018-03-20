@@ -47,9 +47,9 @@ describe('ContactComponent', () => {
         FormsModule,
         ReactiveFormsModule,
       ],
-      providers: [ 
-        SanitizeService, 
-        HttpClient, 
+      providers: [
+        SanitizeService,
+        HttpClient,
         HttpHandler
       ],
     })

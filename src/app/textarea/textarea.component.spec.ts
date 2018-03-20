@@ -17,7 +17,7 @@ describe('TextAreaComponent', () => {
   const NOT_CHANGED = false;
   const VALID = { valid: true, message: ''};
   const INVALID = { valid: false, message: ''};
-  const ERROR_PATTERN = { valid: false, message: 'pattern'};
+  // const ERROR_PATTERN = { valid: false, message: 'pattern'};
   const ERROR_REQUIRED = { valid: false, message: 'required'};
 
   function doAction( action: string , new_value?: string) {
@@ -124,7 +124,7 @@ describe('TextAreaComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        TextAreaComponent, 
+        TextAreaComponent,
         StatusComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA],
@@ -462,7 +462,7 @@ describe('TextAreaComponent', () => {
           it('#4 WHEN input is extending to "x"', fakeAsync(() => {
             // set initial state
             doAction('change_input', 'x');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -498,7 +498,7 @@ describe('TextAreaComponent', () => {
           it('#6 WHEN input changed to empty', fakeAsync(() => {
             // set initial state
             doAction('changed_input',  '');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');
@@ -711,7 +711,7 @@ describe('TextAreaComponent', () => {
           it('#xxx3 WHEN input is touched', fakeAsync(() => {
             // set initial state
             doAction('touched');
-  
+
             // test new state
             expect(component).isValid('');
             showMessage('default');
@@ -720,7 +720,7 @@ describe('TextAreaComponent', () => {
           it('#xxx6 WHEN input is changed to empty', fakeAsync(() => {
             // set initial state
             doAction('changed_input',  '');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -750,10 +750,10 @@ describe('TextAreaComponent', () => {
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
             showMessage('has_success');
-  
+
             // set new state
             doAction('touched');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -854,7 +854,7 @@ describe('TextAreaComponent', () => {
           it('#8 WHEN input is extended to "xxx"', fakeAsync(() => {
             // set initial state
             doAction('changed_input', 'xxx');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('');
@@ -1034,15 +1034,15 @@ describe('TextAreaComponent', () => {
 
             // set new state
             doAction('change_input', 'xxx@daf.de');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
             showMessage('has_success');
-  
+
             // set new state
             doAction('touched');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');

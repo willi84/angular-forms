@@ -10,10 +10,11 @@ import { SanitizeService } from './services/sanitize/sanitize.service';
 // import {Observable} from "rxjs/Observable";
 
 import { HttpClient} from '@angular/common/http';
+import { environment } from '../environments/environment.prod';
 // import { Headers, RequestOptions } from '@angular/http';
 
 @Component({
-selector: 'app-form-contact',
+  selector: environment.prefix +  'contact',
 styles: [ `
   .hide-opacity{
     opacity: 0;
@@ -98,9 +99,18 @@ export class ContactComponent implements OnInit {
   onSubmit() {
     // let headers = new Headers({ 'Content-Type': 'application/json' });
     // let options = new RequestOptions({ headers: headers });
-    let body = "firstname=" + this.form.controls.first_name.value + "&lastname=" + this.form.controls.last_name.value +  "&email=" + this.form.controls.email.value + "&data=" + 'ffobar' + "&company=" + 'ffobar'
-    + "&phone=" + '1234' + "&title=" + 'Herr'
-    + "&subject=" + 'test';
+    console.log(this.form.controls);
+    const body = `
+      firstname=${this.form.controls.first_name.value}&
+      lastname=${this.form.controls.last_name.value}&
+      email=${this.form.controls.email.value}&
+      data=${this.form.controls.message.value}&
+      company=${this.form.controls.company.value}&
+      phone=${this.form.controls.phone.value}&
+      salutation=${this.form.controls.salutation.value}&
+      subject=${this.form.controls.subject.value}
+    `;
+    console.log(body);
 
     this.submitted = true;
     const fields = Object.getOwnPropertyNames(this.form.controls);
@@ -110,20 +120,15 @@ export class ContactComponent implements OnInit {
     for (let i = 0; i < lenNodes;  i++) {
      const field = this.form.controls[fields[i]];
       field.setValue ( this.sanitize.sanitize(field.value));
-      
     }
-    if(this.form.valid){
-
-      console.log(this.form);
-      const URL = '/api';
+    if (this.form.valid) {
 
       // Content-Type:application/x-www-form-urlencoded
-      this.http.post(URL, body).subscribe(
+      this.http.post(environment.API, body).subscribe(
         data => {
           console.log(data);
         }
       );
-           
     }
   }
 

@@ -15,7 +15,7 @@ describe('CompanyComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         CompanyComponent,
-        TextComponent, 
+        TextComponent,
         StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],

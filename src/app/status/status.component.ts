@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
-  selector: 'status',
+  selector: environment.prefix + 'status',
   template: `
   <div class="text-danger {{name}}-error">
     <span name="error-icon"

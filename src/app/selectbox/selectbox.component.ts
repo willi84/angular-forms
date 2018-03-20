@@ -42,18 +42,15 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     [formGroup]="group"
     [ngClass]="{'has-error': getValidationStatus() }"
   >
-  {{isTyping}} | {{ hasFocus}}
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
     </label>
     <select
-    
     (change)="isSelecting=true;"
     formControlName="{{name}}" class="form-control">
     <option *ngFor="let state of states" [ngValue]="state"
       >{{state}}</option>
     </select>
-    isslect: {{isSelecting}}
     <div class="text-danger {{name}}-error">
       <span name="error-icon"
         [style.visibility]="showError === '' ? 'hidden' : 'visible'"
@@ -201,5 +198,4 @@ export class SelectboxComponent implements OnInit, OnChanges, DoCheck {
       );
       return status;
     }
-    
 }

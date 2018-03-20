@@ -49,13 +49,11 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     (focus)="hasFocus=true"
     (blur)="hasFocus=false"
     class="form-control" type="{{type}}" formControlName="{{name}}" />
-    
-    <status
+    <form-status
       [showError]="showError"
       [hasFocus]="hasFocus"
       [name]="name"
-    ></status>
-    
+    ></form-status>
   `
 })
 export class TextComponent implements OnInit, OnChanges, DoCheck {

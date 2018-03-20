@@ -1,4 +1,4 @@
-import {async, TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 
 import { SelectboxComponent } from './selectbox.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
@@ -15,7 +15,7 @@ describe('SelectboxComponent', () => {
   const NOT_CHANGED = false;
   const VALID = { valid: true, message: ''};
   const INVALID = { valid: false, message: ''};
-  const ERROR_PATTERN = { valid: false, message: 'pattern'};
+  // const ERROR_PATTERN = { valid: false, message: 'pattern'};
   const ERROR_REQUIRED = { valid: false, message: 'required'};
 
   function doAction( action: string , new_value?: string) {
@@ -174,18 +174,17 @@ describe('SelectboxComponent', () => {
             // doAction('changed_input', 'xxx');
             inputElement.dispatchEvent(new Event('focus'));
             // inputElement.value = "Frau";
-            component.control.value = "Frau";
+            component.control.value = 'Frau';
             // inputElement.dispatchEvent(new Event('change'));
-            fixture.detectChanges(); 
+            fixture.detectChanges();
             // console.log(component.hasFocus);
             inputElement.dispatchEvent(new Event('change'));
             // console.log("A")
             // console.log(inputElement.value);
             // console.log(component.control.value);
             // console.log("AA")
-           
             // inputElement.value = 'Frau';
-            // inputElement.dispatchEvent(new Event('change')); //this is what triggers angular to do its magic 
+            // inputElement.dispatchEvent(new Event('change')); //this is what triggers angular to do its magic
             // inputElement.dispatchEvent(new Event('blur'));
             //  //assuming you are doing this inside a fakeAsync
             // // const option = inputElement.querySelectorAll('option')[0];
@@ -457,7 +456,7 @@ describe('SelectboxComponent', () => {
           it('#4 WHEN input is extending to "x"', fakeAsync(() => {
             // set initial state
             doAction('change_input', 'x');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -493,7 +492,7 @@ describe('SelectboxComponent', () => {
           it('#6 WHEN input changed to empty', fakeAsync(() => {
             // set initial state
             doAction('changed_input',  '');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');

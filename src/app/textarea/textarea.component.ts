@@ -52,11 +52,11 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
     (blur)="hasFocus=false"
     class="form-control" type="text" formControlName="{{name}}"
     ></textarea>
-    <status
+    <form-status
       [showError]="showError"
       [hasFocus]="hasFocus"
       [name]="name"
-    ></status>
+    ></form-status>
   </div>
   `
 })

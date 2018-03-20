@@ -15,7 +15,7 @@ describe('EmailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         EmailComponent,
-        TextComponent, 
+        TextComponent,
         StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],

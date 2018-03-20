@@ -3,7 +3,7 @@ import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testin
 
 import { TextComponent } from './text.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+// import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { customMatchers, expect } from '../../utils/testing/custom-matcher';
 
 
@@ -18,7 +18,7 @@ describe('TextComponent', () => {
   const NOT_CHANGED = false;
   const VALID = { valid: true, message: ''};
   const INVALID = { valid: false, message: ''};
-  const ERROR_PATTERN = { valid: false, message: 'pattern'};
+  // const ERROR_PATTERN = { valid: false, message: 'pattern'};
   const ERROR_REQUIRED = { valid: false, message: 'required'};
 
   function doAction( action: string , new_value?: string) {
@@ -433,7 +433,7 @@ describe('TextComponent', () => {
           it('#4 WHEN input is extending to "x"', fakeAsync(() => {
             // set initial state
             doAction('change_input', 'x');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -469,7 +469,7 @@ describe('TextComponent', () => {
           it('#6 WHEN input changed to empty', fakeAsync(() => {
             // set initial state
             doAction('changed_input',  '');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');
@@ -682,7 +682,7 @@ describe('TextComponent', () => {
           it('#xxx3 WHEN input is touched', fakeAsync(() => {
             // set initial state
             doAction('touched');
-  
+
             // test new state
             expect(component).isValid('');
             showMessage('default');
@@ -691,7 +691,7 @@ describe('TextComponent', () => {
           it('#xxx6 WHEN input is changed to empty', fakeAsync(() => {
             // set initial state
             doAction('changed_input',  '');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -721,10 +721,10 @@ describe('TextComponent', () => {
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
             showMessage('has_success');
-  
+
             // set new state
             doAction('touched');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -825,7 +825,7 @@ describe('TextComponent', () => {
           it('#8 WHEN input is extended to "xxx"', fakeAsync(() => {
             // set initial state
             doAction('changed_input', 'xxx');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('');
@@ -1005,15 +1005,15 @@ describe('TextComponent', () => {
 
             // set new state
             doAction('change_input', 'xxx@daf.de');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
             showMessage('has_success');
-  
+
             // set new state
             doAction('touched');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -1743,31 +1743,31 @@ describe('TextComponent', () => {
           it('#9 (IMPORTANT) AFTER input has correctly changed', fakeAsync(() => {
             // set initial state
             doAction('active_input');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');
             showMessage('error_required');
-  
+
             // set new state  => occurs pattern error
             doAction('change_input', 'xxx');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');
             showMessage('error_required');
-  
+
             // set new state
             doAction('change_input', '+49 565');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
             showMessage('has_success');
-  
+
             // set new state
             doAction('touched');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
@@ -1822,31 +1822,31 @@ describe('TextComponent', () => {
           it('#8 (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
             // set initial state
             doAction('active_input');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_not_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');
             showMessage('error_required');
-  
+
             // set new state  => occurs pattern error
             doAction('change_input', 'xxx');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('required');
             showMessage('error_required');
-  
+
             // set new state
             doAction('changed_input', 'xxxx');
-  
+
             // test renewed state when left
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('pattern');
             showMessage('has_error');
-  
+
             // set new state  => occurs pattern error
             doAction('touch');
-  
+
             // test renewed state message
             expect(component).isInvalid('pattern');
             showMessage('error_pattern');
@@ -1876,34 +1876,34 @@ describe('TextComponent', () => {
           it('#XXX (IMPORTANT) should change error message from required to pattern after leaving field', fakeAsync(() => {
             // set initial state
             doAction('changed_input', '+49 565');
-  
+
             // test new state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isValid('');
             showMessage('default');
             // @TODO: eigentlich success
-  
+
             // set new state  => occurs pattern error
             doAction('change_input', 'xxx');
-  
+
             // test renewed state
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('pattern');
             showMessage('error_pattern');
-  
+
             // WAIT
-  
+
             // set new state
             doAction('changed_input', 'xxxx');
-  
+
             // test renewed state when left
             expect(component).hasChanged({ action: 'input_changed', oldValue:  _oldValue} );
             expect(component).isInvalid('pattern');
             showMessage('has_error');
-  
+
             // set new state  => occurs pattern error
             doAction('touch');
-  
+
             // test renewed state message
             expect(component).isInvalid('pattern');
             showMessage('error_pattern');

@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  prefix: 'form-'
+  prefix: 'form-',
+  API: '/api'
 };
