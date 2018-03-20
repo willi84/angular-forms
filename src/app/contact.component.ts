@@ -1,5 +1,5 @@
 import {
-  Component
+  Component, ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormGroup,
@@ -15,6 +15,7 @@ import { environment } from '../environments/environment.prod';
 
 @Component({
   selector: environment.prefix +  'contact',
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 styles: [ `
   .hide-opacity{
     opacity: 0;
@@ -27,6 +28,10 @@ template: `
     <div class="col-sm-10 text-danger mb50--xs">
       <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
       >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
+      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
+      >Ihre Anfrage wurde erfolgreich versendet</span>
+      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 0) }"
+      >Es ist ein Fehler aufgetreten {{ responseApi | json }}</span>
     </div>
   </div>
   <div class="row">
@@ -79,6 +84,7 @@ template: `
 })
 export class ContactComponent implements OnInit {
   submitted: Boolean = false;
+  responseApi = {}
 
 
   public form: FormGroup;
@@ -100,16 +106,36 @@ export class ContactComponent implements OnInit {
     // let headers = new Headers({ 'Content-Type': 'application/json' });
     // let options = new RequestOptions({ headers: headers });
     console.log(this.form.controls);
-    const body = `
-      firstname=${this.form.controls.first_name.value}&
-      lastname=${this.form.controls.last_name.value}&
-      email=${this.form.controls.email.value}&
-      data=${this.form.controls.message.value}&
-      company=${this.form.controls.company.value}&
-      phone=${this.form.controls.phone.value}&
-      salutation=${this.form.controls.salutation.value}&
-      subject=${this.form.controls.subject.value}
-    `;
+    const body =
+      'firstname=' + this.form.controls.first_name.value + '&' +
+      'lastname=' + this.form.controls.last_name.value + '&' +
+      'email=' + this.form.controls.email.value + '&' +
+      'data=' + this.form.controls.message.value + '&' +
+      'company=' + this.form.controls.company.value + '&' +
+      'phone=' + this.form.controls.phone.value + '&' +
+      'title=' + this.form.controls.salutation.value + '&' +
+      'subject=' + this.form.controls.subject.value;
+
+
+    //   lastname=${this.form.controls.last_name.value}&
+    //   email=${this.form.controls.email.value}&
+    //   data=${this.form.controls.message.value}&
+    //   company=${this.form.controls.company.value}&
+    //   phone=${this.form.controls.phone.value}&
+    //   title=${this.form.controls.salutation.value}&
+    //   subject=${this.form.controls.subject.value}
+    // ';
+    // const body2 = {
+    //     firstname:this.form.controls.first_name.value,
+    //   lastname:this.form.controls.last_name.value,
+    //   email:this.form.controls.email.value,
+    //   data:this.form.controls.message.value,
+    //   company:this.form.controls.company.value,
+    //   phone:this.form.controls.phone.value,
+    //   title:this.form.controls.salutation.value,
+    //   subject:this.form.controls.subject.value
+
+    // }
     console.log(body);
 
     this.submitted = true;
@@ -124,8 +150,13 @@ export class ContactComponent implements OnInit {
     if (this.form.valid) {
 
       // Content-Type:application/x-www-form-urlencoded
-      this.http.post(environment.API, body).subscribe(
+      this.http.post(environment.API, body, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).subscribe(
         data => {
+          this.responseApi = data;
           console.log(data);
         }
       );
