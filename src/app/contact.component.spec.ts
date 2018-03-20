@@ -18,6 +18,9 @@ import { SanitizeService } from './services/sanitize/sanitize.service';
 // import { HttpClient, HttpHandler } from '@angular/common/http';
 // import {Observable} from 'rxjs/Observable';
 
+
+import { HttpClient, HttpHandler} from '@angular/common/http';
+
 describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
@@ -44,7 +47,8 @@ describe('ContactComponent', () => {
       ],
       providers: [ 
         SanitizeService, 
-        // HttpClient, HttpHandler
+        HttpClient, 
+        HttpHandler
       ],
     })
       .compileComponents();
