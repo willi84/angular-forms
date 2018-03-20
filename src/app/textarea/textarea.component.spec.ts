@@ -1,3 +1,4 @@
+import { StatusComponent } from './../status/status.component';
 import {async, TestBed, ComponentFixture,  fakeAsync } from '@angular/core/testing';
 
 import { TextAreaComponent } from './textarea.component';
@@ -123,7 +124,8 @@ describe('TextAreaComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        TextAreaComponent
+        TextAreaComponent, 
+        StatusComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA],
       imports: [

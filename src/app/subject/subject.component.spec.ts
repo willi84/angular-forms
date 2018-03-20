@@ -3,6 +3,7 @@ import {async, TestBed, ComponentFixture,  fakeAsync } from '@angular/core/testi
 import { SubjectComponent } from './subject.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
+import { StatusComponent } from '../status/status.component';
 
 describe('SubjectComponent', () => {
   let component: SubjectComponent;
@@ -14,7 +15,8 @@ describe('SubjectComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         SubjectComponent,
-        TextComponent
+        TextComponent,
+        StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
       imports: [

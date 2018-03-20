@@ -1,3 +1,4 @@
+import { StatusComponent } from './../status/status.component';
 import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 
 import { NameComponent } from './name.component';
@@ -14,7 +15,8 @@ describe('NameComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         NameComponent,
-        TextComponent
+        TextComponent,
+        StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
       imports: [

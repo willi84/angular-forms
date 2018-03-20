@@ -1,3 +1,4 @@
+import { StatusComponent } from './../status/status.component';
 import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 
 import { TextComponent } from './text.component';
@@ -124,7 +125,8 @@ describe('TextComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        TextComponent
+        TextComponent,
+        StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
       imports: [
@@ -212,7 +214,7 @@ describe('TextComponent', () => {
             doAction('changed_input', 'x');
             showStatus('default', VALID , CHANGED);
           }));
-          it('#4 WHEN input is changed to empty', fakeAsync(() => {
+          it('#44 WHEN input is changed to empty', fakeAsync(() => {
             doAction('changed_input',  '');
             showStatus('default', VALID , CHANGED);
           }));

@@ -1,3 +1,4 @@
+import { StatusComponent } from './status/status.component';
 /* tslint:disable:no-unused-variable */
 
 import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
@@ -38,7 +39,8 @@ describe('ContactComponent', () => {
         MessageComponent,
         TextComponent,
         TextAreaComponent,
-        SelectboxComponent
+        SelectboxComponent,
+        StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
       imports: [

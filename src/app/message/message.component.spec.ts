@@ -3,6 +3,7 @@ import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testin
 import { MessageComponent } from './message.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { TextAreaComponent } from '../textarea/textarea.component';
+import { StatusComponent } from '../status/status.component';
 
 describe('MessageComponent', () => {
   let component: MessageComponent;
@@ -14,7 +15,8 @@ describe('MessageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         MessageComponent,
-        TextAreaComponent
+        TextAreaComponent,
+        StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
       imports: [

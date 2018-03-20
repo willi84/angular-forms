@@ -17,6 +17,7 @@ import { SelectboxComponent } from './selectbox/selectbox.component';
 import { SanitizeService } from './services/sanitize/sanitize.service';
 
 import {HttpClientModule} from '@angular/common/http';
+import { StatusComponent } from './status/status.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {HttpClientModule} from '@angular/common/http';
     PhoneComponent,
     SubjectComponent,
     SalutationComponent,
-    SelectboxComponent
+    SelectboxComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,

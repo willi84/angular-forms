@@ -3,6 +3,7 @@ import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testin
 import { PhoneComponent } from './phone.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
+import { StatusComponent } from '../status/status.component';
 
 describe('PhoneComponent', () => {
   let component: PhoneComponent;
@@ -14,7 +15,8 @@ describe('PhoneComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         PhoneComponent,
-        TextComponent
+        TextComponent,
+        StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
       imports: [
