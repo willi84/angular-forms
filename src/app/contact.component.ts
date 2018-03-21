@@ -1,5 +1,6 @@
 import {
-  Component, ChangeDetectionStrategy
+  Component,
+  // ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormGroup,
@@ -84,7 +85,7 @@ template: `
 })
 export class ContactComponent implements OnInit {
   submitted: Boolean = false;
-  responseApi = {}
+  responseApi = {};
 
 
   public form: FormGroup;

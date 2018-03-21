@@ -18,6 +18,15 @@ import { SelectboxComponent } from './selectbox/selectbox.component';
 import { SanitizeService } from './services/sanitize/sanitize.service';
 // import { HttpClient, HttpHandler } from '@angular/common/http';
 // import {Observable} from 'rxjs/Observable';
+import {} from 'jasmine';
+
+// import { FeedService } from './services/feed/feed.service';
+import {Observable} from 'rxjs/Observable';
+
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+import { importExpr } from '@angular/compiler/src/output/output_ast';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 import { HttpClient, HttpHandler} from '@angular/common/http';
@@ -26,35 +35,49 @@ describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
 
-  beforeEach(() => {
+  let httpClient: HttpClient;
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         ContactComponent,
-        EmailComponent,
-        NameComponent,
-        CompanyComponent,
-        SalutationComponent,
-        SubjectComponent,
-        PhoneComponent,
-        MessageComponent,
-        TextComponent,
-        TextAreaComponent,
-        SelectboxComponent,
-        StatusComponent
       ],
-      // schemas: [ NO_ERRORS_SCHEMA],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-      ],
-      providers: [
-        SanitizeService,
-        HttpClient,
-        HttpHandler
-      ],
-    })
-      .compileComponents();
+      imports: [FormsModule],
+      providers: [ HttpClient, HttpHandler],
+      schemas:      [ NO_ERRORS_SCHEMA ]
+    }).compileComponents();
+  }));
+  beforeEach(() => {
+    httpClient = TestBed.get(HttpClient);
   });
+  // beforeEach(() => {
+  //   TestBed.configureTestingModule({
+  //     declarations: [
+  //       ContactComponent,
+  //       EmailComponent,
+  //       NameComponent,
+  //       CompanyComponent,
+  //       SalutationComponent,
+  //       SubjectComponent,
+  //       PhoneComponent,
+  //       MessageComponent,
+  //       TextComponent,
+  //       TextAreaComponent,
+  //       SelectboxComponent,
+  //       StatusComponent
+  //     ],
+  //     // schemas: [ NO_ERRORS_SCHEMA],
+  //     imports: [
+  //       FormsModule,
+  //       ReactiveFormsModule,
+  //     ],
+  //     providers: [
+  //       SanitizeService,
+  //       HttpClient,
+  //       HttpHandler
+  //     ],
+  //   })
+  //     .compileComponents();
+  // });
 
   beforeEach(async(() => {
     fixture = TestBed.createComponent(ContactComponent);
@@ -68,7 +91,7 @@ describe('ContactComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('check formsArray', fakeAsync(() => {
+  xit('check formsArray', fakeAsync(() => {
     expect(component.form.controls.first_name).toBeTruthy();
     expect(component.form.controls.last_name).toBeTruthy();
     expect(component.form.controls.email).toBeTruthy();
@@ -84,6 +107,48 @@ describe('ContactComponent', () => {
       expect(component.submitted).toBe(false);
       component.onSubmit();
       expect(component.submitted).toBe(true);
+    }));
+  });
+  describe('xxx', () => {
+    beforeEach(() => {
+      httpClient = TestBed.get(HttpClient);
+  
+      spyOn(httpClient, 'post').and.callFake(function(arg){
+        if (!arg) {
+          return Observable.throw({status: 404});  // throw error
+        } else if (arg.indexOf('duplicated') >= 0) {
+          return Observable.of('duplicate');
+        } else if (arg.indexOf('neu') >= 0) {
+          return Observable.of('ok');
+        } else {
+          return Observable.of('someError');
+        }
+      });
+    });
+    xit('onSubmit: xxx - default', async(() => {
+      const fixture = TestBed.createComponent(ContactComponent);
+      const app = fixture.debugElement.componentInstance;
+  
+      app.model.email = 'invalid';
+      app.onSubmit({ form: { valid: true, invalid: false}});
+      expect(app.model.optivoStatus).toEqual('error');
+    }));
+
+    xit('onSubmit: xxx - default', async(() => {
+      const fixture = TestBed.createComponent(ContactComponent);
+      const app = fixture.debugElement.componentInstance;
+  
+      app.model.email = 'neu@gmx.de';
+      app.onSubmit({ form: { valid: true, invalid: false}});
+      expect(app.model.optivoStatus).toEqual('ok');
+    }));
+    xit('onSubmit: xxx - default', async(() => {
+      const fixture = TestBed.createComponent(ContactComponent);
+      const app = fixture.debugElement.componentInstance;
+  
+      app.model.email = 'duplicated@gmx.de';
+      app.onSubmit({ form: { valid: true, invalid: false}});
+      expect(app.model.optivoStatus).toEqual('duplicate');
     }));
   });
 });
