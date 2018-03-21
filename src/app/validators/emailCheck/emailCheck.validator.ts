@@ -1,21 +1,20 @@
-import { Directive, forwardRef } from '@angular/core';
-import { NG_VALIDATORS, AbstractControl, ValidatorFn, Validator, FormControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
-/**
- * validating factory to throw different errors about the email format
- */
-function validateEmailCheckFactory(): ValidatorFn {
-  return (c: AbstractControl) => {
-    const input = c.value;
+
+
+
+export function EmailCheckValidator(control: AbstractControl) {
+  const input = control.value;
 
     // empty input
     if (!input) {
       return {
-        EmailCheck: 'noEmailAddress'
+        // EmailCheck: 'noEmailAddress'
+        required: true
       };
     }
     const email = input.split('@');
-    const locale = email[0];
+    // const locale = email[0];
     if (email[1]) {
       const domain = email[1].split('.');
 
@@ -23,7 +22,8 @@ function validateEmailCheckFactory(): ValidatorFn {
         // input: foobar@domain.
         if (domain[1].length < 2) {
           return {
-            EmailCheck: 'noTld'
+            // EmailCheck: 'noTld'
+            pattern: 'noTld'
           };
         } else {
           return null;
@@ -32,48 +32,15 @@ function validateEmailCheckFactory(): ValidatorFn {
       } else {
         // input: foobar@domain
         return {
-            EmailCheck: 'invalidDomain'
+            // EmailCheck: 'invalidDomain'
+            pattern: 'invalidDomain'
           };
       }
     }
 
     // input: foobar or foobar@
     return {
-      EmailCheck: 'noDomain'
+      // EmailCheck: 'noDomain'
+      pattern: 'noDomain'
     };
-
-  };
 }
-
-/**
- * directive to validate to detect a well-formed email address
- */
-@Directive({
-  selector: '[emailCheck][ngModel]',
-  providers: [
-    { provide: NG_VALIDATORS, useExisting: EmailCheckValidator, multi: true }
-  ]
-})
-export class EmailCheckValidator implements Validator {
-
-  /**
-   * reference to validator member
-   */
-  validator: ValidatorFn;
-
-  /**
-   * constructor binding validator factory to validator
-   */
-  constructor() {
-    this.validator = validateEmailCheckFactory();
-  }
-
-  /**
-   * function to execute validation with given form
-   * @param c form control to be validated
-   * @returns result of validator factory
-   */
-  validate(c: FormControl) {
-     return this.validator(c);
-  }
-};

@@ -6,7 +6,7 @@ import {
 
  } from '@angular/forms';
 import { environment } from '../../environments/environment.prod';
-
+import { EmailCheckValidator } from './../validators/emailCheck/emailCheck.validator';
 @Component({
   selector: environment.prefix + 'email',
   template: `
@@ -27,17 +27,17 @@ export class EmailComponent implements OnInit {
     this.tagName = this.elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
   }
   ngOnInit() {
+
     this.label = this.label || 'E-Mail';
     this.required = this.required !== 'false' ? 'true' : 'false';
     const controlValidators = [Validators.pattern('[^ @]*@[^ @]*')];
     if (this.required === 'true') {
       controlValidators.push(Validators.required);
     }
+    controlValidators.push(EmailCheckValidator);
 
     this.group.addControl('email', new FormControl('', {
-      validators: controlValidators,
-      // updateOn: 'blur',
-    // updateOn: 'change'
-  }));
+      validators: controlValidators
+    }));
   }
 }

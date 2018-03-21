@@ -1,100 +1,123 @@
-import { Component, Directive } from '@angular/core';
-import { TestBed, async } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { async, TestBed, ComponentFixture, fakeAsync  } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormsModule, NG_VALIDATORS, AbstractControl,
-         NgForm, FormControl } from '@angular/forms';
+         NgForm, FormControl,  ReactiveFormsModule, FormGroup, Validators  } from '@angular/forms';
          import { EmailCheckValidator } from './emailCheck.validator';
 
-// Test Component
+         // Test Component
 @Component({
-template: `
-    <form>
-    <input name="email" type="email" ngModel emailCheck />
-    </form>
-`
-})
-class TestComponent {
-}
-
-describe('component: TestComponent', () => {
-    beforeEach(() => {
-      TestBed.configureTestingModule({
-        imports: [ FormsModule ],
-        declarations: [TestComponent, EmailCheckValidator]
-      });
-    });
-
-    it('should validate Email the right way', async(() => {
-
-        const fixture = TestBed.createComponent(TestComponent);
-        const comp = fixture.componentInstance;
-        const debug = fixture.debugElement;
-        const input = debug.query(By.css('[name=email]'));
-
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-
-            const form: NgForm = debug.children[0].injector.get(NgForm);
-            const control = form.control.get('email');
-
-            input.nativeElement.value = 'foobar';
-            input.nativeElement.dispatchEvent(new Event('input'));
-            fixture.detectChanges();
+    template: `
+        <form [formGroup]="myform">
+        <input name="email" type="email" formControlName="email"/>
+        </form>
+    `
+    })
+    class TestComponent {
+       myform: FormGroup;
+    }
 
 
-            // check invalid email
-            expect(control.hasError('EmailCheck')).toBe(true);
-            expect(control.valid).toBe(false);
-            expect(form.control.valid).toEqual(false);
-            expect(form.control.hasError('EmailCheck', ['email'])).toEqual(true);
 
-            // check valid email
-            input.nativeElement.value = 'foobar@bla.de';
-            input.nativeElement.dispatchEvent(new Event('input'));
-            fixture.detectChanges();
-
-            expect(control.valid).toBe(true);
-            expect(form.control.valid).toEqual(true);
-
-            // check missing tld
-            input.nativeElement.value = 'foobar@bla.';
-            input.nativeElement.dispatchEvent(new Event('input'));
-            fixture.detectChanges();
-
-            expect(form.control.hasError('EmailCheck', ['email'])).toEqual(true);
-            expect(control.errors.EmailCheck).toEqual('noTld');
-            expect(control.valid).toBe(false);
-            expect(form.control.valid).toEqual(false);
-
-            // check missing .tld
-            input.nativeElement.value = 'foobar@bla';
-            input.nativeElement.dispatchEvent(new Event('input'));
-            fixture.detectChanges();
-
-            expect(form.control.hasError('EmailCheck', ['email'])).toEqual(true);
-            expect(control.errors.EmailCheck).toEqual('invalidDomain');
-            expect(control.valid).toBe(false);
-            expect(form.control.valid).toEqual(false);
-
-            // check missing domain.tld
-            input.nativeElement.value = 'foobar@';
-            input.nativeElement.dispatchEvent(new Event('input'));
-            fixture.detectChanges();
-
-            expect(form.control.hasError('EmailCheck', ['email'])).toEqual(true);
-            expect(control.errors.EmailCheck).toEqual('noDomain');
-            expect(control.valid).toBe(false);
-            expect(form.control.valid).toEqual(false);
-
-            // check empty
-            input.nativeElement.value = '';
-            input.nativeElement.dispatchEvent(new Event('input'));
-            fixture.detectChanges();
-
-            expect(form.control.hasError('EmailCheck', ['email'])).toEqual(true);
-            expect(control.errors.EmailCheck).toEqual('noEmailAddress');
-            expect(control.valid).toBe(false);
-            expect(form.control.valid).toEqual(false);
+    describe('component: TestComponent', () => {
+            let component: TestComponent;
+    let fixture: ComponentFixture<TestComponent>;
+    let compiled;
+    let inputElement: any;
+        beforeEach(() => {
+          TestBed.configureTestingModule({
+            imports: [  FormsModule,
+                ReactiveFormsModule, ],
+            declarations: [TestComponent]
+          });
         });
-    }));
-});
+        describe('input component (type=text)', () => {
+
+                      beforeEach(async(() => {
+                        fixture = TestBed.createComponent(TestComponent);
+                        component = fixture.componentInstance;
+                        component.myform = new FormGroup({
+                            email:   new FormControl('', [EmailCheckValidator])
+                          });
+                        // component.submitted = false;
+                        fixture.detectChanges();
+                        compiled = fixture.debugElement.nativeElement;
+                        inputElement = compiled.querySelector('input');
+                      }));
+        it('should validate Email the right way', async(() => {
+
+            // fixture = TestBed.createComponent(TestComponent);
+            // const debug = fixture.debugElement;
+            // const input = debug.query(By.css('[name=email]'));
+            // component = fixture.componentInstance;
+            // component.myform = new FormGroup({
+            //     email:   new FormControl('', [EmailCheckValidator])
+            //   });
+            // compiled = fixture.debugElement.nativeElement;
+            // inputElement = compiled.querySelector('input');
+
+                const control = component.myform.get('email');
+                const form  = component.myform;
+
+                inputElement.value = 'foobar';
+                inputElement.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+
+                // check invalid email
+                console.log(control);
+                expect(control.hasError('pattern')).toBe(true);
+                expect(control.valid).toBe(false);
+                expect(form.valid).toEqual(false);
+                expect(form.hasError('pattern', ['email'])).toEqual(true);
+
+                // check valid email
+                inputElement.value = 'foobar@bla.de';
+                inputElement.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+
+                expect(control.valid).toBe(true);
+                expect(form.valid).toEqual(true);
+
+                // check missing tld
+                inputElement.value = 'foobar@bla.';
+                inputElement.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+
+                expect(form.hasError('pattern', ['email'])).toEqual(true);
+                expect(control.errors.pattern).toEqual('noTld');
+                expect(control.valid).toBe(false);
+                expect(form.valid).toEqual(false);
+
+                // check missing .tld
+                inputElement.value = 'foobar@bla';
+                inputElement.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+
+                expect(form.hasError('pattern', ['email'])).toEqual(true);
+                expect(control.errors.pattern).toEqual('invalidDomain');
+                expect(control.valid).toBe(false);
+                expect(form.valid).toEqual(false);
+
+                // check missing domain.tld
+                inputElement.value = 'foobar@';
+                inputElement.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+
+                expect(form.hasError('pattern', ['email'])).toEqual(true);
+                expect(control.errors.pattern).toEqual('noDomain');
+                expect(control.valid).toBe(false);
+                expect(form.valid).toEqual(false);
+
+                // check empty
+                inputElement.value = '';
+                inputElement.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+
+                expect(form.hasError('required', ['email'])).toEqual(true);
+                expect(control.errors.required).toEqual(true);
+                expect(control.valid).toBe(false);
+                expect(form.valid).toEqual(false);
+            // });
+        }));
+    });
+    });
