@@ -24,7 +24,7 @@ styles: [ `
 `],
 template: `
 <h1>Forms sample</h1>
-<form novalidate  action="https://www.google.com" [formGroup]="form" (ngSubmit)="onSubmit()" >
+<form novalidate  [formGroup]="form" (ngSubmit)="onSubmit()" >
   <div class="row">
     <div class="col-sm-10 text-danger mb50--xs">
       <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
