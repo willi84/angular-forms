@@ -8,9 +8,9 @@ import {
 } from '@angular/forms';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { SanitizeService } from './services/sanitize/sanitize.service';
+import { ApiService } from './services/api/api.service';
 // import {Observable} from "rxjs/Observable";
 
-import { HttpClient} from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
 // import { Headers, RequestOptions } from '@angular/http';
 
@@ -92,11 +92,12 @@ export class ContactComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private sanitize: SanitizeService,
-    private http: HttpClient
+    private apiService: ApiService
+    // private http: HttpClient
   ) {
     this.submitted = false;
     this.sanitize = sanitize;
-    this.http = http;
+    // this.http = http;
   }
 
   ngOnInit() {
@@ -106,6 +107,7 @@ export class ContactComponent implements OnInit {
   onSubmit() {
     // let headers = new Headers({ 'Content-Type': 'application/json' });
     // let options = new RequestOptions({ headers: headers });
+    console.log('this.form.controls');
     console.log(this.form.controls);
     const body =
       'firstname=' + this.form.controls.first_name.value + '&' +
@@ -117,28 +119,6 @@ export class ContactComponent implements OnInit {
       'title=' + this.form.controls.salutation.value + '&' +
       'subject=' + this.form.controls.subject.value;
 
-
-    //   lastname=${this.form.controls.last_name.value}&
-    //   email=${this.form.controls.email.value}&
-    //   data=${this.form.controls.message.value}&
-    //   company=${this.form.controls.company.value}&
-    //   phone=${this.form.controls.phone.value}&
-    //   title=${this.form.controls.salutation.value}&
-    //   subject=${this.form.controls.subject.value}
-    // ';
-    // const body2 = {
-    //     firstname:this.form.controls.first_name.value,
-    //   lastname:this.form.controls.last_name.value,
-    //   email:this.form.controls.email.value,
-    //   data:this.form.controls.message.value,
-    //   company:this.form.controls.company.value,
-    //   phone:this.form.controls.phone.value,
-    //   title:this.form.controls.salutation.value,
-    //   subject:this.form.controls.subject.value
-
-    // }
-    console.log(body);
-
     this.submitted = true;
     const fields = Object.getOwnPropertyNames(this.form.controls);
     const lenNodes: number = fields.length;
@@ -149,16 +129,18 @@ export class ContactComponent implements OnInit {
       field.setValue ( this.sanitize.sanitize(field.value));
     }
     if (this.form.valid) {
+      this.apiService.getApiFeedback(body)
+     .subscribe(
 
-      // Content-Type:application/x-www-form-urlencoded
-      this.http.post(environment.API, body, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }).subscribe(
+       // success
         data => {
           this.responseApi = data;
+          console.log('data');
           console.log(data);
+        },
+        // error
+        error => {
+          console.log(error);
         }
       );
     }

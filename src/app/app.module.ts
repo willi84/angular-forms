@@ -15,6 +15,7 @@ import { TextAreaComponent } from './textarea/textarea.component';
 import { MessageComponent } from './message/message.component';
 import { SelectboxComponent } from './selectbox/selectbox.component';
 import { SanitizeService } from './services/sanitize/sanitize.service';
+import { ApiService } from './services/api/api.service';
 
 import {HttpClientModule} from '@angular/common/http';
 import { StatusComponent } from './status/status.component';
@@ -40,7 +41,7 @@ import { StatusComponent } from './status/status.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [SanitizeService],
+  providers: [SanitizeService, ApiService],
   bootstrap: [ContactComponent]
 })
 export class AppModule { }
