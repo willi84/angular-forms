@@ -107,8 +107,6 @@ export class ContactComponent implements OnInit {
   onSubmit() {
     // let headers = new Headers({ 'Content-Type': 'application/json' });
     // let options = new RequestOptions({ headers: headers });
-    console.log('this.form.controls');
-    console.log(this.form.controls);
     const body =
       'firstname=' + this.form.controls.first_name.value + '&' +
       'lastname=' + this.form.controls.last_name.value + '&' +
@@ -134,8 +132,6 @@ export class ContactComponent implements OnInit {
        // success
         data => {
           this.responseApi = data;
-          console.log('data');
-          console.log(data);
         },
         // error
         () => {

@@ -137,17 +137,17 @@ describe('ContactComponent', () => {
 
     it('should call httpClient.post with a given list of ids', () => {
       component.onSubmit();
-        expect(component.responseApi).toEqual({ ok: 1 });
+      expect(component.responseApi).toEqual({ ok: 1 });
     });
     it('should simulate an error', () => {
       component.form.controls.subject.setValue('error');
       component.onSubmit();
-        expect(component.responseApi).toEqual({ ok: 0 });
+      expect(component.responseApi).toEqual({ ok: 0 });
     });
     it('should simulate an error', () => {
       component.form.controls.phone.setValue('error');
       component.onSubmit();
-        expect(component.responseApi).toEqual({  });
+      expect(component.responseApi).toEqual({  });
     });
   });
 });

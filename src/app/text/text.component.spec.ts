@@ -6,6 +6,7 @@ import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } 
 // import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { customMatchers, expect } from '../../utils/testing/custom-matcher';
 
+// import { EmailCheckValidator } from './../validators/emailCheck/emailCheck.validator';
 
 
 describe('TextComponent', () => {
