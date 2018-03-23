@@ -96,9 +96,9 @@ describe('ContactComponent', () => {
       // arg=firstname=xxx&lastname=xxxx&email=xxxx@xxx.de&data=xxx&company=xxx&phone=012&title=Frau&subject=xxx
       if (!arg) {
         return Observable.throw({status: 404});  // throw error
-      } else if (arg.indexOf('invalid') >= 0) {
-        return Observable.of(`{ data:1}`
-        );
+      } else if (arg.indexOf('subject=error') !== -1) {
+        return Observable.throw({status: 404});
+        // return Observable.of(`{ data:1}`
       } else if (arg.indexOf('empty') >= 0) {
         console.log('empty');
         return Observable.of(`{ data:2}`
@@ -106,7 +106,7 @@ describe('ContactComponent', () => {
       } else {
         return Observable.of(
           // `{ data:1}`
-          { data: 1 }
+          { ok: 1 }
         );
       }
     });
@@ -136,9 +136,18 @@ describe('ContactComponent', () => {
     });
 
     it('should call httpClient.post with a given list of ids', () => {
-      spyOn(httpClient, 'post').and.returnValue(Observable.of('foobar'));
       component.onSubmit();
-        expect(component.responseApi).toEqual({ data: 1 });
+        expect(component.responseApi).toEqual({ ok: 1 });
+    });
+    it('should simulate an error', () => {
+      component.form.controls.subject.setValue('error');
+      component.onSubmit();
+        expect(component.responseApi).toEqual({ ok: 0 });
+    });
+    it('should simulate an error', () => {
+      component.form.controls.phone.setValue('error');
+      component.onSubmit();
+        expect(component.responseApi).toEqual({  });
     });
   });
 });

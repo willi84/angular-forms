@@ -122,7 +122,6 @@ export class ContactComponent implements OnInit {
     this.submitted = true;
     const fields = Object.getOwnPropertyNames(this.form.controls);
     const lenNodes: number = fields.length;
-    console.log(fields);
     // IE11 not support forEach on nodeList
     for (let i = 0; i < lenNodes;  i++) {
      const field = this.form.controls[fields[i]];
@@ -139,8 +138,8 @@ export class ContactComponent implements OnInit {
           console.log(data);
         },
         // error
-        error => {
-          console.log(error);
+        () => {
+          this.responseApi = { ok: 0 };
         }
       );
     }
