@@ -5,6 +5,7 @@ import { TextAreaComponent } from './textarea.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { customMatchers, expect } from '../../utils/testing/custom-matcher';
+import { StatusService } from '../services/status/status.service';
 
 
 describe('TextAreaComponent', () => {
@@ -128,6 +129,7 @@ describe('TextAreaComponent', () => {
         StatusComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         ReactiveFormsModule,

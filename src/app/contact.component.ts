@@ -24,17 +24,21 @@ styles: [ `
 `],
 template: `
 <h1>Forms sample</h1>
-<form novalidate  [formGroup]="form" (ngSubmit)="onSubmit()" >
-  <div class="row">
-    <div class="col-sm-10 text-danger mb50--xs">
-      <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
-      >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
-      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
-      >Ihre Anfrage wurde erfolgreich versendet</span>
-      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 0) }"
-      >Es ist ein Fehler aufgetreten {{ responseApi | json }}</span>
-    </div>
+{{ responseApi.ok}}
+<div class="row">
+  <div class="col-sm-10 text-danger mb50--xs">
+    <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
+    >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
+    <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
+    >Ihre Anfrage wurde erfolgreich versendet</span>
+    <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 0) }"
+    >Es ist ein Fehler aufgetreten {{ responseApi | json }}</span>
   </div>
+  <button class="mt20--xs btn btn--primary pull-right" *ngIf="responseApi.ok === 1" (click)="responseApi = {}">
+    <i class="glyphicon glyphicon-envelope"></i> Neue Mitteilung
+    </button>
+</div>
+<form novalidate  [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="responseApi.ok !== 1">
   <div class="row">
     <div class="col-sm-10">
       <form-subject [group]="form" [submitted]="submitted" required></form-subject>
@@ -77,9 +81,6 @@ template: `
       <i class="glyphicon glyphicon-envelope"></i> Mitteilung absenden </button>
     </div>
   </div>
-  <hr />
-  {{ form.value | json}}
-
   </form>
   `
 })
@@ -127,11 +128,14 @@ export class ContactComponent implements OnInit {
     }
     if (this.form.valid) {
       this.apiService.getApiFeedback(body)
-     .subscribe(
+      .subscribe(
 
-       // success
+        // success
         data => {
           this.responseApi = data;
+          this.submitted = false;
+          this.form.reset();
+
         },
         // error
         () => {

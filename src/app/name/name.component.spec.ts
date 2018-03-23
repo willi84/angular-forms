@@ -4,6 +4,7 @@ import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testin
 import { NameComponent } from './name.component';
 import {  FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
+import { StatusService } from '../services/status/status.service';
 
 describe('NameComponent', () => {
   let component: NameComponent;
@@ -19,6 +20,7 @@ describe('NameComponent', () => {
         StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         ReactiveFormsModule,

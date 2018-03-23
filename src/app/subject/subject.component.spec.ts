@@ -4,6 +4,7 @@ import { SubjectComponent } from './subject.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
 import { StatusComponent } from '../status/status.component';
+import { StatusService } from '../services/status/status.service';
 
 describe('SubjectComponent', () => {
   let component: SubjectComponent;
@@ -19,6 +20,7 @@ describe('SubjectComponent', () => {
         StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         ReactiveFormsModule,

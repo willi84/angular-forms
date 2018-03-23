@@ -8,7 +8,7 @@ import {
  } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
-
+import { StatusService } from '../services/status/status.service';
 @Component({
   selector: environment.prefix + 'textarea',
   styles: [ `
@@ -39,7 +39,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
   template: `
   <div class="form-group"
     [formGroup]="group"
-    [ngClass]="{'has-error': getValidationStatus() }"
+    [ngClass]="{'has-error': statusService.getValidationStatus(this) }"
   >
     <label for="{{name}}" class="control-label">
     {{label}}<span *ngIf="required=='true'">*</span>:
@@ -78,7 +78,9 @@ export class TextAreaComponent implements OnInit, OnChanges, DoCheck {
   lastAction = '';
   startError = true;
   noRequired =  false;
-    constructor() {
+    constructor(
+      private statusService: StatusService
+    ) {
     }
     ngOnInit() {
       // set initial state, fixes also tests
@@ -91,96 +93,10 @@ export class TextAreaComponent implements OnInit, OnChanges, DoCheck {
     }
     ngOnChanges() {
     }
+
     ngDoCheck() {
 
-      // TODO: action based behaviour
-      // * copy & paste
-      // * delete from error/success to zero after submit
-      if (this.hasFocus && this.action === 'no') { // startVAlue == ''
-        this.startValue = this.oldValue; // (this.startValue === '') ? this.control.value : this.oldValue;
-        if (this.lastAction === 'reset' && this.control.value === '') {
-          this.action = this.lastAction;
-        } else {
-          this.action = 'start';
-        }
-      }
-      const lenStartValue = this.startValue.length;
-      const lenControlValue = this.control.value.length;
-      // actions based on activity
-      if (lenStartValue > lenControlValue) {
-        this.action = (this.action === 'reset') ? this.action : 'shorten';
-      } else if (lenStartValue < lenControlValue) {
-        this.action = 'extended';
-      } else if (lenStartValue === lenControlValue) {
-        if (this.lastAction === 'reset' && this.control.value === '') {
-          this.action = this.action;
-        } else {
-          this.action = (this.hasFocus) ? 'start' : 'touched'; //  (lenStartValue === 0) ? 'no' : 'start';
-        }
-      } else {
-        this.action = 'replaced';
-      }
-      if (!this.hasFocus) {
-        this.oldValue = this.control.value;
-        this.startValue = this.oldValue;
-        this.lastAction = this.action;
-        this.action = 'no';
-      }
-      if (!this.isTyping ) {
+      this.statusService.checkStatus(this);
 
-        if (this.control) {
-          if (!this.control.errors) {
-            this.showError = '';  // sets default
-          } else {
-            if (this.hasFocus && this.showError === 'required' && this.control.errors.pattern) {
-              // @TODO: maybe deletable
-              // this.showError = this.showError;
-            } else {
-              if (this.control.errors !== null && this.submitted) {
-
-                // Todo: after reset show error after leave
-                if (this.lastAction !== 'reset') {
-
-                  if (this.control.errors.pattern) {
-                    this.showError = 'pattern';
-                  }
-                  if (this.control.errors.required) {
-                    this.showError = 'required';
-                  }
-                }
-
-                // make reset available
-                if (this.lastAction === 'shorten' && this.control.value === '') {
-                  this.showError = '';
-                }
-                if (this.action === 'shorten' && this.control.value === '') {
-                  this.showError = '';
-                  this.action = 'reset';
-                }
-                if (this.lastAction === 'reset' && this.control.value === '') {
-                  this.showError = '';
-                }
-
-                // Todo: after being valid, change to error after leave
-
-                } else {
-                  this.showError = '';
-                }
-              }
-              // }
-            }
-        }
-      } else {
-      }
-
-    }
-    getValidationStatus() {
-      const status = !(
-        (!this.submitted) ||
-        (!this.control.invalid && this.showError === '') ||
-        (this.control.invalid && this.showError === '' && this.control.value ===  '' ) ||
-        (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' )
-      );
-      return status;
     }
 }

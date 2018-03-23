@@ -48,6 +48,7 @@ import { HttpClient, HttpHandler} from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { ApiService } from './services/api/api.service';
+import { StatusService } from './services/status/status.service';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -79,7 +80,7 @@ describe('ContactComponent', () => {
         SelectboxComponent,
         StatusComponent
       ],
-      providers: [ HttpClient, HttpHandler, SanitizeService, ApiService],
+      providers: [ HttpClient, HttpHandler, SanitizeService, ApiService, StatusService],
       // schemas:      [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
   }));

@@ -19,6 +19,7 @@ import { ApiService } from './services/api/api.service';
 
 import {HttpClientModule} from '@angular/common/http';
 import { StatusComponent } from './status/status.component';
+import { StatusService } from './services/status/status.service';
 
 
 @NgModule({
@@ -39,9 +40,9 @@ import { StatusComponent } from './status/status.component';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [SanitizeService, ApiService],
+  providers: [SanitizeService, ApiService, StatusService],
   bootstrap: [ContactComponent]
 })
 export class AppModule { }

@@ -4,6 +4,8 @@ import { MessageComponent } from './message.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { TextAreaComponent } from '../textarea/textarea.component';
 import { StatusComponent } from '../status/status.component';
+import { StatusService } from '../services/status/status.service';
+// import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('MessageComponent', () => {
   let component: MessageComponent;
@@ -19,6 +21,7 @@ describe('MessageComponent', () => {
         StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         // FormGroup,

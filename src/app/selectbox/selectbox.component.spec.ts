@@ -4,6 +4,7 @@ import { SelectboxComponent } from './selectbox.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { customMatchers, expect } from '../../utils/testing/custom-matcher';
+import { StatusService } from '../services/status/status.service';
 
 describe('SelectboxComponent', () => {
   let component: SelectboxComponent;
@@ -125,6 +126,7 @@ describe('SelectboxComponent', () => {
         SelectboxComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         ReactiveFormsModule,

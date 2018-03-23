@@ -4,6 +4,7 @@ import {async, TestBed, ComponentFixture,  fakeAsync } from '@angular/core/testi
 import { CompanyComponent } from './company.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { TextComponent } from '../text/text.component';
+import { StatusService } from '../services/status/status.service';
 
 describe('CompanyComponent', () => {
   let component: CompanyComponent;
@@ -19,6 +20,7 @@ describe('CompanyComponent', () => {
         StatusComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         ReactiveFormsModule,

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { async, TestBed, ComponentFixture  } from '@angular/core/testing';
-import { FormsModule,  FormControl,  ReactiveFormsModule, FormGroup, Validators  } from '@angular/forms';
+import { FormsModule,  FormControl,  ReactiveFormsModule, FormGroup  } from '@angular/forms';
 import { EmailCheckValidator } from './emailCheck.validator';
 
          // Test Component

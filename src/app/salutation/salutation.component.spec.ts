@@ -3,6 +3,7 @@ import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testin
 import { SalutationComponent } from './salutation.component';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { SelectboxComponent } from '../selectbox/selectbox.component';
+import { StatusService } from '../services/status/status.service';
 
 describe('SalutationComponent', () => {
   let component: SalutationComponent;
@@ -17,6 +18,7 @@ describe('SalutationComponent', () => {
         SelectboxComponent
       ],
       // schemas: [ NO_ERRORS_SCHEMA],
+      providers: [StatusService],
       imports: [
         FormsModule,
         ReactiveFormsModule,
