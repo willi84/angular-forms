@@ -58,9 +58,6 @@ describe('ContactComponent', () => {
   let service: ApiService;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      // declarations: [
-      //   ContactComponent,
-      // ],
       imports: [
         FormsModule, ReactiveFormsModule,
         HttpClientModule,
@@ -84,11 +81,9 @@ describe('ContactComponent', () => {
       // schemas:      [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
   }));
+  
   beforeEach(() => {
     httpClient = TestBed.get(HttpClient);
-  });
-
-  beforeEach(() => {
     service = TestBed.get(ApiService);
     httpClient = TestBed.get(HttpClient);
 
