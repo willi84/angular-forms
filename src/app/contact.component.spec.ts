@@ -8,11 +8,8 @@ import { FormsModule, ReactiveFormsModule,
   // FormGroup, FormControl
 } from '@angular/forms';
 
-import { HttpClientModule,
-  // HttpRequest, HttpParams
- } from '@angular/common/http';
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+
 // import { HttpClientFeatureService } from './http-client-feature.service';
 
 import {ContactComponent} from './contact.component';
@@ -54,14 +51,11 @@ describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
 
-  let httpClient: HttpClient;
   let service: ApiService;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule, ReactiveFormsModule,
-        HttpClientModule,
-        HttpClientTestingModule
+        FormsModule, ReactiveFormsModule
       ],
       declarations: [
         ContactComponent,
@@ -81,34 +75,22 @@ describe('ContactComponent', () => {
       // schemas:      [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
   }));
-  
+
   beforeEach(() => {
-    httpClient = TestBed.get(HttpClient);
     service = TestBed.get(ApiService);
-    httpClient = TestBed.get(HttpClient);
 
     spyOn(service, 'getApiFeedback').and.callFake(function(arg) {
-      console.log(arg);
       // arg=firstname=xxx&lastname=xxxx&email=xxxx@xxx.de&data=xxx&company=xxx&phone=012&title=Frau&subject=xxx
       if (!arg) {
         return Observable.throw({status: 404});  // throw error
       } else if (arg.indexOf('subject=error') !== -1) {
         return Observable.throw({status: 404});
-        // return Observable.of(`{ data:1}`
-      } else if (arg.indexOf('empty') >= 0) {
-        console.log('empty');
-        return Observable.of(`{ data:2}`
-        );
       } else {
         return Observable.of(
-          // `{ data:1}`
           { ok: 1 }
         );
       }
     });
-
-    // spyOn(service, 'getApiFeedback').and.returnValue(Observable.of({ data:1}));
-
   });
   beforeEach(async(() => {
     fixture = TestBed.createComponent(ContactComponent);

@@ -1,0 +1,56 @@
+.has-error .form-control{
+    border: 1px solid red;
+}
+.has-error label{
+    color: red;
+}
+.mt30--xs{
+    margin-top: 30px;
+}
+.mt80--xs{
+    margin-top: 80px;
+}
+.mt100--xs{
+    margin-top: 100px;
+}
+.ml-10--xs{
+    margin-left: -10px;
+}
+
+.fs20--xs{
+    font-size: 20px;
+}
+.has-error .control-label{
+    color: red
+}
+
+/* hide sth. without losing space*/
+.hide-opacity{
+    opacity: 0;
+}
+.has-error .form-control:focus  + div.text-danger{
+    opacity:1;
+  }
+  .icon-warning{
+   color: red;
+   margin-left: -30px;
+   font-size: 20px;
+  }
+  .mt30--xs{
+    margin-top: 30px;
+  }
+  .has-error .form-control{
+    border: 1px solid red;
+  }
+  .has-error label{
+    color: red;
+  }
+
+.col-sm-20 {
+    width: 100%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}

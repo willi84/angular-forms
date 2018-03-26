@@ -12,30 +12,7 @@ import { StatusService } from '../services/status/status.service';
 
 @Component({
   selector: environment.prefix + 'text',
-  styles: [ `
-  .hide-opacity{
-  }
-  .form-control  + div.text-danger{
-
-  }
-  .has-error .form-control:focus  + div.text-danger{
-    opacity:1;
-  }
-  .icon-warning{
-   color: red;
-   margin-left: -30px;
-   font-size: 20px;
-  }
-  .mt30--xs{
-    margin-top: 30px;
-  }
-  .has-error .form-control{
-    border: 1px solid red;
-  }
-  .has-error label{
-    color: red;
-  }
-`],
+  styles: [ ``],
   template: `
   <div class="form-group"
     [formGroup]="group"
@@ -76,7 +53,7 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
   startError = true;
   noRequired =  false;
     constructor(
-      private statusService: StatusService
+      public statusService: StatusService
     ) {
     }
     ngOnInit() {

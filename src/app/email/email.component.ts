@@ -10,7 +10,7 @@ import { EmailCheckValidator } from './../validators/emailCheck/emailCheck.valid
 @Component({
   selector: environment.prefix + 'email',
   template: `
-  <form-text [group]="group" [submitted]="submitted" label="E-Mail" required="{{required}}" name="{{tagName}}"></form-text>
+  <form-text [group]="group" [submitted]="submitted" label="E-Mail" type="email" required="{{required}}" name="{{tagName}}"></form-text>
   `
 })
 export class EmailComponent implements OnInit {

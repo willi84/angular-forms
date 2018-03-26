@@ -11,31 +11,7 @@ import { DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
 import { StatusService } from '../services/status/status.service';
 @Component({
   selector: environment.prefix + 'textarea',
-  styles: [ `
-  .hide-opacity{
-  }
-  .form-control  + div.text-danger{
-
-  }
-  .has-error .form-control:focus  + div.text-danger{
-    opacity:1;
-  }
-  .icon-warning{
-   color: red;
-   margin-left: -30px;
-   font-size: 20px;
-   margin-top: 80px; // specific TODO
-  }
-  .mt30--xs{
-    margin-top: 30px;
-  }
-  .has-error .form-control{
-    border: 1px solid red;
-  }
-  .has-error label{
-    color: red;
-  }
-`],
+  styles: [ ``],
   template: `
   <div class="form-group"
     [formGroup]="group"
@@ -56,6 +32,7 @@ import { StatusService } from '../services/status/status.service';
       [showError]="showError"
       [hasFocus]="hasFocus"
       [name]="name"
+      [top]="100"
     ></form-status>
   </div>
   `
@@ -79,7 +56,7 @@ export class TextAreaComponent implements OnInit, OnChanges, DoCheck {
   startError = true;
   noRequired =  false;
     constructor(
-      private statusService: StatusService
+      public statusService: StatusService
     ) {
     }
     ngOnInit() {

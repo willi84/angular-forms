@@ -17,7 +17,7 @@ import { StatusService } from '../services/status/status.service';
   }
   .form-control + span + div.text-danger{
   }
-  .form-control:focus + span + div.text-danger{
+  /*.form-control:focus + span + div.text-danger{
     opacity:1;
   }
   .has-error .form-control:focus  + div.text-danger{
@@ -27,16 +27,8 @@ import { StatusService } from '../services/status/status.service';
     color: red;
     margin-left: -50px;
     font-size: 20px;
-   }
-   .mt30--xs{
-     margin-top: 30px;
-   }
-   .has-error .form-control{
-     border: 1px solid red;
-   }
-   .has-error label{
-     color: red;
-   }
+   }*/
+
 `],
   template: `
   <div class="form-group"
@@ -89,13 +81,13 @@ export class SelectboxComponent implements OnInit, OnChanges, DoCheck {
   control: any;
   startValue = '';
   oldValue: '';
-  isSelecting: false;
+  isSelecting = false;
   action = '';  // action of input between focuses
   lastAction = '';
   startError = true;
   noRequired =  false;
     constructor(
-        private statusService: StatusService
+        public statusService: StatusService
       ) {
     }
     ngOnInit() {

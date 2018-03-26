@@ -17,14 +17,8 @@ import { environment } from '../environments/environment.prod';
 @Component({
   selector: environment.prefix +  'contact',
   // changeDetection: ChangeDetectionStrategy.OnPush,
-styles: [ `
-  .hide-opacity{
-    opacity: 0;
-  }
-`],
+styles: [ ``],
 template: `
-<h1>Forms sample</h1>
-{{ responseApi.ok}}
 <div class="row">
   <div class="col-sm-10 text-danger mb50--xs">
     <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
@@ -40,12 +34,12 @@ template: `
 </div>
 <form novalidate  [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="responseApi.ok !== 1">
   <div class="row">
-    <div class="col-sm-10">
+    <div class="col-sm-12">
       <form-subject [group]="form" [submitted]="submitted" required></form-subject>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-10">
+    <div class="col-sm-20">
       <form-message [group]="form" [submitted] ="submitted"
     label=" Ihre Nachfrage/Nachricht an uns"></form-message>
     </div>
@@ -57,7 +51,7 @@ template: `
   </div>
   <div class="row">
 
-    <div class="col-sm-2">
+    <div class="col-sm-4">
       <form-salutation [group]="form" [submitted]="submitted" required></form-salutation>
     </div>
     <div class="col-sm-8">
@@ -86,7 +80,9 @@ template: `
 })
 export class ContactComponent implements OnInit {
   submitted: Boolean = false;
-  responseApi = {};
+  responseApi = {
+    ok: -1
+  };
 
 
   public form: FormGroup;
@@ -94,20 +90,16 @@ export class ContactComponent implements OnInit {
     private formBuilder: FormBuilder,
     private sanitize: SanitizeService,
     private apiService: ApiService
-    // private http: HttpClient
   ) {
-    this.submitted = false;
-    this.sanitize = sanitize;
-    // this.http = http;
+      this.submitted = false;
+      this.sanitize = sanitize;
   }
 
   ngOnInit() {
-
     this.form = this.formBuilder.group({});
   }
   onSubmit() {
-    // let headers = new Headers({ 'Content-Type': 'application/json' });
-    // let options = new RequestOptions({ headers: headers });
+    // set body
     const body =
       'firstname=' + this.form.controls.first_name.value + '&' +
       'lastname=' + this.form.controls.last_name.value + '&' +
@@ -144,5 +136,4 @@ export class ContactComponent implements OnInit {
       );
     }
   }
-
 }
