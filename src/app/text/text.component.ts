@@ -93,13 +93,4 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
     ngDoCheck() {
       this.statusService.checkStatus(this);
     }
-    // getValidationStatus() {
-    //   const status = !(
-    //     (!this.submitted) ||
-    //     (!this.control.invalid && this.showError === '') ||
-    //     (this.control.invalid && this.showError === '' && this.control.value ===  '' ) ||
-    //     (this.control.invalid && this.showError === '' && this.lastAction ===  'reset' )
-    //   );
-    //   return status;
-    // }
 }
