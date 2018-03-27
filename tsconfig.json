@@ -16,6 +16,19 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "baseUrl": "./src",
+    "paths": {
+        "@app/*": ["app/*"],
+        "@config/*": ["app/_config/*"],
+        "@environment/*": ["environments/*"],
+        "@shared/*": ["app/_shared/*"],
+        "@framework/*": ["app/framework/*"],
+        "@features/*": ["app/features/*"],
+        "@services/*": ["app/features/services/*"],
+        "@validators/*": ["app/features/validators/*"],
+        "@helpers/*": ["helpers/*"],
+        "@utils/*": ["utils/*"]
+    },
   }
 }

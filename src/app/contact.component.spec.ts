@@ -1,51 +1,39 @@
-import { StatusComponent } from './status/status.component';
 /* tslint:disable:no-unused-variable */
 
-import {async, TestBed, ComponentFixture,
-  // fakeAsync,
-  } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule,
-  // FormGroup, FormControl
-} from '@angular/forms';
-
-
-
-// import { HttpClientFeatureService } from './http-client-feature.service';
-
-import {ContactComponent} from './contact.component';
-import { EmailComponent } from './email/email.component';
-import { NameComponent } from './name/name.component';
-import { CompanyComponent } from './company/company.component';
-import { MessageComponent } from './message/message.component';
-import { TextComponent } from './text/text.component';
-import { TextAreaComponent } from './textarea/textarea.component';
-import { SalutationComponent } from './salutation/salutation.component';
-import { SubjectComponent } from './subject/subject.component';
-import { PhoneComponent } from './phone/phone.component';
-import { SelectboxComponent } from './selectbox/selectbox.component';
-import { SanitizeService } from './services/sanitize/sanitize.service';
-// import { HttpClient, HttpHandler } from '@angular/common/http';
-// import {Observable} from 'rxjs/Observable';
+// angular
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpHandler} from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 import {} from 'jasmine';
-
-// import { FeedService } from './services/feed/feed.service';
-// import {Observable} from 'rxjs/Observable';
-
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/Observable';
-// import { importExpr } from '@angular/compiler/src/output/output_ast';
-// import { NO_ERRORS_SCHEMA } from '@angular/core';
 
+// framework
+import { EmailComponent } from '@framework/email/email.component';
+import { NameComponent } from '@framework/name/name.component';
+import { CompanyComponent } from '@framework/company/company.component';
+import { MessageComponent } from '@framework/message/message.component';
+import { SalutationComponent } from '@framework/salutation/salutation.component';
+import { SubjectComponent } from '@framework/subject/subject.component';
+import { PhoneComponent } from '@framework/phone/phone.component';
 
-import { HttpClient, HttpHandler} from '@angular/common/http';
-// import { EmailCheckValidator } from './emailCheck.validator';
+// _shared
+import { StatusComponent } from '@shared/status/status.component';
+import { TextComponent } from '@shared/text/text.component';
+import { TextAreaComponent } from '@shared/textarea/textarea.component';
+import { SelectboxComponent } from '@shared/selectbox/selectbox.component';
 
-import { Observable } from 'rxjs/Observable';
-import { ApiService } from './services/api/api.service';
-import { StatusService } from './services/status/status.service';
+// root component
+import {ContactComponent} from './contact.component';
+
+// features
+import { SanitizeService } from '@services/sanitize/sanitize.service';
+import { ApiService } from '@services/api/api.service';
+import { StatusService } from '@services/status/status.service';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -125,7 +113,7 @@ describe('ContactComponent', () => {
     it('should simulate an error', () => {
       component.form.controls.phone.setValue('error');
       component.onSubmit();
-      expect(component.responseApi).toEqual({  });
+      expect(component.responseApi).toEqual({ ok: -1 });
     });
   });
 });

@@ -1,82 +1,77 @@
-import {
-  Component,
-  // ChangeDetectionStrategy
-} from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder
-} from '@angular/forms';
+// angular
+import { Component } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { SanitizeService } from './services/sanitize/sanitize.service';
-import { ApiService } from './services/api/api.service';
-// import {Observable} from "rxjs/Observable";
 
-import { environment } from '../environments/environment.prod';
-// import { Headers, RequestOptions } from '@angular/http';
+// services
+import { SanitizeService } from '@services/sanitize/sanitize.service';
+import { ApiService } from '@services/api/api.service';
+
+// configuration
+import { environment } from '@environment/environment.prod';
 
 @Component({
   selector: environment.prefix +  'contact',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
-styles: [ ``],
-template: `
-<div class="row">
-  <div class="col-sm-10 text-danger mb50--xs">
-    <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
-    >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
-    <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
-    >Ihre Anfrage wurde erfolgreich versendet</span>
-    <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 0) }"
-    >Es ist ein Fehler aufgetreten {{ responseApi | json }}</span>
-  </div>
-  <button class="mt20--xs btn btn--primary pull-right" *ngIf="responseApi.ok === 1" (click)="responseApi = {}">
-    <i class="glyphicon glyphicon-envelope"></i> Neue Mitteilung
-    </button>
-</div>
-<form novalidate  [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="responseApi.ok !== 1">
+  styles: [ ``],
+  template: `
   <div class="row">
-    <div class="col-sm-12">
-      <form-subject [group]="form" [submitted]="submitted" required></form-subject>
+    <div class="col-sm-10 text-danger mb50--xs">
+      <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
+      >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
+      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
+      >Ihre Anfrage wurde erfolgreich versendet</span>
+      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 0) }"
+      >Es ist ein Fehler aufgetreten {{ responseApi | json }}</span>
     </div>
+    <button class="mt20--xs btn btn--primary pull-right" *ngIf="responseApi.ok === 1" (click)="responseApi = {}">
+      <i class="glyphicon glyphicon-envelope"></i> Neue Mitteilung
+      </button>
   </div>
-  <div class="row">
-    <div class="col-sm-20">
-      <form-message [group]="form" [submitted] ="submitted"
-    label=" Ihre Nachfrage/Nachricht an uns"></form-message>
+  <form novalidate  [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="responseApi.ok !== 1">
+    <div class="row">
+      <div class="col-sm-12">
+        <form-subject [group]="form" [submitted]="submitted" required></form-subject>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-10">
-      <form-company [group]="form" [submitted]="submitted"></form-company>
+    <div class="row">
+      <div class="col-sm-20">
+        <form-message [group]="form" [submitted] ="submitted"
+      label=" Ihre Nachfrage/Nachricht an uns"></form-message>
+      </div>
     </div>
-  </div>
-  <div class="row">
+    <div class="row">
+      <div class="col-sm-10">
+        <form-company [group]="form" [submitted]="submitted"></form-company>
+      </div>
+    </div>
+    <div class="row">
 
-    <div class="col-sm-4">
-      <form-salutation [group]="form" [submitted]="submitted" required></form-salutation>
+      <div class="col-sm-4">
+        <form-salutation [group]="form" [submitted]="submitted" required></form-salutation>
+      </div>
+      <div class="col-sm-8">
+        <form-name [group]="form" [submitted]="submitted" name="first_name" label="Vorname"  required></form-name>
+      </div>
+      <div class="col-sm-8">
+        <form-name [group]="form" [submitted]="submitted" name="last_name" label="Nachname" required></form-name>
+      </div>
     </div>
-    <div class="col-sm-8">
-      <form-name [group]="form" [submitted]="submitted" name="first_name" label="Vorname"  required></form-name>
+    <div class="row">
+      <div class="col-sm-10">
+        <form-email [group]="form" [submitted]="submitted" required></form-email>
+      </div>
+      <div class="col-sm-10">
+        <form-phone [group]="form" [submitted]="submitted"required></form-phone>
+      </div>
     </div>
-    <div class="col-sm-8">
-      <form-name [group]="form" [submitted]="submitted" name="last_name" label="Nachname" required></form-name>
+    <div class="row">
+      <div class="col-sm-20">
+      <button class="mt20--xs btn btn--primary pull-right">
+        <i class="glyphicon glyphicon-envelope"></i> Mitteilung absenden </button>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-10">
-      <form-email [group]="form" [submitted]="submitted" required></form-email>
-    </div>
-    <div class="col-sm-10">
-      <form-phone [group]="form" [submitted]="submitted"required></form-phone>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-20">
-    <button class="mt20--xs btn btn--primary pull-right">
-      <i class="glyphicon glyphicon-envelope"></i> Mitteilung absenden </button>
-    </div>
-  </div>
-  </form>
-  `
+    </form>
+    `
 })
 export class ContactComponent implements OnInit {
   submitted: Boolean = false;

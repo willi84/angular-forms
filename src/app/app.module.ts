@@ -1,26 +1,31 @@
+// angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-
-import { ContactComponent } from './contact.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { EmailComponent } from './email/email.component';
-import { NameComponent } from './name/name.component';
-import { CompanyComponent } from './company/company.component';
-import { PhoneComponent } from './phone/phone.component';
-import { SubjectComponent } from './subject/subject.component';
-import { SalutationComponent } from './salutation/salutation.component';
-import { TextComponent } from './text/text.component';
-import { TextAreaComponent } from './textarea/textarea.component';
-import { MessageComponent } from './message/message.component';
-import { SelectboxComponent } from './selectbox/selectbox.component';
-import { SanitizeService } from './services/sanitize/sanitize.service';
-import { ApiService } from './services/api/api.service';
-
 import {HttpClientModule} from '@angular/common/http';
-import { StatusComponent } from './status/status.component';
-import { StatusService } from './services/status/status.service';
 
+// framework
+import { EmailComponent } from '@framework/email/email.component';
+import { NameComponent } from '@framework/name/name.component';
+import { CompanyComponent } from '@framework/company/company.component';
+import { MessageComponent } from '@framework/message/message.component';
+import { SalutationComponent } from '@framework/salutation/salutation.component';
+import { SubjectComponent } from '@framework/subject/subject.component';
+import { PhoneComponent } from '@framework/phone/phone.component';
+
+// shared
+import { StatusComponent } from '@shared/status/status.component';
+import { TextComponent } from '@shared/text/text.component';
+import { TextAreaComponent } from '@shared/textarea/textarea.component';
+import { SelectboxComponent } from '@shared/selectbox/selectbox.component';
+
+// root component
+import {ContactComponent} from '@app/contact.component';
+
+// services
+import { SanitizeService } from '@services/sanitize/sanitize.service';
+import { ApiService } from '@services/api/api.service';
+import { StatusService } from '@services/status/status.service';
 
 @NgModule({
   declarations: [

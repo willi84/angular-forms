@@ -16,6 +16,28 @@ This project should provide a simple but powerful real world solution of reactiv
 ## Credits
 To my company STRATO and to Travis and Browserstack for supporting OpenSource projects.
 
+## Folder structure
+
+* _shared: every building block for a component like input/textarea/select and status message
+* framework: reusable components
+* features: helping services and validators
+```
+├── app
+│   ├── _shared/
+│   │   ├── <basic for component>
+│   ├── framework/
+│   │   ├── <reusable component>
+│   ├── features/
+│   │   ├── services
+│   │   └── validators
+│   ├── app.module.ts
+│   └── contact.component (root component)
+├── environments
+├── utils
+└── index.html
+```
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -54,4 +76,7 @@ In German: Diese Software wurde mit Unterstützung von STRATO entwickelt.
 
 ## Credits
 * https://medium.com/from-the-couch/angular-2-with-travis-ci-922040e01937
+* Folder Structure
+  * basics: @webdave_de with his [talk](https://docs.google.com/presentation/d/1w3Icstdkou9Ri9jX5-onUEB2jgdFV_3hl43dHgKbhMo/present?slide=id.p)
+  * namespaces: @maxim_koretskyi
 
