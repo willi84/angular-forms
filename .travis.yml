@@ -39,12 +39,9 @@ before_script:
 
 script: 
 # run tests
-npm run test:prod
-
+- npm run test:prod
 # run production build
-npm run build:prod
-
+- npm run build:prod
 # run documentation
-npm run compodoc
-
+- npm run compodoc
 #- ng e2e
