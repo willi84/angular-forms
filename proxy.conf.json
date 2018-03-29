@@ -1,5 +1,5 @@
 {
-  "/buy/*": {
+  "/api/*": {
     "target": "https://www.domain.de",
     "secure": false,
     "logLevel": "debug",

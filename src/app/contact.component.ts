@@ -12,10 +12,14 @@ import { environment } from '@environment/environment.prod';
 
 @Component({
   selector: environment.prefix +  'contact',
-  styles: [ ``],
+  styles: [ `
+    .hide-opacity{
+      opacity: 0;
+    }
+  `],
   template: `
   <div class="row">
-    <div class="col-sm-10 text-danger mb50--xs">
+    <div class="col-sm-offset-5 text-danger text-center col-xs-15 col-xs-offset-2 mb50--xs">
       <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
       >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
       <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
@@ -50,7 +54,7 @@ import { environment } from '@environment/environment.prod';
         <form-salutation [group]="form" [submitted]="submitted" required></form-salutation>
       </div>
       <div class="col-sm-8">
-        <form-name [group]="form" [submitted]="submitted" name="first_name" label="Vorname"  required></form-name>
+        <form-name [group]="form" [submitted]="submitted" name="first_name" label="Vorname" required></form-name>
       </div>
       <div class="col-sm-8">
         <form-name [group]="form" [submitted]="submitted" name="last_name" label="Nachname" required></form-name>
@@ -67,7 +71,7 @@ import { environment } from '@environment/environment.prod';
     <div class="row">
       <div class="col-sm-20">
       <button class="mt20--xs btn btn--primary pull-right">
-        <i class="glyphicon glyphicon-envelope"></i> Mitteilung absenden </button>
+      <i class="icon-mail"></i> Mitteilung absenden </button>
       </div>
     </div>
     </form>
