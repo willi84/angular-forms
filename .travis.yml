@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - '6.12.3'
+  - '8.9.1'
 
 cache:
   directories:
@@ -38,5 +38,13 @@ before_script:
 - ng build
 
 script: 
-- karma start karma.conf.js --single-run
-- ng e2e
+# run tests
+npm run test:prod
+
+# run production build
+npm run build:prod
+
+# run documentation
+npm run compodoc
+
+#- ng e2e
