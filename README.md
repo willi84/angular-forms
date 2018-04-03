@@ -37,6 +37,17 @@ To my company STRATO and to Travis and Browserstack for supporting OpenSource pr
 └── index.html
 ```
 
+## Content
+  * [basic idea](./docs/basic_idea.md)
+  * [create a new component](./docs/new_component.md)
+  * [create new unit tests](./docs/unit_test.md)
+  * [npm task overview](./doc/npm_tasks.md)
+  * [Coding Styleguide](./docs/CODE_STYLEGUIDE.md)
+  * [License](./LICENSE)
+
+## setup
+  * node 8.9.1
+  * typescript
 
 ## Development server
 

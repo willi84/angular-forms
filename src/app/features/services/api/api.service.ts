@@ -8,21 +8,21 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from '@environment/environment.prod';
 
 /**
- * Service zur Abfrage eines RSS-Feeds.
+ * Service to request an api
  */
 @Injectable()
 export class ApiService {
 
     /**
-     * Konstruktur erzeugt neuen HttpClient
-     * @param http Ein Http-client-objekt
+     * constructor
+     * @param http instance of http client
      */
 
     constructor(private http: HttpClient) {
     }
 
     /**
-     * Diese Funktion ruft den Feed ab und gibt einen Observable zurück.
+     * returns observable object from api call with httclient
      * @returns Ein Observable
      */
     getApiFeedback(body: any): Observable<any> {

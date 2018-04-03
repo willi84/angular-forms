@@ -5,6 +5,22 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 // configuration
 import { environment } from '@environment/environment';
 
+/**
+ * salutation component creates a salutation selectbox
+ * @todo make submitted optional
+ *
+ * @example
+ * <!-- Basic sample -->
+ * <form-salutation [group]="form" [submitted]="submitted"></form-salutation>
+ *
+ * @example
+ * <!-- Basic sample with required option -->
+ * <form-salutation [...] required></form-salutation>
+ *
+ * @example
+ * <!-- Basic sample with custom lable -->
+ * <form-salutation [...] [label]="I am a subject"></form-salutation>
+ */
 @Component({
   selector: environment.prefix + 'salutation',
   template: `
@@ -13,17 +29,44 @@ import { environment } from '@environment/environment';
 })
 export class SalutationComponent implements OnInit {
 
+  /**
+   * Input with status of form being submitted.
+   */
   @Input() submitted: Boolean;
+
+  /**
+   * Input with reference to main form control.
+   */
   @Input() group: FormGroup;
+
+  /**
+   * optional input to customize label.
+   */
   @Input() label?: any;
+
+  /**
+   * input to declare element as required.
+   */
   @Input() required = 'false';
+
+  /**
+   * name of html tag
+   */
   public tagName: string;
 
+  /**
+   * constructor
+   * @param elementRef reference to element
+   */
   constructor(
     private elementRef: ElementRef
   ) {
     this.tagName = this.elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
   }
+
+  /**
+   * creating basic setting for salutation component and add it to main control
+   */
   ngOnInit() {
     this.label = this.label || 'Anrede';
     this.required = this.required !== 'false' ? 'true' : 'false';

@@ -2,20 +2,22 @@
 import { Injectable } from '@angular/core';
 
 /**
- * Service zur Bereinigung von Strings.
+ * service to clean string from vulnerable characters
+ *
+ * useful, when you don't be sure how your API handles this
  */
 @Injectable()
 export class SanitizeService {
 
   /**
-   * Konstruktor für Sanitizer.
+   * constructor
    */
   constructor() { }
 
   /**
-   * Öffentliche Methode um problematische Zeichen zu entfernen zur Vermeidung von XSS.
-   * @param unsafe zu bereinigender String
-   * @returns bereinigter String
+   * public method to delete unsafe character to avoid XSS
+   * @param unsafe incoming string to check
+   * @returns cleaned string
    */
   sanitize(unsafe: string): string {
     unsafe = unsafe || '';

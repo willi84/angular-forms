@@ -8,22 +8,23 @@ import { Injectable } from '@angular/core';
 export class StatusService {
 
   /**
-   * Konstruktor für Sanitizer.
+   * contructor for StatusService component
    */
   constructor() { }
 
   /**
-   * Öffentliche Methode um problematische Zeichen zu entfernen zur Vermeidung von XSS.
-   * @param unsafe zu bereinigender String
-   * @returns bereinigter String
+   * public method to evaluate current form control status
+   * @param self reference to this
    */
 
   checkStatus(self: any): void {
-    // TODO: action based behaviour
-    // * copy & paste
-    // * delete from error/success to zero after submit
-    if (self.hasFocus && self.action === 'no') { // startVAlue == ''
-      self.startValue = self.oldValue; // (self.startValue === '') ? self.control.value : self.oldValue;
+    /**
+     * @todo action based behaviour (copy & paste)
+     * @todo delete from error/success to zero after submit
+     */
+
+    if (self.hasFocus && self.action === 'no') {
+      self.startValue = self.oldValue;
       if (self.lastAction === 'reset' && self.control.value === '') {
         self.action = self.lastAction;
       } else {
@@ -32,6 +33,7 @@ export class StatusService {
     }
     const lenStartValue = self.startValue ? self.startValue.length : 0;
     const lenControlValue = self.control && self.control.value ? self.control.value.length : 0;
+
     // actions based on activity
     if (lenStartValue > lenControlValue) {
       self.action = (self.action === 'reset') ? self.action : 'shorten';
@@ -41,7 +43,7 @@ export class StatusService {
       if (self.lastAction === 'reset' && self.control.value === '') {
         self.action = self.action;
       } else {
-        self.action = (self.hasFocus) ? 'start' : 'touched'; //  (lenStartValue === 0) ? 'no' : 'start';
+        self.action = (self.hasFocus) ? 'start' : 'touched';
       }
     } else {
       self.action = 'replaced';
@@ -56,15 +58,19 @@ export class StatusService {
 
       if (self.control) {
         if (!self.control.errors) {
-          self.showError = '';  // sets default
+          // sets default
+          self.showError = '';
         } else {
           if (self.hasFocus && self.showError === 'required' && self.control.errors.pattern) {
-            // @TODO: maybe deletable
-            // self.showError = self.showError;
+            /**
+             * @todo maybe deletable?
+             */
           } else {
             if (self.control.errors !== null && self.submitted) {
 
-              // Todo: after reset show error after leave
+              /**
+               * @todo after reset showing error after leave
+               */
               if (self.lastAction !== 'reset') {
 
                 if (self.control.errors.pattern) {
@@ -87,18 +93,24 @@ export class StatusService {
                 self.showError = '';
               }
 
-              // Todo: after being valid, change to error after leave
-
+              /**
+               * @todo after being valid, change to error after leave
+               */
               } else {
                 self.showError = '';
               }
             }
-            // }
           }
       }
     } else {
     }
   }
+
+  /**
+   * public method to get the final validation status
+   * @param self reference to this
+   * @returns status
+   */
   getValidationStatus(self) {
     const status = !(
       (!self.submitted) ||

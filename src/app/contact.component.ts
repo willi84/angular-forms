@@ -10,6 +10,13 @@ import { ApiService } from '@services/api/api.service';
 // configuration
 import { environment } from '@environment/environment.prod';
 
+/**
+ * Main Component of a form
+ * @todo: make app independent from this
+ *
+ * @example
+ * <form-contact></form-contact>
+ */
 @Component({
   selector: environment.prefix +  'contact',
   styles: [ `
@@ -78,14 +85,32 @@ import { environment } from '@environment/environment.prod';
     `
 })
 export class ContactComponent implements OnInit {
+
+  /**
+   * status of form being submitted
+   */
   submitted: Boolean = false;
+
+  /**
+   * response of API
+   */
   responseApi = {
     ok: -1
   };
 
-
+  /**
+   *  main form group
+   */
   public form: FormGroup;
+
+   /**
+     * constuctor
+     * @param {any} formBuilder  instance of form builder
+     * @param {any} sanitize  instance to sanitize service
+     * @param {any} apiService instance to API service
+     */
   constructor(
+
     private formBuilder: FormBuilder,
     private sanitize: SanitizeService,
     private apiService: ApiService
@@ -94,11 +119,18 @@ export class ContactComponent implements OnInit {
       this.sanitize = sanitize;
   }
 
+  /**
+   * create basic form builder array
+   */
   ngOnInit() {
     this.form = this.formBuilder.group({});
   }
+
+  /**
+   * handling submit, call API and changing view
+   */
   onSubmit() {
-    // set body
+
     const body =
       'firstname=' + this.form.controls.first_name.value + '&' +
       'lastname=' + this.form.controls.last_name.value + '&' +
@@ -110,14 +142,18 @@ export class ContactComponent implements OnInit {
       'subject=' + this.form.controls.subject.value;
 
     this.submitted = true;
+
     const fields = Object.getOwnPropertyNames(this.form.controls);
+
     const lenNodes: number = fields.length;
+
     // IE11 not support forEach on nodeList
     for (let i = 0; i < lenNodes;  i++) {
      const field = this.form.controls[fields[i]];
       field.setValue ( this.sanitize.sanitize(field.value));
     }
     if (this.form.valid) {
+
       this.apiService.getApiFeedback(body)
       .subscribe(
 

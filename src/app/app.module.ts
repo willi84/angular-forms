@@ -27,6 +27,9 @@ import { SanitizeService } from '@services/sanitize/sanitize.service';
 import { ApiService } from '@services/api/api.service';
 import { StatusService } from '@services/status/status.service';
 
+/**
+ * module of the application
+ */
 @NgModule({
   declarations: [
     ContactComponent,
