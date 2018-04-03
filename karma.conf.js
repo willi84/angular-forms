@@ -12,6 +12,7 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-mocha-reporter'),
       require('karma-coverage-istanbul-reporter'),
+      require('karma-htmlfile-reporter'),
       require('@angular/cli/plugins/karma')
     ],
     client:{
@@ -24,9 +25,12 @@ module.exports = function (config) {
     angularCli: {
       environment: 'dev'
     },
+    htmlReporter: {
+      outputFile: 'tests/units.html'
+    },
     reporters: [
       'progress', 'kjhtml', 
-      'mocha'],
+      'mocha', 'html'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

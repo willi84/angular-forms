@@ -29,6 +29,6 @@
         "@validators/*": ["app/features/validators/*"],
         "@helpers/*": ["helpers/*"],
         "@utils/*": ["utils/*"]
-    },
+    }
   }
 }
