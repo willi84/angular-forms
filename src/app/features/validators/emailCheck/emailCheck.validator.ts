@@ -1,7 +1,15 @@
 // angular
 import { AbstractControl } from '@angular/forms';
 
+/**
+ * validator for emails
+ * @param control reference to an abstract control
+ */
 export function EmailCheckValidator(control: AbstractControl) {
+
+  /**
+   * use input as base
+   */
   const input = control.value;
 
     // empty input
@@ -11,28 +19,32 @@ export function EmailCheckValidator(control: AbstractControl) {
         required: true
       };
     }
-    const email = input.split('@');
-    // const locale = email[0];
-    if (email[1]) {
-      const domain = email[1].split('.');
 
-      if (domain.length > 1) {
-        // input: foobar@domain.
-        if (domain[1].length < 2) {
-          return {
-            // EmailCheck: 'noTld'
-            pattern: 'noTld'
-          };
-        } else {
-          return null;
+  /**
+   * split input to get email address
+  */
+  const email = input.split('@');
+  // const locale = email[0];
+  if (email[1]) {
+    const domain = email[1].split('.');
 
-        }
-      } else {
-        // input: foobar@domain
+    if (domain.length > 1) {
+      // input: foobar@domain.
+      if (domain[1].length < 2) {
         return {
-            // EmailCheck: 'invalidDomain'
-            pattern: 'invalidDomain'
-          };
+          // EmailCheck: 'noTld'
+          pattern: 'noTld'
+        };
+      } else {
+        return null;
+
+      }
+    } else {
+      // input: foobar@domain
+      return {
+          // EmailCheck: 'invalidDomain'
+          pattern: 'invalidDomain'
+        };
       }
     }
 

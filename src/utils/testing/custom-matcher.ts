@@ -1,13 +1,12 @@
+/**
+ * define global variable
+ */
 declare var global: any;
+
+/**
+ * define _global variable
+ */
 const _global = <any>(typeof window === 'undefined' ? global : window);
-
-
-
-// declare namespace jasmine {
-// 	interface Matchers {
-// 		toHaveCssStyle(expected: any): boolean;
-// 	}
-// }
 
 /**
  * Extend the API to support chaining with custom matchers
@@ -15,25 +14,64 @@ const _global = <any>(typeof window === 'undefined' ? global : window);
 export const expect: (actual: any) => NgMatchers = <any> _global.expect;
 
 /**
- * Jasmine matchers that support checking custom CSS conditions.
+ * Jasmine matchers that support checking custom form validation conditions.
  * !! important to add your custom matcher to the interface
  */
 export interface NgMatchers extends jasmine.Matchers<any> {
+
+  /**
+   * interface for custom matcher to detect changes
+   * @param expected string to be analyzed
+   */
   hasChanged(expected: {[k: string]: string}|string): boolean;
+
+  /**
+   * interface for custom matcher to detect valid input
+   * @param expected string to be analyzed
+   */
   isValid(expected: string): boolean;
+
+  /**
+   * interface for custom matcher to detect invalid input
+   * @param expected string to be analyzed
+   */
   isInvalid(expected: string): boolean;
+
+  /**
+   * interface for custom matcher to detect if error icon is shown
+   * @param expected status to  be shown
+   */
   showErrorIcon(expected: boolean): boolean;
+
+  /**
+   * interface for custom matcher to detect shown error message
+   * @param expected string to be analyzed
+   */
   showErrorMessage(expected: string): boolean;
+
+  /**
+   * interface for custom matcher to detect shown hidden error message
+   * @param expected string to be analyzed
+   */
   showHiddenErrorMessage(expected: string): boolean;
+
+  /**
+   * interface for custom matcher to detect hidden error message
+   * @param expected string to be analyzed
+   */
   hideErrorMessage(expected: string): boolean;
 }
 
 /**
  * Implementation of 1...n custom matchers
  * cloned from @angular/core
+ * @todo optimize duplicated matchers
  */
 export const customMatchers: jasmine.CustomMatcherFactories = {
 
+  /**
+   * custom matcher function that detects if input has changed
+   */
   hasChanged: function () {
     return {
       compare: (actual: any, styles: {[k: string]: string}|string): jasmine.CustomMatcherResult => {
@@ -72,6 +110,10 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
       }
     };
   },
+
+  /**
+   * custom matcher function that detects if input is valid
+   */
   isValid: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
@@ -96,6 +138,10 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
       }
     };
   },
+
+  /**
+   * custom matcher function that detects if input is not valid
+   */
   isInvalid: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
@@ -121,6 +167,9 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
     };
   },
 
+  /**
+   * custom matcher function that detects if error icon is shown
+   */
   showErrorIcon: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
@@ -163,6 +212,9 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
     };
   },
 
+  /**
+   * custom matcher function that detects if error message is hidden
+   */
   hideErrorMessage: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
@@ -217,6 +269,10 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
       }
     };
   },
+
+  /**
+   * custom matcher function that detects if error message is shown
+   */
   showErrorMessage: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {
@@ -272,6 +328,10 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
       }
     };
   },
+
+  /**
+   * custom matcher function that detects if hidden error message is shown
+   */
   showHiddenErrorMessage: function () {
     return {
       compare: (actual: any, expected: any): jasmine.CustomMatcherResult => {

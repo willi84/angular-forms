@@ -19,7 +19,7 @@ import { environment } from '@environment/environment';
  *
  * @example
  * <!-- Basic sample with custom lable -->
- * <form-salutation [...] [label]="I am a subject"></form-salutation>
+ * <form-salutation [...] [label]="I am a Salutation"></form-salutation>
  */
 @Component({
   selector: environment.prefix + 'salutation',

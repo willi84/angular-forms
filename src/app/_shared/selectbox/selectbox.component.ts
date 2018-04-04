@@ -9,6 +9,25 @@ import { environment } from '@environment/environment.prod';
 // services
 import { StatusService } from '@services/status/status.service';
 
+/**
+ * selectbox component creates a basic selectbox
+ * @todo make submitted optional
+ * @todo optimize css away
+ * @todo adapt to other _shared components
+ * @todo make values to select configurable
+ *
+ * @example
+ * <!-- Basic sample -->
+ * <form-selectbox [group]="form" [submitted]="submitted"></form-selectbox>
+ *
+ * @example
+ * <!-- Basic sample with required option -->
+ * <form-selectbox [...] required></form-selectbox>
+ *
+ * @example
+ * <!-- Basic sample with custom lable -->
+ * <form-selectbox [...] [label]="I am a Salutation"></form-selectbox>
+ */
 @Component({
   selector: environment.prefix + 'selectbox',
   styles: [ `
@@ -68,39 +87,124 @@ import { StatusService } from '@services/status/status.service';
 })
 export class SelectboxComponent implements OnInit, OnChanges, DoCheck {
 
+  /**
+   * Input with status of form being submitted.
+   */
   @Input() submitted: Boolean;
+
+  /**
+   * Input with reference to main form control.
+   */
   @Input() group: FormGroup;
-  @Input() name: string;
+
+  /**
+   * optional input to customize label.
+   */
   @Input() label?: any;
+
+  /**
+   * input to declare element as required.
+   */
   @Input() required = 'false';
+
+  /**
+   * input to declare tag name of text component (used by label, control and status)
+   */
+  @Input() name: string;
+
+   /**
+   * values for selectbox
+   * @todo make configurable
+   */
   states = ['Herr', 'Frau'];
+
+  /**
+   * type of error to be shown
+   */
   showError: string;
+
+  /**
+   * flag if field has focus
+   */
   hasFocus = false;
+
+  /**
+   * flag if user is typing at the field
+   */
   isTyping =  false;
+
+  /**
+   * reference to control
+   */
   control: any;
+
+  /**
+   * value when user do action on the field
+   */
   startValue = '';
+
+  /**
+   * old value when user has interacted with the field
+   */
   oldValue: '';
-  isSelecting = false;
+
+  /**
+   * detected action of what user is doing
+   */
   action = '';  // action of input between focuses
+
+  /**
+   * last action of user
+   */
   lastAction = '';
+
+  /**
+   * show error on start
+   */
   startError = true;
+
+  /**
+   * no required status is set
+   */
   noRequired =  false;
-    constructor(
-        public statusService: StatusService
-      ) {
-    }
-    ngOnInit() {
-      // set initial state, fixes also tests
-      this.hasFocus = false;
-      this.isTyping = false;
-      this.required = this.required !== 'false' ? 'true' : 'false';
-      this.control = this.group.get(this.name);
-      this.startValue = '';
-      this.oldValue = '';
-    }
-    ngOnChanges() {
-    }
-    ngDoCheck() {
-      this.statusService.checkStatus(this);
-    }
+
+  /**
+   * special: if user is selecting
+   */
+  isSelecting = false;
+
+  /**
+   * constructor
+   * @param statusService instance of status service component
+   */
+  constructor(
+      public statusService: StatusService
+    ) {
+  }
+
+  /**
+   * creating basic setting for selectbox component onInit
+   */
+  ngOnInit() {
+    // set initial state, fixes also tests
+    this.hasFocus = false;
+    this.isTyping = false;
+    this.required = this.required !== 'false' ? 'true' : 'false';
+    this.control = this.group.get(this.name);
+    this.startValue = '';
+    this.oldValue = '';
+  }
+
+  /**
+   * settings on changes lifecycle-event
+   */
+  ngOnChanges() {
+  }
+
+  /**
+   * check status on doCheck lifecycle-event
+   */
+  ngDoCheck() {
+    this.statusService.checkStatus(this);
+  }
 }
