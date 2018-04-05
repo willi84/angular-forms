@@ -40,7 +40,6 @@ To my company STRATO and to Travis and Browserstack for supporting OpenSource pr
 ## App Structure
 
 ![App Structure](./docs/folder_structure.svg)
-<img src="./docs/folder_structure.svg">
 
 ## Content
   * [basic idea](./docs/basic_idea.md)
