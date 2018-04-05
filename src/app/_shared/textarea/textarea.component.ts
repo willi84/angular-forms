@@ -49,7 +49,7 @@ import { StatusService } from '@services/status/status.service';
       [showError]="showError"
       [hasFocus]="hasFocus"
       [name]="name"
-      [top]="100"
+      [marginTop]="100"
     ></form-status>
   </div>
   `

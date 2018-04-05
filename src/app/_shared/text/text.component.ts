@@ -48,6 +48,7 @@ import { StatusService } from '@services/status/status.service';
       [hasFocus]="hasFocus"
       [name]="name"
     ></form-status>
+  </div>
   `
 })
 export class TextComponent implements OnInit, OnChanges, DoCheck {
