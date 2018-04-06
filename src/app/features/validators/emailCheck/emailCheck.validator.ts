@@ -5,15 +5,15 @@ import { AbstractControl } from '@angular/forms';
  * validator for emails
  * @param control reference to an abstract control
  */
-export function EmailCheckValidator(control: AbstractControl) {
+export function emailCheckValidator(control: AbstractControl) {
 
   /**
    * use input as base
    */
-  const input = control.value;
+  const inputValue = control.value;
 
     // empty input
-    if (!input) {
+    if (!inputValue) {
       return {
         // EmailCheck: 'noEmailAddress'
         required: true
@@ -23,7 +23,7 @@ export function EmailCheckValidator(control: AbstractControl) {
   /**
    * split input to get email address
   */
-  const email = input.split('@');
+  const email = inputValue.split('@');
   // const locale = email[0];
   if (email[1]) {
     const domain = email[1].split('.');

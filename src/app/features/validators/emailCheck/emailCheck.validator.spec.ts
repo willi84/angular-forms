@@ -4,7 +4,7 @@ import { async, TestBed, ComponentFixture  } from '@angular/core/testing';
 import { FormsModule,  FormControl,  ReactiveFormsModule, FormGroup  } from '@angular/forms';
 
 // to be tested
-import { EmailCheckValidator } from './emailCheck.validator';
+import { emailCheckValidator } from './emailCheck.validator';
 
 // Test Component
 @Component({
@@ -36,7 +36,7 @@ describe('component: TestComponent', () => {
             fixture = TestBed.createComponent(TestComponent);
             component = fixture.componentInstance;
             component.myform = new FormGroup({
-                email:   new FormControl('', [EmailCheckValidator])
+                email:   new FormControl('', [emailCheckValidator])
                 });
             // component.submitted = false;
             fixture.detectChanges();

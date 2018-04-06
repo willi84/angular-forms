@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from '@environment/environment.prod';
 
 // features
-import { EmailCheckValidator } from '@validators/emailCheck/emailCheck.validator';
+import { emailCheckValidator } from '@validators/emailCheck/emailCheck.validator';
 
 /**
  * email component creates a email inputbox
@@ -82,7 +82,7 @@ export class EmailComponent implements OnInit {
     if (this.required === 'true') {
       controlValidators.push(Validators.required);
     }
-    controlValidators.push(EmailCheckValidator);
+    controlValidators.push(emailCheckValidator);
 
     this.group.addControl('email', new FormControl('', {
       validators: controlValidators
