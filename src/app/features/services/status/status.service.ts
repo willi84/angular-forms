@@ -22,7 +22,6 @@ export class StatusService {
      * @todo action based behaviour (copy & paste)
      * @todo delete from error/success to zero after submit
      */
-
     if (self.hasFocus && self.action === 'no') {
       self.startValue = self.oldValue;
       if (self.lastAction === 'reset' && self.control.value === '') {
@@ -35,24 +34,31 @@ export class StatusService {
     const lenControlValue = self.control && self.control.value ? self.control.value.length : 0;
 
     // actions based on activity
+
     if (lenStartValue > lenControlValue) {
+      // input was shortened
       self.action = (self.action === 'reset') ? self.action : 'shorten';
     } else if (lenStartValue < lenControlValue) {
+      // input was extended
       self.action = 'extended';
     } else if (lenStartValue === lenControlValue) {
       if (self.lastAction === 'reset' && self.control.value === '') {
+        // first touch after reset
         self.action = self.action;
       } else {
+        // first touch
         self.action = (self.hasFocus) ? 'start' : 'touched';
       }
     } else {
       self.action = 'replaced';
     }
+
+    // lose focus
     if (!self.hasFocus) {
       self.oldValue = self.control.value;
       self.startValue = self.oldValue;
       self.lastAction = self.action;
-      self.action = 'no';
+      // self.action = 'no';   // wrong
     }
     if (!self.isTyping ) {
 
@@ -72,7 +78,6 @@ export class StatusService {
                * @todo after reset showing error after leave
                */
               if (self.lastAction !== 'reset') {
-
                 if (self.control.errors.pattern) {
                   self.showError = 'pattern';
                 }

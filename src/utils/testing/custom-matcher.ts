@@ -104,7 +104,7 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
           result.pass = true;
         } else {
           // ERROR
-          result.message =  `Expecting action='${expectedAction}' (is: ${action})`;
+          result.message =  `Expecting action='${expectedAction}' (is: ${action}, oldValue: ${oldValue}, currentValue: ${control.value} )`;
         }
         return result;
       }

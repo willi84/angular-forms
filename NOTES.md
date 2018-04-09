@@ -44,3 +44,7 @@
 * fine tune validation
 * make it composable from outside
 * ivy
+
+
+debug
+action: {{action}} | oldAction: {{ lastAction }} | startValue: {{ startValue }} | oldValue: {{ oldValue }} | showError: '{{ showError}}'

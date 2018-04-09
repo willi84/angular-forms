@@ -45,6 +45,16 @@ describe('TextComponent', () => {
       case 'touch':
         inputElement.dispatchEvent(new Event('focus'));
         break;
+      case 'blur':
+        inputElement.dispatchEvent(new Event('blur'));
+        break;
+      case 'mouseleave':
+        inputElement.dispatchEvent(new Event('mouseleave'));
+        break;
+      case 'input':
+        inputElement.dispatchEvent(new Event('focus'));
+        inputElement.dispatchEvent(new Event('input'));
+        break;
       case 'touched':
         inputElement.dispatchEvent(new Event('focus'));
         inputElement.dispatchEvent(new Event('blur'));
@@ -412,6 +422,136 @@ describe('TextComponent', () => {
           it('#2 WHEN input is not changing', fakeAsync(() => {
             doAction('active_input');
             showStatus('has_success', VALID , NOT_CHANGED);
+          }));
+        });
+      });
+      describe('newtest', () => {
+        beforeEach(async(() => {
+          component.submitted = true;
+          doAction('touched');
+        }));
+        describe('=> SHOW message="required"', () => {
+          it('#4XX change focus of input', fakeAsync(() => {
+            doAction('change_input', 'xxx');
+            fixture.detectChanges();
+            showStatus('default_active', VALID , CHANGED);
+            expect(component.action).toEqual('extended');
+            expect(component.lastAction).toEqual('touched');
+            expect(component.hasFocus).toEqual(true);
+            expect(component.control.value).toEqual('xxx');
+            expect(component.startValue).toEqual('');
+            expect(component.isTyping).toEqual(false);
+            expect(component.showError).toEqual('');
+
+            
+            
+
+            doAction('blur');
+            //# fixture.detectChanges();
+            showStatus('default', VALID , CHANGED);
+            // expect(component.action).toEqual('no');
+            expect(component.action).toEqual('extended');
+            expect(component.lastAction).toEqual('extended');
+            expect(component.hasFocus).toEqual(false);
+            expect(component.control.value).toEqual('xxx');
+            expect(component.startValue).toEqual('xxx');
+            expect(component.isTyping).toEqual(false);
+            expect(component.showError).toEqual('');
+
+            _oldValue = inputElement.value;
+            doAction('change_input', '');
+            //# fixture.detectChanges();
+            showStatus('default_active', INVALID , CHANGED);
+            expect(component.action).toEqual('reset');
+            expect(component.lastAction).toEqual('extended');
+            expect(component.hasFocus).toEqual(true);
+            expect(component.control.value).toEqual('');
+            expect(component.startValue).toEqual('xxx');
+            expect(component.isTyping).toEqual(false);
+            expect(component.showError).toEqual('');
+
+            doAction('blur');
+            //# fixture.detectChanges();
+            showStatus('default', INVALID , CHANGED);
+            // expect(component.action).toEqual('no');
+            expect(component.action).toEqual('reset');
+            expect(component.lastAction).toEqual('reset');
+            expect(component.hasFocus).toEqual(false);
+            expect(component.control.value).toEqual('');
+            expect(component.startValue).toEqual('');
+            expect(component.isTyping).toEqual(false);
+            expect(component.showError).toEqual('');
+
+            // detecting after blur changes simulates issues with changing fields
+
+            fixture.detectChanges();
+            _oldValue = inputElement.value;
+            // showStatus('has_error', ERROR_REQUIRED , NOT_CHANGED);
+            // expect(component.action).toEqual('no');
+            // expect(component.lastAction).toEqual('no');
+            // expect(component.hasFocus).toEqual(false);
+            // expect(component.control.value).toEqual('');
+            // expect(component.startValue).toEqual('');
+            // expect(component.isTyping).toEqual(false);
+            // expect(component.showError).toEqual('required');
+
+            showStatus('default', INVALID , NOT_CHANGED);
+            expect(component.action).toEqual('reset');
+            expect(component.lastAction).toEqual('reset');
+            expect(component.hasFocus).toEqual(false);
+            expect(component.control.value).toEqual('');
+            expect(component.startValue).toEqual('');
+            expect(component.isTyping).toEqual(false);
+            expect(component.showError).toEqual('');
+
+
+            // expect(component.action).toEqual('reset');
+            // expect(component.lastAction).toEqual('reset');
+            // expect(component.hasFocus).toEqual(true);
+            // expect(component.showError).toEqual('');
+
+             doAction('touch');
+             showStatus('default_active', INVALID , NOT_CHANGED);
+            expect(component.action).toEqual('reset');
+            expect(component.lastAction).toEqual('reset');
+            expect(component.hasFocus).toEqual(true);
+            expect(component.control.value).toEqual('');
+            expect(component.startValue).toEqual('');
+            expect(component.isTyping).toEqual(false);
+            expect(component.showError).toEqual('');
+            //# fixture.detectChanges();
+            // showStatus('default_active', INVALID , NOT_CHANGED);
+            // expect(component.action).toEqual('reset');
+            // expect(component.lastAction).toEqual('reset');
+            // expect(component.hasFocus).toEqual(true);
+            // expect(component.control.value).toEqual('');
+            // expect(component.startValue).toEqual('');
+            // expect(component.isTyping).toEqual(false);
+            // expect(component.showError).toEqual('');
+
+            // fixture.detectChanges();
+            // showStatus('default_active', INVALID , NOT_CHANGED);
+            // expect(component.action).toEqual('no');
+            // expect(component.lastAction).toEqual('no');
+            // expect(component.hasFocus).toEqual(true);
+            // expect(component.control.value).toEqual('');
+            // expect(component.startValue).toEqual('');
+            // expect(component.isTyping).toEqual(false);
+            // expect(component.showError).toEqual('');
+
+            // doAction('change_input', '');
+            // fixture.detectChanges();
+            // showStatus('default_active', VALID , CHANGED);
+            // expect(component.action).toEqual('extended');
+            // expect(component.lastAction).toEqual('touched');
+            // expect(component.hasFocus).toEqual(true);
+            // expect(component.control.value).toEqual('xxx');
+            // expect(component.startValue).toEqual('');
+            // expect(component.isTyping).toEqual(false);
+            // expect(component.showError).toEqual('');
+
+            // doAction('touched', 'xxx');
+
           }));
         });
       });
