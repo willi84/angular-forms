@@ -23,18 +23,26 @@ import { environment } from '@environment/environment.prod';
     .hide-opacity{
       opacity: 0;
     }
+    .text-center{
+      text-align: center;
+    }
   `],
   template: `
-  <div class="row">
-    <div class="col-sm-offset-5 text-danger text-center col-xs-15 col-xs-offset-2 mb50--xs">
-      <span [ngClass]="{'hide-opacity': (!form.invalid || !submitted) }"
-      >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
-      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 1) }"
-      >Ihre Anfrage wurde erfolgreich versendet</span>
-      <span [ngClass]="{'hide-opacity': !(form.valid  && submitted && responseApi && responseApi.ok === 0) }"
-      >Es ist ein Fehler aufgetreten {{ responseApi | json }}</span>
+  <div class="row" class="{{responseApi.ok}}">
+    <div class="text-danger text-center col-xs-20 mb50--xs">
+    <span *ngIf="responseApi.ok === -1" [ngClass]="{'hide-opacity': responseApi.ok === -1 }">
+    &nbsp;</span>
+    <span *ngIf="responseApi.ok > -1 || submitted">
+
+    <span *ngIf="(form.invalid && responseApi.ok === -1 )"
+    >Bitte füllen Sie alle rot gekennzeichneten Felder aus.</span>
+    <span *ngIf="(responseApi  && responseApi.ok === 1)"
+    >Ihre Anfrage wurde erfolgreich versendet</span>
+    <span *ngIf="(responseApi && responseApi.ok === 0)"
+    >Es ist ein Fehler aufgetreten</span>
+    </span>
     </div>
-    <button class="mt20--xs btn btn--primary pull-right" *ngIf="responseApi.ok === 1" (click)="responseApi = {}">
+    <button class="mt20--xs btn btn--primary pull-right" *ngIf="responseApi.ok === 1" (click)="responseApi = { ok: -1}">
       <i class="glyphicon glyphicon-envelope"></i> Neue Mitteilung
       </button>
   </div>
@@ -161,7 +169,9 @@ export class ContactComponent implements OnInit {
         data => {
           this.responseApi = data;
           this.submitted = false;
-          this.form.reset();
+          if (data.ok === 1) {
+            this.form.reset();
+          }
 
         },
         // error
