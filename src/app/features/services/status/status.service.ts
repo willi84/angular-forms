@@ -60,54 +60,51 @@ export class StatusService {
       self.lastAction = self.action;
       // self.action = 'no';   // wrong
     }
+    if (!self.control) {
+      return;
+    }
     if (!self.isTyping ) {
+      if (self.control.valid || !self.submitted) {
 
-      if (self.control) {
-        if (!self.control.errors) {
-          // sets default
-          self.showError = '';
-        } else {
-          if (self.hasFocus && self.showError === 'required' && self.control.errors.pattern) {
-            /**
-             * @todo maybe deletable?
-             */
-          } else {
-            if (self.control.errors !== null && self.submitted) {
+        // sets default
+        self.showError = '';
+      } else {
+        const statusErrorChanged = self.hasFocus && self.showError === 'required' && self.control.errors.pattern;
+        if (statusErrorChanged) {
+          return;
+        }
 
-              /**
-               * @todo after reset showing error after leave
-               */
-              if (self.lastAction !== 'reset') {
-                if (self.control.errors.pattern) {
-                  self.showError = 'pattern';
-                }
-                if (self.control.errors.required) {
-                  self.showError = 'required';
-                }
-              }
+        if (self.submitted) {
 
-              // make reset available
-              if (self.lastAction === 'shorten' && self.control.value === '') {
-                self.showError = '';
-              }
-              if (self.action === 'shorten' && self.control.value === '') {
-                self.showError = '';
-                self.action = 'reset';
-              }
-              if (self.lastAction === 'reset' && self.control.value === '') {
-                self.showError = '';
-              }
-
-              /**
-               * @todo after being valid, change to error after leave
-               */
-              } else {
-                self.showError = '';
-              }
+          /**
+           * @todo after reset showing error after leave
+           */
+          if (self.lastAction !== 'reset') {
+            if (self.control.errors.pattern) {
+              self.showError = 'pattern';
+            }
+            if (self.control.errors.required) {
+              self.showError = 'required';
             }
           }
+
+          // make reset available
+          if (self.control.value === '') {
+            if (self.lastAction === 'shorten') {
+              self.showError = '';
+            }
+            if (self.action === 'shorten') {
+              self.showError = '';
+              self.action = 'reset';
+            }
+            if (self.lastAction === 'reset') {
+              self.showError = '';
+            }
+          }
+
+          // @todo after being valid, change to error after leave
+        }
       }
-    } else {
     }
   }
 
