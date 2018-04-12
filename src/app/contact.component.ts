@@ -55,12 +55,12 @@ import { environment } from '@environment/environment.prod';
     <div class="row">
       <div class="col-sm-20">
         <form-message [group]="form" [submitted] ="submitted"
-      label=" Ihre Nachfrage/Nachricht an uns"></form-message>
+      label=" Ihre Nachfrage/Nachricht an uns" required></form-message>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-10">
-        <form-company [group]="form" [submitted]="submitted"></form-company>
+        <form-company [group]="form" [submitted]="submitted" required></form-company>
       </div>
     </div>
     <div class="row">
