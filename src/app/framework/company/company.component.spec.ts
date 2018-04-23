@@ -1,5 +1,7 @@
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
+
 // angular
-import {async, TestBed, ComponentFixture,  fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture,  fakeAsync, TestModuleMetadata } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 
 // to be tested
@@ -18,8 +20,7 @@ describe('CompanyComponent', () => {
   let compiled;
   let inputElement: any;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  const moduleDef: TestModuleMetadata = {
       declarations: [
         CompanyComponent,
         TextComponent,
@@ -31,8 +32,23 @@ describe('CompanyComponent', () => {
         FormsModule,
         ReactiveFormsModule,
       ]
-    })
-      .compileComponents();
+  };
+  setUpTestBed(moduleDef);
+  beforeEach(() => {
+    // TestBed.configureTestingModule({
+    //   declarations: [
+    //     CompanyComponent,
+    //     TextComponent,
+    //     StatusComponent
+    //   ],
+    //   // schemas: [ NO_ERRORS_SCHEMA],
+    //   providers: [StatusService],
+    //   imports: [
+    //     FormsModule,
+    //     ReactiveFormsModule,
+    //   ]
+    // })
+    //   .compileComponents();
   });
 
   beforeEach(async(() => {

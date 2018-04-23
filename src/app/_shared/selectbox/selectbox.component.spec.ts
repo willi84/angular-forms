@@ -185,12 +185,7 @@ describe('SelectboxComponent', () => {
             component.control.value = 'Frau';
             // inputElement.dispatchEvent(new Event('change'));
             fixture.detectChanges();
-            // console.log(component.hasFocus);
             inputElement.dispatchEvent(new Event('change'));
-            // console.log("A")
-            // console.log(inputElement.value);
-            // console.log(component.control.value);
-            // console.log("AA")
             // inputElement.value = 'Frau';
             // inputElement.dispatchEvent(new Event('change')); //this is what triggers angular to do its magic
             // inputElement.dispatchEvent(new Event('blur'));
@@ -198,10 +193,6 @@ describe('SelectboxComponent', () => {
             // // const option = inputElement.querySelectorAll('option')[0];
             // // option.dispatchEvent(new Event('change'));
             // // fi
-            // // console.log(inputElement.querySelectorAll('option'));
-            // console.log('inputElement');
-            // console.log(inputElement);
-            // console.log(component);
             // inputElement.value = 1;
             // inputElement.dispatchEvent(new Event('change'));
             showStatus('default', VALID , CHANGED);

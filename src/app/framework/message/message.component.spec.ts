@@ -1,5 +1,6 @@
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
 // angular
-import { async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
+import { async, TestBed, ComponentFixture, fakeAsync, TestModuleMetadata } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 
 // to be tested
@@ -18,21 +19,20 @@ describe('MessageComponent', () => {
   let compiled;
   let inputElement: any;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        MessageComponent,
-        TextAreaComponent,
-        StatusComponent
-      ],
-      providers: [StatusService],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-      ]
-    })
-      .compileComponents();
-  });
+  const moduleDef: TestModuleMetadata = {
+    declarations: [
+      MessageComponent,
+      TextAreaComponent,
+      StatusComponent
+    ],
+    providers: [StatusService],
+    imports: [
+      FormsModule,
+      ReactiveFormsModule,
+    ]
+};
+setUpTestBed(moduleDef);
+
 
   beforeEach(async(() => {
     fixture = TestBed.createComponent(MessageComponent);

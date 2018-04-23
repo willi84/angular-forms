@@ -35,7 +35,6 @@ describe('ApiService', () => {
           (response) => {
 
             data = response;
-            console.log(data);
           }
         );
 

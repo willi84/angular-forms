@@ -1,5 +1,6 @@
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
 // angular
-import {async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
+import {async, TestBed, ComponentFixture, fakeAsync, TestModuleMetadata } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 
 // to be tested
@@ -13,6 +14,26 @@ import { StatusService } from '@services/status/status.service';
 
 // shared
 import { StatusComponent } from '@shared/status/status.component';
+
+// make-tests-faster-again.ts
+
+// const resetTestingModule = TestBed.resetTestingModule,
+//   preventAngularFromResetting = () => TestBed.resetTestingModule = () => TestBed;
+// let allowAngularToReset = () => TestBed.resetTestingModule = resetTestingModule;
+
+// export const setUpTestBed = (moduleDef: TestModuleMetadata) => {
+//   beforeAll(done => (async () => {
+//     resetTestingModule();
+//     preventAngularFromResetting();
+//     TestBed.configureTestingModule(moduleDef);
+//     await TestBed.compileComponents();
+
+//     // prevent Angular from resetting testing module
+//     TestBed.resetTestingModule = () => TestBed;
+//   })().then(done).catch(done.fail));
+
+//   afterAll(() => allowAngularToReset());
+// };
 
 describe('TextComponent', () => {
   let component: TextComponent;
@@ -142,22 +163,50 @@ describe('TextComponent', () => {
     }
   }
 
+  const moduleDef: TestModuleMetadata = {
+    declarations: [
+      TextComponent,
+      StatusComponent
+    ],
+    // schemas: [ NO_ERRORS_SCHEMA],
+    providers: [StatusService],
+    imports: [
+      FormsModule,
+      ReactiveFormsModule,
+    ], // declare the test component
+  };
+  setUpTestBed(moduleDef);
+
+  // setupTestBed({
+  //   declarations: [
+  //     TextComponent,
+  //     StatusComponent
+  //   ],
+  //   // schemas: [ NO_ERRORS_SCHEMA],
+  //   providers: [StatusService],
+  //   imports: [
+  //     FormsModule,
+  //     ReactiveFormsModule,
+  //   ], // declare the test component
+  // });
+
   beforeEach(() => {
     // adding custom Matchers
     jasmine.addMatchers(customMatchers);
 
-    TestBed.configureTestingModule({
-      declarations: [
-        TextComponent,
-        StatusComponent
-      ],
-      // schemas: [ NO_ERRORS_SCHEMA],
-      providers: [StatusService],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-      ]
-    }).compileComponents();
+
+    // TestBed.configureTestingModule({
+    //   declarations: [
+    //     TextComponent,
+    //     StatusComponent
+    //   ],
+    //   // schemas: [ NO_ERRORS_SCHEMA],
+    //   providers: [StatusService],
+    //   imports: [
+    //     FormsModule,
+    //     ReactiveFormsModule,
+    //   ]
+    // }).compileComponents();
   });
 
   describe('input component (type=text)', () => {
