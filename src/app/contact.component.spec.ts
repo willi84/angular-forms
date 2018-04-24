@@ -1,6 +1,5 @@
 // import { NO_ERRORS_SCHEMA } from '@angular/core';
 /* tslint:disable:no-unused-variable */
-import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
 
 // angular
 import { async,
@@ -39,6 +38,9 @@ import {ContactComponent} from './contact.component';
 import { SanitizeService } from '@services/sanitize/sanitize.service';
 import { ApiService } from '@services/api/api.service';
 import { StatusService } from '@services/status/status.service';
+
+// testing
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;

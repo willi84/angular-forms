@@ -1,4 +1,3 @@
-import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
 // angular
 import { async, TestBed, ComponentFixture, fakeAsync, TestModuleMetadata } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
@@ -12,6 +11,9 @@ import { TextComponent } from '@shared/text/text.component';
 
 // services
 import { StatusService } from '@services/status/status.service';
+
+// testing
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
 
 describe('NameComponent', () => {
   let component: NameComponent;

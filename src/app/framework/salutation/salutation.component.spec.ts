@@ -1,5 +1,5 @@
 // angular
-import { async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
+import { async, TestBed, ComponentFixture, fakeAsync, TestModuleMetadata } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 
 // to be tested
@@ -11,27 +11,28 @@ import { SelectboxComponent } from '@shared/selectbox/selectbox.component';
 // services
 import { StatusService } from '@services/status/status.service';
 
+// testing
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
+
 describe('SalutationComponent', () => {
   let component: SalutationComponent;
   let fixture: ComponentFixture<SalutationComponent>;
   let compiled;
   let inputElement: any;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        SalutationComponent,
-        SelectboxComponent
-      ],
-      // schemas: [ NO_ERRORS_SCHEMA],
-      providers: [StatusService],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-      ]
-    })
-      .compileComponents();
-  });
+  const moduleDef: TestModuleMetadata = {
+    declarations: [
+      SalutationComponent,
+      SelectboxComponent
+    ],
+    // schemas: [ NO_ERRORS_SCHEMA],
+    providers: [StatusService],
+    imports: [
+      FormsModule,
+      ReactiveFormsModule,
+    ]
+  };
+  setUpTestBed(moduleDef);
 
   beforeEach(async(() => {
     fixture = TestBed.createComponent(SalutationComponent);

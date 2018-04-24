@@ -1,5 +1,5 @@
 // angular
-import { async, TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
+import { async, TestBed, ComponentFixture, fakeAsync, TestModuleMetadata } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 
 // to be tested
@@ -12,28 +12,29 @@ import { StatusComponent } from '@shared/status/status.component';
 // services
 import { StatusService } from '@services/status/status.service';
 
+// testing
+import { setUpTestBed } from '@utils/testing/make-tests-faster-again';
+
 describe('PhoneComponent', () => {
   let component: PhoneComponent;
   let fixture: ComponentFixture<PhoneComponent>;
   let compiled;
   let inputElement: any;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        PhoneComponent,
-        TextComponent,
-        StatusComponent
-      ],
-      // schemas: [ NO_ERRORS_SCHEMA],
-      providers: [StatusService],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-      ]
-    })
-      .compileComponents();
-  });
+  const moduleDef: TestModuleMetadata = {
+    declarations: [
+      PhoneComponent,
+      TextComponent,
+      StatusComponent
+    ],
+    // schemas: [ NO_ERRORS_SCHEMA],
+    providers: [StatusService],
+    imports: [
+      FormsModule,
+      ReactiveFormsModule,
+    ]
+  };
+  setUpTestBed(moduleDef);
 
   beforeEach(async(() => {
     fixture = TestBed.createComponent(PhoneComponent);
