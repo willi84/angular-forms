@@ -4,5 +4,9 @@
 export const environment = {
   production: true,
   prefix: 'form-',
-  API: '/api'
+  API: '/api',
+  messages: {
+    'required': 'Some required error',
+    'pattern': 'a pattern error'
+  }
 };

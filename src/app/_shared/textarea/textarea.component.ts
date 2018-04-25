@@ -35,7 +35,7 @@ import { StatusService } from '@services/status/status.service';
     [ngClass]="{'has-error': statusService.getValidationStatus(this) }"
   >
     <label for="{{name}}" class="control-label">
-    {{label}}<span *ngIf="required=='true'">*</span>:
+    {{label}}<span *ngIf="required=='true'">*</span>
     </label>
     <textarea
     rows="{{rows}}"

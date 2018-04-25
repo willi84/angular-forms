@@ -35,7 +35,7 @@ import { StatusService } from '@services/status/status.service';
     [ngClass]="{'has-error': statusService.getValidationStatus(this) }"
   >
     <label for="{{name}}" class="control-label">
-    {{label}}<span *ngIf="required=='true'">*</span>:
+    {{label}}<span *ngIf="required=='true'">*</span>
     </label>
     <input
     (keydown)="isTyping= true"
@@ -47,6 +47,7 @@ import { StatusService } from '@services/status/status.service';
       [showError]="showError"
       [hasFocus]="hasFocus"
       [name]="name"
+      [messages]="messages"
     ></form-status>
   </div>
   `
@@ -82,6 +83,11 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
    * input to declare element as required.
    */
   @Input() type = 'text';
+
+  /**
+   * input to declare element as required.
+   */
+  @Input() messages?: any;
 
   /**
    * type of error to be shown
@@ -153,6 +159,16 @@ export class TextComponent implements OnInit, OnChanges, DoCheck {
     this.control = this.group.get(this.name);
     this.startValue = '';
     this.oldValue = '';
+    // const keysMessages = Object.keys(this.messages);
+    // const lenKeysMessages = keysMessages.length;
+
+    // for (let i = 0; i < lenKeysMessages; i++) {
+    //   if()
+    // this.messages.forEach(value => {
+    //   console.log(value);
+    // });
+     this.messages = this.messages || environment.messages;
+
   }
 
   /**

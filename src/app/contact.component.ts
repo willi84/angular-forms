@@ -60,7 +60,7 @@ import { environment } from '@environment/environment.prod';
     </div>
     <div class="row">
       <div class="col-sm-10">
-        <form-company [group]="form" [submitted]="submitted" required></form-company>
+        <form-company [group]="form" [submitted]="submitted" required messages.required="bl"></form-company>
       </div>
     </div>
     <div class="row">
@@ -80,7 +80,7 @@ import { environment } from '@environment/environment.prod';
         <form-email [group]="form" [submitted]="submitted" required></form-email>
       </div>
       <div class="col-sm-10">
-        <form-phone [group]="form" [submitted]="submitted"required></form-phone>
+        <form-phone [group]="form" [submitted]="submitted" required></form-phone>
       </div>
     </div>
     <div class="row">

@@ -28,7 +28,7 @@ import { environment } from '@environment/environment.prod';
       >
         <small name="error-required"
           [hidden]="!(showError === 'required')"
-          >Das ist ein Pflichtfeld</small>
+          >{{messages.required}}</small>
         <small name="error-pattern"
           [hidden]="!(showError === 'pattern')"
         >Bitte überprüfen Sie das Textfeld.</small>
@@ -63,6 +63,11 @@ export class StatusComponent implements OnInit {
   @Input() marginTop ? = 30;
 
   /**
+   * input to declare the marginTop margin of the error icon
+   */
+  @Input() messages ?: any;
+
+  /**
    * constructor
    */
   constructor() { }
@@ -71,6 +76,19 @@ export class StatusComponent implements OnInit {
    * settings on onInit lifecycle event
    */
   ngOnInit() {
+
+    // todo take message[required]
+    if(this.messages){
+      console.log('msg');
+    } else {
+      this.messages = {
+        required: 'Das ist ein Pflichtfeld',
+        pattern: 'Bitte überprüfen Sie das Textfeld.'
+      }
+    }
+    // this.messages['required'] = this.messages.required || 'Das ist ein Pflichtfeld';
+    // this.messages['pattern'] = this.messages.pattern || 'Bitte überprüfen Sie das Textfeld.';
+    // this.messages = this.messagesrequired !== 'false' ? 'true' : 'false';
   }
 
 }

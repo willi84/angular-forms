@@ -24,7 +24,7 @@ import { environment } from '@environment/environment.prod';
 @Component({
   selector: environment.prefix + 'company',
   template: `
-  <form-text [group]="group" [submitted]="submitted" label="{{label}}" required="{{required}}" name="{{tagName}}"></form-text>
+  <form-text [group]="group" [submitted]="submitted" label="{{label}}" required="{{required}}" name="{{tagName}}" [messages]="messages"></form-text>
   `
 })
 export class CompanyComponent implements OnInit {
@@ -49,6 +49,11 @@ export class CompanyComponent implements OnInit {
    */
   @Input() required = 'false';
 
+   /**
+   * input to declare element as required.
+   */
+  @Input() messages? : any;
+
   /**
    * name of html tag
    */
@@ -62,6 +67,30 @@ export class CompanyComponent implements OnInit {
     private elementRef: ElementRef
   ) {
     this.tagName = this.elementRef.nativeElement.tagName.toLowerCase().replace(environment.prefix, '');
+
+
+     // get all attributes with messages.<name>
+     const attributeNames = this.elementRef.nativeElement.getAttributeNames();
+     const lenAttributes: number = attributeNames.length;
+
+    if(!this.messages){
+      this.messages = {};
+    }
+
+    // IE11 not support forEach on nodeList
+    for (let i = 0; i < lenAttributes; i++) {
+      if(attributeNames[i].indexOf('messages.') === 0){
+        const attrName = attributeNames[i].replace('messages.', '');
+        console.log(attrName);
+        console.log(this.messages[attrName])
+        if(!this.messages[attrName]){
+          this.messages[attrName] = this.elementRef.nativeElement.getAttribute(attributeNames[i]);
+        }
+        console.log(this.messages)
+      }
+    }
+
+  
   }
 
   /**
@@ -74,7 +103,6 @@ export class CompanyComponent implements OnInit {
     if (this.required === 'true') {
       controlValidators.push(Validators.required);
     }
-
     this.group.addControl('company', new FormControl('', controlValidators));
   }
 }
