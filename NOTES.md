@@ -1,3 +1,6 @@
+# Ressources
+* https://medium.com/selleo/faster-angular-tests-with-setuptestbed-b213312d1bd8
+
 * check error unsubmitted
 
 # Todo errors
