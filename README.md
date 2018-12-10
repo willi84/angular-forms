@@ -2,7 +2,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.8.
 
 ## Goal
-This project should provide a simple but powerful real world solution of reactive forms in Angular, where are used reusable and configurable components. It should also be test-driven. 
+This project should provide a simple but powerful real world solution of reactive forms in Angular, where are used reusable and configurable components. It should also be test-driven.  :raised_hands:
 
 
 
