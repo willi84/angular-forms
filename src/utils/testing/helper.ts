@@ -1,70 +1,99 @@
 
-export const helper = () =>  'hello';
 
 
-/*import { customMatchers, expect } from '@utils/testing/custom-matcher';
 
+import { expect } from '@utils/testing/custom-matcher';
 
-export const doAction ( action: string , new_value?: string, inputElement: any, fixture:  any) {
+export class Helper {
+  fixture: any;
+  element: any;
+  compiled: any;
+  // component: any;
+  _oldValue: any;
+  oldValues: Array<string>;
+  constructor(fixture, query) {
+    this.fixture = fixture;
+    this.compiled = this.fixture.debugElement.nativeElement;
+    this.element = this.compiled.querySelector(query);
+    this._oldValue = this.element.value;
+    this.oldValues = [];
+
+  }
+  refreshOldValue() {
+    this._oldValue = this.element.value;
+    this.oldValues.push(this._oldValue);
+  }
+  getCurrentValue() {
+    return this.element.value;
+  }
+  getDefaultValue() {
+    return this._oldValue;
+  }
+  getPreviousValue() {
+
+    return this.oldValues[this.oldValues.length - 2];
+  }
+  doAction( action: string , new_value?: string) {
     switch (action) {
-        case 'change_input':
-            // without event input no value will be set
-            inputElement.dispatchEvent(new Event('focus'));
-            inputElement.value = new_value;
-            inputElement.dispatchEvent(new Event('input'));
-            break;
-        case 'changed_input':
-            // without event input no value will be set
-            inputElement.dispatchEvent(new Event('focus'));
-            inputElement.value = new_value;
-            inputElement.dispatchEvent(new Event('input'));
-            inputElement.dispatchEvent(new Event('blur'));
-            break;
-        case 'touch':
-            inputElement.dispatchEvent(new Event('focus'));
-            break;
-        case 'blur':
-            inputElement.dispatchEvent(new Event('blur'));
-            break;
-        case 'mouseleave':
-            inputElement.dispatchEvent(new Event('mouseleave'));
-            break;
-        case 'input':
-            inputElement.dispatchEvent(new Event('focus'));
-            inputElement.dispatchEvent(new Event('input'));
-            break;
-        case 'touched':
-            inputElement.dispatchEvent(new Event('focus'));
-            inputElement.dispatchEvent(new Event('blur'));
-            break;
-        case 'active_input':
-            inputElement.dispatchEvent(new Event('blur'));
-            inputElement.dispatchEvent(new Event('focus'));
-            break;
-        case 'default':
-            // inputElement.dispatchEvent(new Event('input'));
-            break;
-        }
-        fixture.detectChanges();
-
-    }
-}
-
-export const showStatus ( action: string, isValid: any, hasChanged: boolean, component: any, _oldValue: string) {
+      case 'change_input':
+        // without event input no value will be set
+        this.element.dispatchEvent(new Event('focus'));
+        this.element.value = new_value;
+        this.element.dispatchEvent(new Event('input'));
+        this.oldValues.push(new_value);
+        break;
+      case 'changed_input':
+        // without event input no value will be set
+        this.element.dispatchEvent(new Event('focus'));
+        this.element.value = new_value;
+        this.element.dispatchEvent(new Event('input'));
+        this.element.dispatchEvent(new Event('blur'));
+        this.oldValues.push(new_value);
+        break;
+      case 'touch':
+        this.element.dispatchEvent(new Event('focus'));
+        break;
+      case 'blur':
+        this.element.dispatchEvent(new Event('blur'));
+        break;
+      case 'mouseleave':
+        this.element.dispatchEvent(new Event('mouseleave'));
+        break;
+      case 'input':
+        this.element.dispatchEvent(new Event('focus'));
+        this.element.dispatchEvent(new Event('input'));
+        break;
+      case 'touched':
+        this.element.dispatchEvent(new Event('focus'));
+        this.element.dispatchEvent(new Event('blur'));
+        break;
+      case 'active_input':
+        this.element.dispatchEvent(new Event('blur'));
+        this.element.dispatchEvent(new Event('focus'));
+        break;
+      case 'default':
+        // this.element.dispatchEvent(new Event('input'));
+        break;
+      }
+      this.fixture.detectChanges();
+  }
+  showStatus( action: string, isValid: any, hasChanged: boolean) {
     const inputChanged = (hasChanged === true) ? 'input_changed' : 'input_not_changed';
-    expect(component).hasChanged({ action: inputChanged, oldValue:  _oldValue} );
+    const _component = this.fixture.componentInstance;
+    const oldValue = (hasChanged) ? this.getPreviousValue() : this._oldValue;
+    expect(_component).hasChanged({ action: inputChanged, oldValue: oldValue} );
     if (isValid.valid === true) {
-      expect(component).isValid('');
+      expect(_component).isValid('');
     } else {
-      expect(component).isInvalid(isValid.message);
+      expect(_component).isInvalid(isValid.message);
     }
-    showMessage(action);
+    this.showMessage(action);
   }
 
   // @TODO: extract to custom matcher  hasChanged isValid
-  function showMessage(action) {
-    const _compiled = fixture.debugElement.nativeElement;
-    const _component = fixture.componentInstance;
+ showMessage(action) {
+    const _compiled = this.fixture.debugElement.nativeElement;
+    const _component = this.fixture.componentInstance;
     switch (action) {
       case 'has_error':
         expect(_compiled).hideErrorMessage('required');
@@ -112,4 +141,6 @@ export const showStatus ( action: string, isValid: any, hasChanged: boolean, com
         expect(_component.hasFocus).toEqual(true);
         break;
     }
-  }*/
+  }
+}
+
